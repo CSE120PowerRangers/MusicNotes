@@ -6,10 +6,21 @@ public class Chord {
 	private ArrayList<Note> noteList;
 	
 	/**
-	 * Chord() is a constructor that creates a chord object which contains a list of noteList in the given chord.
+	 * Chord() is a constructor that creates a chord object which contains a list of notes in the chord.
 	 */
-	public Chord() {
 
+	/**
+	 * Finds a note with the given frequency
+	 * @param targetFrequency
+	 * @return note if found, null if not
+	 */
+	private Note findNote(int targetFrequency) {
+		for(Note n : noteList) {
+			if(n.getFrequency() == targetFrequency) {
+				return n;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -19,12 +30,11 @@ public class Chord {
 	 * @param sampleRate of the note for playback
 	 */
 	public void addNote(int frequency, int duration, int sampleRate) {
-		for(Note n : noteList) {
-			if(n.getFrequency() == frequency) {
-				//This frequency already exists
-				return;
-			}
+		if(findNote(frequency) != null) {
+			//Note already exists with that frequency
+			return;
 		}
+		
 		Note newNote = new Note(frequency, duration, sampleRate);
 		noteList.add(newNote);
 	}
@@ -34,11 +44,9 @@ public class Chord {
 	 * @param targetFrequency 
 	 */
 	public void deleteNote(int targetFrequency) {
-		for(Note n : noteList) {
-			if(n.getFrequency() == targetFrequency) {
-				noteList.remove(n);
-				break;
-			}
+		Note targetNote = findNote(targetFrequency);
+		if(targetNote != null) {
+			noteList.remove(targetNote);
 		}
 	}
 	
@@ -47,12 +55,7 @@ public class Chord {
 	 * @return note with the target frequency or null if it wasn't found
 	 */
 	public Note getNote(int targetFrequency) {
-		for(Note n : noteList) {
-			if(n.getFrequency() == targetFrequency) {
-				return n;
-			}
-		}
-		return null;
+		return findNote(targetFrequency);
 	}
 	
 	/**
