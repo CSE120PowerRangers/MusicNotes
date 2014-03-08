@@ -1,20 +1,43 @@
 package MusicSheet;
-import java.util.ArrayList;
 
 public class Signature {
 	private int tempo;
-	private int timeSignature;
-	private int keySignature;
+	private String timeSignature;
+	private String keySignature;
 	private int[] flats;
 	private int[] sharps;
 
+	/**
+	 * Signature() is a constructor for a signature which creates a new section with its own time/key signature and tempo
+	 * 
+	 */
 	public Signature() {
+		tempo = 0;
+		timeSignature = "";
+		keySignature = "";
 		flats = new int[8];
 		sharps = new int[8];
 	}
+
+	public Signature(String keySig, String timeSig, int newTempo) {
+		tempo = newTempo;
+		timeSignature = "";
+		keySignature = "";
+		flats = new int[8];
+		sharps = new int[8];
+		
+		setKeySignature(keySig);
+		setTimeSignature(timeSig);
+	}
+
 	
-	public void setKeySignature(String key) {
-		KeySignature whichKey = KeySignature.valueOf(key);
+	/**
+	 * Sets the key signature of this signature
+	 * @param newKey is a key signature enum value converted to its name
+	 */
+	public void setKeySignature(String newKey) {
+		keySignature = newKey;
+		KeySignature whichKey = KeySignature.valueOf(newKey);
 		switch(whichKey) {
 		case C_MAJOR:
 			for(int i = 0; i < 8; i++) {
@@ -67,7 +90,43 @@ public class Signature {
 		}
 	}
 	
-	public void setTimeSignature(int tSig) {
-		timeSignature = tSig;
+	/**
+	 * Sets the time signature for this signature
+	 * @param newTime is a TimeSignature enum value converted to its name
+	 */
+	public void setTimeSignature(String newTime) {
+		timeSignature = newTime;
+	}
+	
+	/**
+	 * Sets the tempo for this signature
+	 * @param newTempo is the new tempo in beats per minute (bpm)
+	 */
+	public void setTempo(int newTempo) {
+		tempo = newTempo;
+	}
+	
+	/**
+	 * Gets the key signature for this signature
+	 * @return keySignature is the string value of the key signature enum
+	 */
+	public String getKeySignature() {
+		return keySignature;
+	}
+	
+	/**
+	 * Gets the time signature for this signature
+	 * @return timeSignature is the string value of the time signature enum
+	 */
+	public String getTimeSignature() {
+		return timeSignature;
+	}
+	
+	/**
+	 * Gets the tempo for this signature
+	 * @return tempo is the beats per minute (bpm) of this signature
+	 */
+	public int getTempo() {
+		return tempo;
 	}
 }

@@ -1,4 +1,5 @@
 package MusicSheet;
+
 public enum KeySignature {
 	C_MAJOR,
 	//Sharp keys

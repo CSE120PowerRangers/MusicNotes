@@ -1,4 +1,5 @@
 package MusicSheet;
+
 public enum NoteNames {
 	A,
 	B,
