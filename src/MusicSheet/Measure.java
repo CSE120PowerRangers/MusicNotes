@@ -1,8 +1,15 @@
+package MusicSheet;
 public class Measure {
 	private static int numDivisions = 32;
 	private int chordMap;
 	private Chord[] chordList;
 	
+	/**
+	 * Measure() is a constructor that creates a new measure object
+	 * It sets the chord bitmap to 0 and creates a new array of chords with a set number of divisions
+	 * By default we support 32 divisions of a measure to allow for 32nd notes
+	 * The chord bitmap merely says whether or not a chord starts at this division or not
+	 */
 	public Measure() {
 		chordMap = 0;
 		chordList = new Chord[numDivisions];

@@ -1,3 +1,4 @@
+package MusicSheet;
 import java.util.ArrayList;
 
 
@@ -7,6 +8,8 @@ public class Chord {
 	
 	/**
 	 * Chord() is a constructor that creates a chord object which contains a list of notes in the chord.
+	 * The chord keeps an unordered list of notes, which may or may not have the same durations
+	 * Chords cannot contain duplicate frequencies
 	 */
 
 	/**
