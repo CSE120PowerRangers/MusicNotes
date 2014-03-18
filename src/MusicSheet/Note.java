@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/Note.java
 /**
  * The note class contains all of the relevant information about a particular note on a sheet of music.
  * 
@@ -8,25 +9,30 @@
  * @author Robert Wang
  */
 
+=======
+package MusicSheet;
+>>>>>>> fe84f7c041eef09e4a9338696bfaec60f935d9c9:src/MusicSheet/Note.java
 public class Note {
 	private int frequency; //hz
 	private int duration; //milliseconds
-	private int sampleRate;
-	private double[] sample;
 	
+<<<<<<< HEAD:src/Note.java
+=======
+	public Note() {
+		frequency = 0;
+		duration = 0;
+	}
+	
+	
+>>>>>>> fe84f7c041eef09e4a9338696bfaec60f935d9c9:src/MusicSheet/Note.java
 	/**
 	 * Note() is a constructor that creates a note with a given tone, duration, and sample rate
-	 * @param frequency is the tone of the note
+	 * @param frequency is the tone of the note and specifies the sound of the note/what note it is
 	 * @param duration is how long the note is played for in milliseconds
-	 * @param sampleRate is how many samples per second the note will need when being rendered
 	 */
 	public Note(int frequency, int duration, int sampleRate) {
 		this.frequency = frequency;
 		this.duration = duration;
-		this.sampleRate = sampleRate;
-		
-		int numSamples = this.sampleRate*(this.duration / 1000);
-		sample = new double[numSamples];
 	}
 	
 	/**
@@ -45,6 +51,7 @@ public class Note {
 		duration = newDuration;
 	}
 	
+<<<<<<< HEAD:src/Note.java
 	/**
 	 * Sets the sample rate of the note
 	 * @param newSampleRate
@@ -53,6 +60,8 @@ public class Note {
 		sampleRate = newSampleRate;
 	}
 	
+=======
+>>>>>>> fe84f7c041eef09e4a9338696bfaec60f935d9c9:src/MusicSheet/Note.java
 	/**
 	 * Gets the frequency of the note
 	 * @return frequency
@@ -67,13 +76,5 @@ public class Note {
 	 */
 	public int getDuration() {
 		return duration;
-	}
-	
-	/**
-	 * Gets the sample rate of the note
-	 * @return sampleRate
-	 */
-	public int getSampleRate() {
-		return sampleRate;
 	}
 }
