@@ -1,15 +1,18 @@
+/**
+ * The note class contains all of the relevant information about a particular note on a sheet of music.
+ * 
+ * The note takes in three parameters. The first two specify what note is being played and how long it's being played for.
+ * The sample rate is for generating the sound sample of the note based on its frequency and duration.
+ * 
+ * Contents are subject to change as we iterate through the project
+ * @author Robert Wang
+ */
+
 public class Note {
 	private int frequency; //hz
 	private int duration; //milliseconds
 	private int sampleRate;
 	private double[] sample;
-	
-	public Note() {
-		frequency = 0;
-		duration = 0;
-		sample = null;
-	}
-	
 	
 	/**
 	 * Note() is a constructor that creates a note with a given tone, duration, and sample rate
@@ -34,7 +37,6 @@ public class Note {
 		frequency = newFreq;
 	}
 	
-	
 	/**
 	 * Sets the duration of the note
 	 * @param newDuration
@@ -42,7 +44,6 @@ public class Note {
 	public void setDuration(int newDuration) {
 		duration = newDuration;
 	}
-	
 	
 	/**
 	 * Sets the sample rate of the note
