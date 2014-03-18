@@ -1,8 +1,5 @@
 package MusicSheet;
 import java.util.ArrayList;
-
-
-
 public class Chord {
 	private ArrayList<Note> noteList;
 	

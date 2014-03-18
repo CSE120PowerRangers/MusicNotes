@@ -1,5 +1,4 @@
 package MusicSheet;
-
 public class Signature {
 	private int tempo;
 	private String timeSignature;
