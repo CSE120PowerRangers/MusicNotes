@@ -1,4 +1,5 @@
 package MusicSheet;
+
 public class Measure {
 	private static int numDivisions = 32;
 	private int chordMap;
