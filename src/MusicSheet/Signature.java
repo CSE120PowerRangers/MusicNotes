@@ -1,10 +1,14 @@
 package MusicSheet;
+
+import java.util.ArrayList;
+
 public class Signature {
 	private int tempo;
 	private String timeSignature;
 	private String keySignature;
 	private int[] flats;
 	private int[] sharps;
+	private ArrayList<Measure> measures;
 
 	/**
 	 * Signature() is a constructor for a signature which creates a new section with its own time/key signature and tempo
@@ -29,6 +33,19 @@ public class Signature {
 		setTimeSignature(timeSig);
 	}
 
+	public void addMeasure(Measure newMeasure) {
+		measures.add(newMeasure);
+	}
+	
+	
+	public void deleteMeasure(Measure oldMeasure) {
+		for(int i = 0; i < measures.size(); i++) {
+			if(measures.get(i).equals(oldMeasure)) {
+				measures.remove(i);
+				break;
+			}
+		}
+	}
 	
 	/**
 	 * Sets the key signature of this signature
@@ -37,6 +54,14 @@ public class Signature {
 	public void setKeySignature(String newKey) {
 		keySignature = newKey;
 		KeySignature whichKey = KeySignature.valueOf(newKey);
+		
+		/*
+		 * Quick note: Case statements are allowed to fall through on purpose
+		 * The rationale is that for sharp/flat keys, each major scale has a 
+		 * natural progression in which the sharps and flats are added
+		 * https://en.wikipedia.org/wiki/Major_scale
+		 */
+		
 		switch(whichKey) {
 		case C_MAJOR:
 			for(int i = 0; i < 8; i++) {
