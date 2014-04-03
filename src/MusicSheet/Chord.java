@@ -12,13 +12,14 @@ public class Chord {
 	 */
 
 	/**
-	 * Finds a note with the given frequency
-	 * @param targetFrequency
+	 * Finds a note with the name and octave
+	 * @param name is the enumerated name of the note
+	 * @param octave is the octave of the note
 	 * @return note if found, null if not
 	 */
-	private Note findNote(int targetFrequency) {
+	private Note findNote(NoteName name, int octave) {
 		for(Note n : noteList) {
-			if(n.getFrequency() == targetFrequency) {
+			if(n.getName() == name && n.getOctave() == octave) {
 				return n;
 			}
 		}
@@ -26,38 +27,40 @@ public class Chord {
 	}
 	
 	/**
-	 * Adds a note to the chord if an existing note doesn't have the same frequency
-	 * @param frequency of the note
-	 * @param duration of the note in milliseconds
-	 * @param sampleRate of the note for playback
+	 * Adds a note to the chord if an existing note doesn't have the same name and octave
+	 * @param name is the enumerated name of the note
+	 * @param type is the enumerated type of the note duration
+	 * @param octave is the octave of the note
 	 */
-	public void addNote(int frequency, int duration, int sampleRate) {
-		if(findNote(frequency) != null) {
+	public void addNote(NoteName name, NoteType type, int octave) {
+		if(findNote(name, octave) != null) {
 			//Note already exists with that frequency
 			return;
 		}
 		
-		Note newNote = new Note(frequency, duration, sampleRate);
+		Note newNote = new Note(name, type, octave);
 		noteList.add(newNote);
 	}
-	
 	/**
+	
 	 * Deletes the note from the note list 
-	 * @param targetFrequency 
+	 * @param targetName
+	 * @param targetOctave
 	 */
-	public void deleteNote(int targetFrequency) {
-		Note targetNote = findNote(targetFrequency);
+	public void deleteNote(NoteName targetName, int targetOctave) {
+		Note targetNote = findNote(targetName, targetOctave);
 		if(targetNote != null) {
 			noteList.remove(targetNote);
 		}
 	}
 	
 	/**
-	 * @param targetFrequency of the note
+	 * @param targetName is the enumerated name of the note
+	 * @param targetOctave is the octave of the note
 	 * @return note with the target frequency or null if it wasn't found
 	 */
-	public Note getNote(int targetFrequency) {
-		return findNote(targetFrequency);
+	public Note getNote(NoteName targetName, int targetOctave) {
+		return findNote(targetName, targetOctave);
 	}
 	
 	/**

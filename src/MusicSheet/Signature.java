@@ -71,19 +71,19 @@ public class Signature {
 			break;
 		//Sharp keys
 		case CSHARP_MAJOR:
-			sharps[NoteNames.B.ordinal()] = 1;
+			sharps[NoteName.B.ordinal()] = 1;
 		case FSHARP_MAJOR:
-			sharps[NoteNames.E.ordinal()] = 1;
+			sharps[NoteName.E.ordinal()] = 1;
 		case B_MAJOR:
-			sharps[NoteNames.A.ordinal()] = 1;
+			sharps[NoteName.A.ordinal()] = 1;
 		case E_MAJOR:
-			sharps[NoteNames.D.ordinal()] = 1;
+			sharps[NoteName.D.ordinal()] = 1;
 		case A_MAJOR:
-			sharps[NoteNames.G.ordinal()] = 1;
+			sharps[NoteName.G.ordinal()] = 1;
 		case D_MAJOR:
-			sharps[NoteNames.C.ordinal()] = 1;
+			sharps[NoteName.C.ordinal()] = 1;
 		case G_MAJOR:
-			sharps[NoteNames.F.ordinal()] = 1;
+			sharps[NoteName.F.ordinal()] = 1;
 			for(int i = 0; i < 8; i++) {
 				flats[i] = 0;
 			}
@@ -91,19 +91,19 @@ public class Signature {
 			
 		//Flat keys
 		case CFLAT_MAJOR:
-			flats[NoteNames.F.ordinal()] = 1;
+			flats[NoteName.F.ordinal()] = 1;
 		case GFLAT_MAJOR:
-			flats[NoteNames.C.ordinal()] = 1;
+			flats[NoteName.C.ordinal()] = 1;
 		case DFLAT_MAJOR:
-			flats[NoteNames.G.ordinal()] = 1;
+			flats[NoteName.G.ordinal()] = 1;
 		case AFLAT_MAJOR:
-			flats[NoteNames.D.ordinal()] = 1;
+			flats[NoteName.D.ordinal()] = 1;
 		case EFLAT_MAJOR:
-			flats[NoteNames.A.ordinal()] = 1;
+			flats[NoteName.A.ordinal()] = 1;
 		case BFLAT_MAJOR:
-			flats[NoteNames.E.ordinal()] = 1;
+			flats[NoteName.E.ordinal()] = 1;
 		case F_MAJOR:
-			flats[NoteNames.B.ordinal()] = 1;
+			flats[NoteName.B.ordinal()] = 1;
 			for(int i = 0; i < 8; i++) {
 				sharps[i] = 0;
 			}

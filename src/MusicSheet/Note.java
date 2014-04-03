@@ -11,53 +11,174 @@
 package MusicSheet;
 
 public class Note {
-	private int frequency; //hz
-	private int duration; //milliseconds
+	private NoteName name;
+	private NoteType type;
+	private int octave;
+	
 	
 	public Note() {
-		frequency = 0;
-		duration = 0;
+		
 	}
 	
 	/**
 	 * Note() is a constructor that creates a note with a given tone, duration, and sample rate
-	 * @param frequency is the tone of the note and specifies the sound of the note/what note it is
-	 * @param duration is how long the note is played for in milliseconds
+	 * @param name is an enumerated note name referring to the musical name for the note
+	 * @param type is an enumerated note type referring to the duration of the note
+	 * @param octave is the octave number of the note
 	 */
-	public Note(int frequency, int duration, int sampleRate) {
-		this.frequency = frequency;
-		this.duration = duration;
+	public Note(NoteName name, NoteType type, int octave) {
+		this.name = name;
+		this.type = type;
+		this.octave = octave;
 	}
 	
 	/**
-	 * Sets the frequency of the note
-	 * @param newFreq
-	 */	
-	public void setFrequency(int newFreq) {
-		frequency = newFreq;
+	 * Changes the musical name of the note
+	 * @param name
+	 */
+	public void setName(NoteName name) {
+		this.name = name;
 	}
 	
 	/**
-	 * Sets the duration of the note
-	 * @param newDuration
+	 * Changes the note duration
+	 * @param type
 	 */
-	public void setDuration(int newDuration) {
-		duration = newDuration;
+	public void setType(NoteType type) {
+		this.type = type;
 	}
 	
 	/**
-	 * Gets the frequency of the note
-	 * @return frequency
+	 * Changes the octave of the note
+	 * @param octave
 	 */
-	public int getFrequency() {
-		return frequency;
+	public void setOctave(int octave) {
+		this.octave = octave;
 	}
 	
 	/**
-	 * Gets the duration of the note
-	 * @return duration
+	 * Retrieves the name of the note
+	 * @return name
 	 */
-	public int getDuration() {
-		return duration;
+	public NoteName getName() {
+		return name;
+	}
+	
+	/**
+	 * Retrieves the duration/type of the note
+	 * @return type
+	 */
+	public NoteType getType() {
+		return type;
+	}
+	
+	/**
+	 * Retrieves the octave of the note
+	 * @return octave
+	 */
+	public int getOctave() {
+		return octave;
+	}
+	
+	/**
+	 * Simple hash could be the number mapping of the actual name
+	 * e.g. C0 == 0, CSHARP0 == 2, C1 == 21, CSHARP1 == 23, ... BSHARP8 == 188
+	 * Used in note lookup table for determining frequencies
+	 * @return returns the unique identifier of the note based on the name of the note and its octave
+	 */
+	public int hashCode() {
+		int numberName;
+		switch(name) {
+
+		case C:
+			numberName = 0;
+			break;
+		case CFLAT:
+			numberName = 1;
+			break;
+		case CSHARP:
+			numberName = 2;
+			break;
+		case D:
+			numberName = 3;
+			break;
+		case DFLAT:
+			numberName = 4;
+			break;
+		case DSHARP:
+			numberName = 5;
+			break;
+		case E:
+			numberName = 6;
+			break;
+		case EFLAT:
+			numberName = 7;
+			break;
+		case ESHARP:
+			numberName = 8;
+			break;
+		case F:
+			numberName = 9;
+			break;
+		case FFLAT:
+			numberName = 10;
+			break;
+		case FSHARP:
+			numberName = 11;
+			break;
+		case G:
+			numberName = 12;
+			break;
+		case GFLAT:
+			numberName = 13;
+			break;
+		case GSHARP:
+			numberName = 14;
+			break;
+		case A:
+			numberName = 15;
+			break;
+		case AFLAT:
+			numberName = 16;
+			break;
+		case ASHARP:
+			numberName = 17;
+			break;
+		case B:
+			numberName = 18;
+			break;
+		case BFLAT:
+			numberName = 19;
+			break;
+		case BSHARP:
+			numberName = 20;
+			break;
+		default:
+			// Should NEVER happen
+			numberName = -1000000;
+			break;
+		
+		}
+		return (21 * octave) + numberName;
+	}
+	
+	/**
+	 * Simple equals method. Notes are equal if they have both the same name and octave 
+	 * @param obj is the note being compared
+	 */
+	public boolean equals(Object obj) {
+		// Trivial Cases
+		if(obj == null) {
+			return false;
+		}
+		if(obj == this) {
+			return true;
+		}
+		if(this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		// Examine note name and octave
+		return (this.getName() == ((MusicNote) obj).getName() && this.getOctave() == ((MusicNote) obj).getOctave());
 	}
 }

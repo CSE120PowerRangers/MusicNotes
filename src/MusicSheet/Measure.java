@@ -1,7 +1,7 @@
 package MusicSheet;
 
 public class Measure {
-	private static int numDivisions = 32;
+	private static int numDivisions = 8; //Currently supporting up to eighth notes only
 	private int chordMap;
 	private Chord[] chordList;
 	

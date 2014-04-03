@@ -14,152 +14,106 @@ public class NoteTable {
 	private static final double baseFrequency = 440; // Hz
 	private static final double a = Math.pow(2.0, (1.0 / 12.0));
 
-	private static Map<MusicNote, Double> noteFrequency;
+	private static Map<Note, Double> noteFrequency;
 
 	/**
 	 * Constructor for the lookup table, fills up the table
 	 */
 	public NoteTable() {
 
-		noteFrequency = new HashMap<MusicNote, Double>(); // Double is frequency
+		noteFrequency = new HashMap<Note, Double>(); // Double is frequency
 
-		double returnedFrequency = 0.0; // Stores the current frequency about to
+		double frequency = 0.0; // Stores the current frequency about to
 										// be put in the table
 
 		// Fill in the frequencies one octave at a time
-		for (int i = 0; i < MAX_OCTAVES; i++) {
+		for (int octave = 0; octave < MAX_OCTAVES; octave++) {
 			// C
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE); // Steps
-																				// away
-																				// from
-																				// A4
-			noteFrequency.put(
-					new MusicNote(NoteNames.C, NoteTypes.NOTANOTE, i),
-					returnedFrequency); // Throw it in
-			// the table
+			// Steps away from A4
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE); 
+			// Throw it in the table
+			noteFrequency.put(new Note(NoteName.C, NoteType.NOTANOTE, octave), frequency); 
+
 
 			// CSHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 1);
-			noteFrequency.put(new MusicNote(NoteNames.CSHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 1);
+			noteFrequency.put(new Note(NoteName.CSHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// DFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 1);
-			noteFrequency.put(new MusicNote(NoteNames.DFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 1);
+			noteFrequency.put(new Note(NoteName.DFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// D
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 2);
-			noteFrequency.put(
-					new MusicNote(NoteNames.D, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 2);
+			noteFrequency.put(new Note(NoteName.D, NoteType.NOTANOTE, octave), frequency);
 
 			// DSHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 3);
-			noteFrequency.put(new MusicNote(NoteNames.DSHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 3);
+			noteFrequency.put(new Note(NoteName.DSHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// EFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 3);
-			noteFrequency.put(new MusicNote(NoteNames.EFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 3);
+			noteFrequency.put(new Note(NoteName.EFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// E
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 4);
-			noteFrequency.put(
-					new MusicNote(NoteNames.E, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 4);
+			noteFrequency.put(new Note(NoteName.E, NoteType.NOTANOTE, octave), frequency);
 
 			// ESHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 5);
-			noteFrequency.put(new MusicNote(NoteNames.ESHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 5);
+			noteFrequency.put(new Note(NoteName.ESHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// FFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 4);
-			noteFrequency.put(new MusicNote(NoteNames.FFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 4);
+			noteFrequency.put(new Note(NoteName.FFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// F
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 5);
-			noteFrequency.put(
-					new MusicNote(NoteNames.F, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 5);
+			noteFrequency.put(new Note(NoteName.F, NoteType.NOTANOTE, octave), frequency);
 
 			// FSHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 6);
-			noteFrequency.put(new MusicNote(NoteNames.FSHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 6);
+			noteFrequency.put(new Note(NoteName.FSHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// GFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 6);
-			noteFrequency.put(new MusicNote(NoteNames.GFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 6);
+			noteFrequency.put(new Note(NoteName.GFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// G
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 7);
-			noteFrequency.put(
-					new MusicNote(NoteNames.G, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 7);
+			noteFrequency.put(new Note(NoteName.G, NoteType.NOTANOTE, octave), frequency);
 
 			// GSHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 8);
-			noteFrequency.put(new MusicNote(NoteNames.GSHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 8);
+			noteFrequency.put(new Note(NoteName.GSHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// AFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 8);
-			noteFrequency.put(new MusicNote(NoteNames.AFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 8);
+			noteFrequency.put(new Note(NoteName.AFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// A
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 9);
-			noteFrequency.put(
-					new MusicNote(NoteNames.A, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 9);
+			noteFrequency.put(new Note(NoteName.A, NoteType.NOTANOTE, octave), frequency);
 
 			// ASHARP
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 10);
-			noteFrequency.put(new MusicNote(NoteNames.ASHARP,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 10);
+			noteFrequency.put(new Note(NoteName.ASHARP, NoteType.NOTANOTE, octave), frequency);
 
 			// BFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 10);
-			noteFrequency.put(new MusicNote(NoteNames.BFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 10);
+			noteFrequency.put(new Note(NoteName.BFLAT, NoteType.NOTANOTE, octave), frequency);
 
 			// B
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 11);
-			noteFrequency.put(
-					new MusicNote(NoteNames.B, NoteTypes.NOTANOTE, i),
-					returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 11);
+			noteFrequency.put(new Note(NoteName.B, NoteType.NOTANOTE, octave), frequency);
 
 			// CFLAT
-			returnedFrequency = calculateFrequency((12 * i) - STEP_DIFFERENCE
-					+ 11);
-			noteFrequency.put(new MusicNote(NoteNames.CFLAT,
-					NoteTypes.NOTANOTE, i), returnedFrequency);
+			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 11);
+			noteFrequency.put(new Note(NoteName.CFLAT, NoteType.NOTANOTE, octave), frequency);
 		}
 
-		noteFrequency = new HashMap<MusicNote, Double>(noteFrequency);
+		//?? Why create a copy of the map? - Robert
+		noteFrequency = new HashMap<Note, Double>(noteFrequency);
 	}
 
 	private static double calculateFrequency(int halfStepDistance) {
@@ -175,7 +129,7 @@ public class NoteTable {
 	 * @param note2
 	 * @return true if note1 and note2 are enharmonic tones
 	 */
-	private static boolean is_note_enharmonic(MusicNote note1, MusicNote note2) {
+	private static boolean isNoteEnharmonic(Note note1, Note note2) {
 		/*
 		 * ================= Note equivalences ================= Different
 		 * "spelling" for note of the same frequency Probably better to make
@@ -189,108 +143,108 @@ public class NoteTable {
 
 			// CSHARP == DFLAT
 			case CSHARP:
-				if (note2.getName() == NoteNames.DFLAT) {
+				if (note2.getName() == NoteName.DFLAT) {
 					return true;
 				}
 				break;
 			case DFLAT:
-				if (note2.getName() == NoteNames.CSHARP) {
+				if (note2.getName() == NoteName.CSHARP) {
 					return true;
 				}
 				break;
 
 			// DSHARP == EFLAT
 			case DSHARP:
-				if (note2.getName() == NoteNames.EFLAT) {
+				if (note2.getName() == NoteName.EFLAT) {
 					return true;
 				}
 				break;
 			case EFLAT:
-				if (note2.getName() == NoteNames.DSHARP) {
+				if (note2.getName() == NoteName.DSHARP) {
 					return true;
 				}
 				break;
 
 			// E == FFLAT
 			case E:
-				if (note2.getName() == NoteNames.FFLAT) {
+				if (note2.getName() == NoteName.FFLAT) {
 					return true;
 				}
 				break;
 			case FFLAT:
-				if (note2.getName() == NoteNames.E) {
+				if (note2.getName() == NoteName.E) {
 					return true;
 				}
 				break;
 
 			// ESHARP == F
 			case ESHARP:
-				if (note2.getName() == NoteNames.F) {
+				if (note2.getName() == NoteName.F) {
 					return true;
 				}
 				break;
 			case F:
-				if (note2.getName() == NoteNames.ESHARP) {
+				if (note2.getName() == NoteName.ESHARP) {
 					return true;
 				}
 				break;
 
 			// FSHARP == GFLAT
 			case FSHARP:
-				if (note2.getName() == NoteNames.GFLAT) {
+				if (note2.getName() == NoteName.GFLAT) {
 					return true;
 				}
 				break;
 			case GFLAT:
-				if (note2.getName() == NoteNames.FSHARP) {
+				if (note2.getName() == NoteName.FSHARP) {
 					return true;
 				}
 				break;
 
 			// GSHARP == AFLAT
 			case GSHARP:
-				if (note2.getName() == NoteNames.AFLAT) {
+				if (note2.getName() == NoteName.AFLAT) {
 					return true;
 				}
 				break;
 			case AFLAT:
-				if (note2.getName() == NoteNames.GSHARP) {
+				if (note2.getName() == NoteName.GSHARP) {
 					return true;
 				}
 				break;
 
 			// ASHARP == BFLAT
 			case ASHARP:
-				if (note2.getName() == NoteNames.BFLAT) {
+				if (note2.getName() == NoteName.BFLAT) {
 					return true;
 				}
 				break;
 			case BFLAT:
-				if (note2.getName() == NoteNames.ASHARP) {
+				if (note2.getName() == NoteName.ASHARP) {
 					return true;
 				}
 				break;
 
 			// B == CFLAT
 			case B:
-				if (note2.getName() == NoteNames.CFLAT) {
+				if (note2.getName() == NoteName.CFLAT) {
 					return true;
 				}
 				break;
 			case CFLAT:
-				if (note2.getName() == NoteNames.B) {
+				if (note2.getName() == NoteName.B) {
 					return true;
 				}
 				break;
 
 			// BSHARP == C
 			case BSHARP:
-				if (note2.getName() == NoteNames.C) {
+				if (note2.getName() == NoteName.C) {
 					return true;
 				}
 				break;
 			case C:
-				if (note2.getName() == NoteNames.BSHARP) {
+				if (note2.getName() == NoteName.BSHARP) {
 					return true;
 				}
 				break;
@@ -315,9 +269,8 @@ public class NoteTable {
 	 * @param octave
 	 * @return
 	 */
-	public double look_up_noteFrequency(NoteNames name, int octave) {
-		MusicNote requestedNote = new MusicNote(name, NoteTypes.NOTANOTE,
-				octave);
+	public double getNoteFrequency(NoteName name, int octave) {
+		Note requestedNote = new Note(name, NoteType.NOTANOTE, octave);
 
 		boolean foundNote = noteFrequency.containsKey(requestedNote);
 		if (foundNote) {
