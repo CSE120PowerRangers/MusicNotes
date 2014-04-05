@@ -1,13 +1,12 @@
 package com.example.musicnotes;
 
-import MusicSheet.Sheet;
+import MusicSheet.*;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-<<<<<<< HEAD
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
@@ -15,12 +14,6 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	
-=======
-import MusicSheet.*;
-
-public class EditorActivity extends Activity{
-
->>>>>>> 486345c8019b7f122da044398b7f91ece75688e8
     @Override
     protected void onCreate(Bundle savedInstanceState) {
       
