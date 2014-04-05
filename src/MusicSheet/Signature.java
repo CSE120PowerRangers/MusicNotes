@@ -2,6 +2,12 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+/**
+ * TODO: Allow for adding measures at a particular index instead of just appending
+ * See if "copying" measures can be done
+ *
+ */
+
 public class Signature {
 	private int tempo;
 	private String timeSignature;

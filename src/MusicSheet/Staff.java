@@ -2,11 +2,6 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
-/*
- * TODO:
- * Finish up staff & sheet classes
- * Implement marker classes using divisions & do calculations for position
- */
 
 public class Staff {
 	private ArrayList<Signature> signatures;
@@ -18,6 +13,10 @@ public class Staff {
 	
 	public Staff(Clef clef) {
 		this.clef = clef;
+	}
+	
+	public void setClef(Clef newClef) {
+		clef = newClef;
 	}
 	
 	public void addSignature(Signature newSignature) {
@@ -37,5 +36,7 @@ public class Staff {
 		return signatures.get(sigNumber);
 	}
 	
-	
+	public Clef getClef() {
+		return clef;
+	}
 }

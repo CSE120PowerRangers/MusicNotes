@@ -16,6 +16,17 @@ public class Measure {
 		chordList = new Chord[numDivisions];
 	}
 	
+	public Measure(Measure toCopy) {
+		this.chordMap = toCopy.chordMap;
+		for(int i = 0; i < numDivisions; i++) {
+			if(toCopy.chordList[i].equals(null)) {
+				this.chordList[i] = null;
+			} else {
+				this.chordList[i] = new Chord(toCopy.chordList[i]);
+			}
+		}
+	}
+	
 	/**
 	 * Adds a chord to the measure at the specified division. 
 	 * Measures are divided into 32 segments as to allow for up to 32nd notes

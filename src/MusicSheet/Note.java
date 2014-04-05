@@ -33,6 +33,18 @@ public class Note {
 	}
 	
 	/**
+	 * A copy constructor for the note class. 
+	 * Since enums are immutable, it's fine to just copy them over 
+	 * Ints are okay to leave as is since they are primitive types
+	 * @param toCopy is the note to be copied
+	 */
+	public Note(Note toCopy) {
+		this.name = toCopy.name;
+		this.type = toCopy.type;
+		this.octave = toCopy.octave;
+	}
+	
+	/**
 	 * Changes the musical name of the note
 	 * @param name
 	 */
