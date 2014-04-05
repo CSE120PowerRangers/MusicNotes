@@ -41,6 +41,10 @@ public class Staff {
 		return signatures.get(sigNumber);
 	}
 	
+	public int getSize() {
+		return signatures.size();
+	}
+	
 	public Clef getClef() {
 		return clef;
 	}

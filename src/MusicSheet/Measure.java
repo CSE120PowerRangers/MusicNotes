@@ -76,4 +76,8 @@ public class Measure {
 		}
 		return chordList[targetPoint];
 	}
+	
+	public int getSize() {
+		return numDivisions;
+	}
 }

@@ -177,4 +177,8 @@ public class Signature {
 	public Measure getMeasure(int index) {
 		return measures.get(index);
 	}
+	
+	public int getSize() {
+		return measures.size();
+	}
 }
