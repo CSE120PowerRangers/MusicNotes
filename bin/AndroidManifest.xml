@@ -27,7 +27,7 @@
         
         <activity
             android:name="com.example.musicnotes.EditorActivity"
-            android:label="@string/app_name"
+            android:label="@string/editor_name"
             android:screenOrientation="landscape">
             
         </activity>

@@ -8,4 +8,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="editor_name">Editor</string>
       <string name="mainMenu_name">Main Menu</string>
+      <string name="timesigtop_file_path">@drawable/four</string>
 </resources>

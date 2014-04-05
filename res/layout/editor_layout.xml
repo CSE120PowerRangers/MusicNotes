@@ -28,8 +28,9 @@
              -->
     </LinearLayout>
 
+        <!--  Time Signature Layout -->
     <RelativeLayout
-        android:id="@+id/keySignatureLayout"
+        android:id="@+id/timeSignatureLayout"
         android:layout_width="75dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
@@ -37,15 +38,44 @@
         android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:paddingLeft="-30dp"
+            android:id="@+id/staffclef"
+           
+            android:layout_width="35dp"
+            android:layout_height="fill_parent"
+           
             android:src="@drawable/treble" />
+
+        <ImageView
+            android:id="@+id/timesigtop"
+           android:layout_toRightOf="@+id/staffclef"
+           android:paddingBottom="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           
+            android:src="@string/timesigtop_file_path" />
+         
+         <ImageView
+            android:id="@+id/timesigbot"
+           android:layout_toRightOf="@+id/staffclef"
+  			android:paddingTop = "35dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/four" />
+        <ImageView
+            android:id="@+id/timesignaturemeasure"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_alignParentLeft="true"
+     
+            android:src="@drawable/csignature" />
+
     </RelativeLayout>
     
+    <!--  Key Signature Layout -->
     <RelativeLayout
-        android:id="@+id/timeSignatureLayout"
+        android:id="@+id/keySignatureLayout"
         android:layout_width="75dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
@@ -53,6 +83,16 @@
         android:layout_below="@+id/keySignatureLayout"
         android:orientation="vertical" >
         
+          <ImageView
+            android:id="@+id/keysignaturemeasure"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_alignParentLeft="true"
+     
+            android:src="@drawable/csignature" />
+          
     </RelativeLayout>
 
     <HorizontalScrollView
