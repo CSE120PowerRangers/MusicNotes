@@ -10,9 +10,14 @@ import java.util.ArrayList;
 
 public class Staff {
 	private ArrayList<Signature> signatures;
+	private Clef clef;
 	
 	public Staff() {
 		
+	}
+	
+	public Staff(Clef clef) {
+		this.clef = clef;
 	}
 	
 	public void addSignature(Signature newSignature) {
@@ -28,14 +33,8 @@ public class Staff {
 		}
 	}
 	
-	//Staff modifies its signatures, needs to know which signature it is
-	public void modifySignature(int sigNumber) {
-		
-	}
-	
 	public Signature getSignature(int sigNumber) {
-		
-		return null;
+		return signatures.get(sigNumber);
 	}
 	
 	
