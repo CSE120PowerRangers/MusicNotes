@@ -19,9 +19,10 @@ public class EditorActivity extends Activity{
       
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.editor_layout);
+    	updateToolBar();
     	ImageView timeSigTop = (ImageView) findViewById(R.id.timesigtop);
     	timeSigTop.setImageResource(R.drawable.halfnote);
-    	sheet = new Sheet();
+    	//sheet = new Sheet();
     	//Add Buttons to notesToolBar
     }
 
@@ -52,12 +53,15 @@ public class EditorActivity extends Activity{
     	for(int i = 0; i < toolbarButtons.length; i++)
     	{
     		toolbarButtons[i] = new ImageButton(this);
-    		toolbarButtons[i].setImageResource(R.drawable.four);
-    		toolbarButtons[i].setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+    		toolbarButtons[i].setImageResource(R.drawable.fillednote);
+    		
+    		toolbarButtons[i].setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
     		toolbar.addView(toolbarButtons[i]);
-    		setContentView(toolbar);
-    	}
 
+    	}
     	
+    	
+
+    
     }
 }
