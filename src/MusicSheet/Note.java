@@ -179,6 +179,6 @@ public class Note {
 		}
 		
 		// Examine note name and octave
-		return (this.getName() == ((MusicNote) obj).getName() && this.getOctave() == ((MusicNote) obj).getOctave());
+		return (this.getName() == ((Note) obj).getName() && this.getOctave() == ((Note) obj).getOctave());
 	}
 }
