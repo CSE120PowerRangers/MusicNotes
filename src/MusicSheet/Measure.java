@@ -44,6 +44,15 @@ public class Measure {
 		}
 	}
 	
+	public void addChord(int startPoint, Chord newChord) {
+		assert (startPoint > -1 && startPoint < numDivisions) : "Invalid chord starting position on the measure!";
+		if(chordList[startPoint] == null) {
+			chordList[startPoint] = newChord;
+		} else {
+			return;
+		}
+	}
+	
 	/**
 	 * Deletes a chord from the measure at the specified division
 	 * @param startPoint falls between 0 and numDivisions, zero inclusive.

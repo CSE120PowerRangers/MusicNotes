@@ -15,6 +15,11 @@ public class Staff {
 		this.clef = clef;
 	}
 	
+	public Staff(Staff toCopy) {
+		this.clef = toCopy.clef;
+		this.signatures = new ArrayList<Signature>(toCopy.signatures);
+	}
+	
 	public void setClef(Clef newClef) {
 		clef = newClef;
 	}
