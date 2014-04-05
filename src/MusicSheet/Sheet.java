@@ -7,10 +7,12 @@ public class Sheet {
 	
 	public Sheet() {
 		name = "";
+		staffs.add(new Staff());
 	}
 	
 	public Sheet(String name) {
 		this.name = name;
+		staffs.add(new Staff());
 	}
 	
 	public Sheet(Sheet toCopy) {

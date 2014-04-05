@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import MusicSheet.*;
 
 public class EditorActivity extends Activity{
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,6 @@ public class EditorActivity extends Activity{
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.editor_layout);
     }
-    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

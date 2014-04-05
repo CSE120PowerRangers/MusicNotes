@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class Signature {
 	private int tempo;
-	private String timeSignature;
-	private String keySignature;
+	private TimeSignature timeSignature;
+	private KeySignature keySignature;
 	private int[] flats;
 	private int[] sharps;
 	private ArrayList<Measure> measures;
@@ -22,30 +22,30 @@ public class Signature {
 	 */
 	public Signature() {
 		tempo = 0;
-		timeSignature = "";
-		keySignature = "";
+		timeSignature = TimeSignature.FOUR_FOUR;
+		keySignature = KeySignature.C_MAJOR;
 		flats = new int[8];
 		sharps = new int[8];
-	}
-
-	public Signature(Signature toCopy) {
-		this.tempo = toCopy.tempo;
-		this.timeSignature = new String(toCopy.timeSignature);
-		this.keySignature = new String(toCopy.keySignature);
-		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
-		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
-		this.measures = new ArrayList<Measure>(toCopy.measures);
+		measures.add(new Measure());
 	}
 	
-	public Signature(String keySig, String timeSig, int newTempo) {
+	public Signature(KeySignature keySig, TimeSignature timeSig, int newTempo) {
 		tempo = newTempo;
-		timeSignature = "";
-		keySignature = "";
 		flats = new int[8];
 		sharps = new int[8];
 		
 		setKeySignature(keySig);
 		setTimeSignature(timeSig);
+		measures.add(new Measure());
+	}
+
+	public Signature(Signature toCopy) {
+		this.tempo = toCopy.tempo;
+		this.timeSignature = toCopy.timeSignature;
+		this.keySignature = toCopy.keySignature;
+		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
+		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
+		this.measures = new ArrayList<Measure>(toCopy.measures);
 	}
 
 	public void addMeasure(Measure newMeasure) {
@@ -71,9 +71,8 @@ public class Signature {
 	 * Sets the key signature of this signature
 	 * @param newKey is a key signature enum value converted to its name
 	 */
-	public void setKeySignature(String newKey) {
+	public void setKeySignature(KeySignature newKey) {
 		keySignature = newKey;
-		KeySignature whichKey = KeySignature.valueOf(newKey);
 		
 		/*
 		 * Quick note: Case statements are allowed to fall through on purpose
@@ -82,7 +81,7 @@ public class Signature {
 		 * https://en.wikipedia.org/wiki/Major_scale
 		 */
 		
-		switch(whichKey) {
+		switch(newKey) {
 		case C_MAJOR:
 			for(int i = 0; i < 8; i++) {
 				sharps[i] = 0;
@@ -138,7 +137,7 @@ public class Signature {
 	 * Sets the time signature for this signature
 	 * @param newTime is a TimeSignature enum value converted to its name
 	 */
-	public void setTimeSignature(String newTime) {
+	public void setTimeSignature(TimeSignature newTime) {
 		timeSignature = newTime;
 	}
 	
@@ -154,7 +153,7 @@ public class Signature {
 	 * Gets the key signature for this signature
 	 * @return keySignature is the string value of the key signature enum
 	 */
-	public String getKeySignature() {
+	public KeySignature getKeySignature() {
 		return keySignature;
 	}
 	
@@ -162,7 +161,7 @@ public class Signature {
 	 * Gets the time signature for this signature
 	 * @return timeSignature is the string value of the time signature enum
 	 */
-	public String getTimeSignature() {
+	public TimeSignature getTimeSignature() {
 		return timeSignature;
 	}
 	

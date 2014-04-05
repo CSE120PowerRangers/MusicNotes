@@ -8,11 +8,18 @@ public class Staff {
 	private Clef clef;
 	
 	public Staff() {
-		
+		clef = Clef.TREBLE;
+		signatures.add(new Signature());
 	}
 	
 	public Staff(Clef clef) {
 		this.clef = clef;
+		signatures.add(new Signature());
+	}
+	
+	public Staff(Clef clef, Signature signature) {
+		this.clef = clef;
+		signatures.add(signature);
 	}
 	
 	public Staff(Staff toCopy) {
