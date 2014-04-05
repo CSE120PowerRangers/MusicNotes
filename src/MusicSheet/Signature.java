@@ -9,55 +9,81 @@ import java.util.ArrayList;
  */
 
 public class Signature {
-	private int tempo;
-	private String timeSignature;
-	private String keySignature;
+	private int tempo; //Beats per minute
+	private TimeSignature timeSignature;
+	private KeySignature keySignature;
 	private int[] flats;
 	private int[] sharps;
 	private ArrayList<Measure> measures;
 
 	/**
 	 * Signature() is a constructor for a signature which creates a new section with its own time/key signature and tempo
-	 * 
+	 * Creates a default time signature, key signature, and tempo
 	 */
 	public Signature() {
-		tempo = 0;
-		timeSignature = "";
-		keySignature = "";
+		tempo = 120;
+		timeSignature = TimeSignature.FOUR_FOUR;
+		keySignature = KeySignature.C_MAJOR;
 		flats = new int[8];
 		sharps = new int[8];
+		measures.add(new Measure());
 	}
 
+	/**
+	 * A signature constructor that initializes the signature
+	 * with the given key signature, time signature, and tempo
+	 * @param keySig
+	 * @param timeSig
+	 * @param newTempo
+	 */
+	public Signature(KeySignature keySig, TimeSignature timeSig, int newTempo) {
+		tempo = newTempo;
+		flats = new int[8];
+		sharps = new int[8];
+
+		setKeySignature(keySig);
+		setTimeSignature(timeSig);
+		measures.add(new Measure());
+	}
+
+	/**
+	 * Copy constructor for the signature
+	 * @param toCopy
+	 */
 	public Signature(Signature toCopy) {
 		this.tempo = toCopy.tempo;
-		this.timeSignature = new String(toCopy.timeSignature);
-		this.keySignature = new String(toCopy.keySignature);
+		this.timeSignature = toCopy.timeSignature;
+		this.keySignature = toCopy.keySignature;
 		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
 		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
 		this.measures = new ArrayList<Measure>(toCopy.measures);
 	}
-	
-	public Signature(String keySig, String timeSig, int newTempo) {
-		tempo = newTempo;
-		timeSignature = "";
-		keySignature = "";
-		flats = new int[8];
-		sharps = new int[8];
-		
-		setKeySignature(keySig);
-		setTimeSignature(timeSig);
-	}
 
+	/**
+	 * Adds a given measure to the end of the list
+	 * @param newMeasure
+	 */
 	public void addMeasure(Measure newMeasure) {
 		measures.add(newMeasure);
 	}
-	
+
+	/**
+	 * Inserts a given measure into the given index
+	 * @param index
+	 * @param newMeasure
+	 */
 	public void addMeasure(int index, Measure newMeasure) {
-		//Force creation of new copy of measure
-		newMeasure = new Measure(newMeasure);
-		measures.add(index, newMeasure);
+		if(index >= 0 && index < measures.size()) {
+			//Force creation of new copy of measure
+			newMeasure = new Measure(newMeasure);
+			measures.add(index, newMeasure);
+		}
 	}
-	
+
+	/**
+	 * Deletes a given measure from the list
+	 * @param oldMeasure
+	 */
 	public void deleteMeasure(Measure oldMeasure) {
 		for(int i = 0; i < measures.size(); i++) {
 			if(measures.get(i).equals(oldMeasure)) {
@@ -66,30 +92,31 @@ public class Signature {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the key signature of this signature
+	 * The key signature determines what flats or sharps are in the signature
+	 * Only deals with major scales since minor scales can just be converted to the appropriate major scale
 	 * @param newKey is a key signature enum value converted to its name
 	 */
-	public void setKeySignature(String newKey) {
+	public void setKeySignature(KeySignature newKey) {
 		keySignature = newKey;
-		KeySignature whichKey = KeySignature.valueOf(newKey);
-		
+
 		/*
 		 * Quick note: Case statements are allowed to fall through on purpose
 		 * The rationale is that for sharp/flat keys, each major scale has a 
 		 * natural progression in which the sharps and flats are added
 		 * https://en.wikipedia.org/wiki/Major_scale
 		 */
-		
-		switch(whichKey) {
+
+		switch(newKey) {
 		case C_MAJOR:
 			for(int i = 0; i < 8; i++) {
 				sharps[i] = 0;
 				flats[i] = 0;
 			}
 			break;
-		//Sharp keys
+			//Sharp keys
 		case CSHARP_MAJOR:
 			sharps[NoteName.B.ordinal()] = 1;
 		case FSHARP_MAJOR:
@@ -108,8 +135,8 @@ public class Signature {
 				flats[i] = 0;
 			}
 			break;
-			
-		//Flat keys
+
+			//Flat keys
 		case CFLAT_MAJOR:
 			flats[NoteName.F.ordinal()] = 1;
 		case GFLAT_MAJOR:
@@ -128,44 +155,46 @@ public class Signature {
 				sharps[i] = 0;
 			}
 			break;
-			
+
 		default:
 			break;
 		}
 	}
-	
+
 	/**
 	 * Sets the time signature for this signature
-	 * @param newTime is a TimeSignature enum value converted to its name
+	 * @param newTime is a TimeSignature enum value
 	 */
-	public void setTimeSignature(String newTime) {
+	public void setTimeSignature(TimeSignature newTime) {
 		timeSignature = newTime;
 	}
-	
+
 	/**
 	 * Sets the tempo for this signature
 	 * @param newTempo is the new tempo in beats per minute (bpm)
 	 */
 	public void setTempo(int newTempo) {
-		tempo = newTempo;
+		if(newTempo >= 0 || newTempo < 500) {
+			tempo = newTempo;
+		}
 	}
-	
+
 	/**
 	 * Gets the key signature for this signature
-	 * @return keySignature is the string value of the key signature enum
+	 * @return keySignature is the key signature enum
 	 */
-	public String getKeySignature() {
+	public KeySignature getKeySignature() {
 		return keySignature;
 	}
-	
+
 	/**
 	 * Gets the time signature for this signature
-	 * @return timeSignature is the string value of the time signature enum
+	 * @return timeSignature is the time signature enum
 	 */
-	public String getTimeSignature() {
+	public TimeSignature getTimeSignature() {
 		return timeSignature;
 	}
-	
+
 	/**
 	 * Gets the tempo for this signature
 	 * @return tempo is the beats per minute (bpm) of this signature
@@ -173,11 +202,24 @@ public class Signature {
 	public int getTempo() {
 		return tempo;
 	}
-	
+
+	/**
+	 * Gets the measure from the given index
+	 * @param index
+	 * @return
+	 */
 	public Measure getMeasure(int index) {
-		return measures.get(index);
+		if(index >= 0 && index < measures.size()) {
+			return measures.get(index);
+		} else {
+			return null;
+		}
 	}
-	
+
+	/**
+	 * Returns the number of measures in the signature
+	 * @return
+	 */
 	public int getSize() {
 		return measures.size();
 	}

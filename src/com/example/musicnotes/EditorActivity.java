@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
@@ -14,6 +15,12 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	
+=======
+import MusicSheet.*;
+
+public class EditorActivity extends Activity{
+
+>>>>>>> 486345c8019b7f122da044398b7f91ece75688e8
     @Override
     protected void onCreate(Bundle savedInstanceState) {
       
@@ -24,7 +31,6 @@ public class EditorActivity extends Activity{
     	sheet = new Sheet();
     	//Add Buttons to notesToolBar
     }
-    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
