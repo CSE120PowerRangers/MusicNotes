@@ -29,11 +29,13 @@ public class Measure {
 	
 	/**
 	 * Adds a chord to the measure at the specified division. 
-	 * Measures are divided into 32 segments as to allow for up to 32nd notes
 	 * @param startPoint falls between 0 and numDivisions, zero inclusive.
 	 */
 	public void addChord(int startPoint) {
-		assert (startPoint > -1 && startPoint < numDivisions) : "Invalid chord starting position on the measure!";
+		if(startPoint < 0 || startPoint >= numDivisions) {
+			return;
+		}
+
 		if(chordList[startPoint] == null) {
 			//Valid position for the chord
 			chordList[startPoint] = new Chord();
@@ -44,8 +46,16 @@ public class Measure {
 		}
 	}
 	
+	/**
+	 * Adds a given chord to the measure at the specified division
+	 * @param startPoint
+	 * @param newChord
+	 */
 	public void addChord(int startPoint, Chord newChord) {
-		assert (startPoint > -1 && startPoint < numDivisions) : "Invalid chord starting position on the measure!";
+		if(startPoint < 0 || startPoint >= numDivisions) {
+			return;
+		}
+		
 		if(chordList[startPoint] == null) {
 			chordList[startPoint] = newChord;
 		} else {
@@ -59,7 +69,10 @@ public class Measure {
 	 * Specifies which chord to get rid of
 	 */
 	public void deleteChord(int startPoint) {
-		assert (startPoint > -1 && startPoint < numDivisions) : "Invalid chord starting position on the measure!";
+		if(startPoint < 0 || startPoint >= numDivisions) {
+			return;
+		}
+		
 		//Sketchy object deletion. May change in the future
 		chordList[startPoint] = null;
 	}
@@ -70,13 +83,17 @@ public class Measure {
 	 * @return target chord on the specified division
 	 */
 	public Chord getChord(int targetPoint) {
-		if(chordList[targetPoint] == null) {
+		if(targetPoint < 0 || targetPoint >= numDivisions || chordList[targetPoint] == null) {
 			//Chord doesn't exist here
 			return null;
 		}
 		return chordList[targetPoint];
 	}
 	
+	/**
+	 * Returns the number of chords that are in the measure
+	 * @return
+	 */
 	public int getSize() {
 		return numDivisions;
 	}

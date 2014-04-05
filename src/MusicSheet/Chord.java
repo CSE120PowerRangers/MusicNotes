@@ -43,11 +43,15 @@ public class Chord {
 		if(findNote(name, octave) != null) {
 			//Note already exists with that frequency
 			return;
+		} else if(octave < 0 || octave > 8) {
+			//Invalid octave
+			return;
 		}
 		
 		Note newNote = new Note(name, type, octave);
 		noteList.add(newNote);
 	}
+	
 	/**
 	
 	 * Deletes the note from the note list 
@@ -55,6 +59,10 @@ public class Chord {
 	 * @param targetOctave
 	 */
 	public void deleteNote(NoteName targetName, int targetOctave) {
+		if(targetOctave < 0 || targetOctave > 8) {
+			return;
+		}
+		
 		Note targetNote = findNote(targetName, targetOctave);
 		if(targetNote != null) {
 			noteList.remove(targetNote);
@@ -67,6 +75,10 @@ public class Chord {
 	 * @return note with the target frequency or null if it wasn't found
 	 */
 	public Note getNote(NoteName targetName, int targetOctave) {
+		if(targetOctave < 0 || targetOctave > 8) {
+			return null;
+		}
+		
 		return findNote(targetName, targetOctave);
 	}
 	
