@@ -8,7 +8,7 @@ public class Staff {
 	private Clef clef;
 	
 	/**
-	 * Default constructor creates a staff with a treble cleff and a default signature
+	 * Default constructor creates a staff with a treble clef and a default signature
 	 */
 	public Staff() {
 		clef = Clef.TREBLE;
