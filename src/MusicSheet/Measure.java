@@ -16,6 +16,17 @@ public class Measure {
 		chordList = new Chord[numDivisions];
 	}
 	
+	public Measure(Measure toCopy) {
+		this.chordMap = toCopy.chordMap;
+		for(int i = 0; i < numDivisions; i++) {
+			if(toCopy.chordList[i].equals(null)) {
+				this.chordList[i] = null;
+			} else {
+				this.chordList[i] = new Chord(toCopy.chordList[i]);
+			}
+		}
+	}
+	
 	/**
 	 * Adds a chord to the measure at the specified division. 
 	 * Measures are divided into 32 segments as to allow for up to 32nd notes
@@ -29,6 +40,15 @@ public class Measure {
 			chordMap = (chordMap >> startPoint) | 1;
 		} else {
 			//Chord already exists at this position on the measure
+			return;
+		}
+	}
+	
+	public void addChord(int startPoint, Chord newChord) {
+		assert (startPoint > -1 && startPoint < numDivisions) : "Invalid chord starting position on the measure!";
+		if(chordList[startPoint] == null) {
+			chordList[startPoint] = newChord;
+		} else {
 			return;
 		}
 	}
@@ -55,5 +75,9 @@ public class Measure {
 			return null;
 		}
 		return chordList[targetPoint];
+	}
+	
+	public int getSize() {
+		return numDivisions;
 	}
 }

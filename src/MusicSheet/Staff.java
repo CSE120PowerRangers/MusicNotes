@@ -2,17 +2,26 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
-/*
- * TODO:
- * Finish up staff & sheet classes
- * Implement marker classes using divisions & do calculations for position
- */
 
 public class Staff {
 	private ArrayList<Signature> signatures;
+	private Clef clef;
 	
 	public Staff() {
 		
+	}
+	
+	public Staff(Clef clef) {
+		this.clef = clef;
+	}
+	
+	public Staff(Staff toCopy) {
+		this.clef = toCopy.clef;
+		this.signatures = new ArrayList<Signature>(toCopy.signatures);
+	}
+	
+	public void setClef(Clef newClef) {
+		clef = newClef;
 	}
 	
 	public void addSignature(Signature newSignature) {
@@ -28,15 +37,15 @@ public class Staff {
 		}
 	}
 	
-	//Staff modifies its signatures, needs to know which signature it is
-	public void modifySignature(int sigNumber) {
-		
-	}
-	
 	public Signature getSignature(int sigNumber) {
-		
-		return null;
+		return signatures.get(sigNumber);
 	}
 	
+	public int getSize() {
+		return signatures.size();
+	}
 	
+	public Clef getClef() {
+		return clef;
+	}
 }

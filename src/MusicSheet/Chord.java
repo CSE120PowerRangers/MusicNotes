@@ -10,7 +10,14 @@ public class Chord {
 	 * The chord keeps an unordered list of notes, which may or may not have the same durations
 	 * Chords cannot contain duplicate frequencies
 	 */
+	public Chord() {
+		
+	}
 
+	public Chord(Chord toCopy) {
+		this.noteList = new ArrayList<Note>(toCopy.noteList);
+	}
+	
 	/**
 	 * Finds a note with the name and octave
 	 * @param name is the enumerated name of the note
@@ -64,9 +71,9 @@ public class Chord {
 	}
 	
 	/**
-	 * @return number of noteList in the chord
+	 * @return number of notes in the chord
 	 */
-	public int getNumbernoteList() {
+	public int getSize() {
 		return noteList.size();
 	}
 }

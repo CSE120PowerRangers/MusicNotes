@@ -2,6 +2,12 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+/**
+ * TODO: Allow for adding measures at a particular index instead of just appending
+ * See if "copying" measures can be done
+ *
+ */
+
 public class Signature {
 	private int tempo;
 	private String timeSignature;
@@ -22,6 +28,15 @@ public class Signature {
 		sharps = new int[8];
 	}
 
+	public Signature(Signature toCopy) {
+		this.tempo = toCopy.tempo;
+		this.timeSignature = new String(toCopy.timeSignature);
+		this.keySignature = new String(toCopy.keySignature);
+		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
+		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
+		this.measures = new ArrayList<Measure>(toCopy.measures);
+	}
+	
 	public Signature(String keySig, String timeSig, int newTempo) {
 		tempo = newTempo;
 		timeSignature = "";
@@ -37,6 +52,11 @@ public class Signature {
 		measures.add(newMeasure);
 	}
 	
+	public void addMeasure(int index, Measure newMeasure) {
+		//Force creation of new copy of measure
+		newMeasure = new Measure(newMeasure);
+		measures.add(index, newMeasure);
+	}
 	
 	public void deleteMeasure(Measure oldMeasure) {
 		for(int i = 0; i < measures.size(); i++) {
@@ -152,5 +172,13 @@ public class Signature {
 	 */
 	public int getTempo() {
 		return tempo;
+	}
+	
+	public Measure getMeasure(int index) {
+		return measures.get(index);
+	}
+	
+	public int getSize() {
+		return measures.size();
 	}
 }
