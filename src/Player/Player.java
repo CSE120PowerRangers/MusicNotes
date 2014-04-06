@@ -16,7 +16,7 @@ public class Player {
 	
 	private byte[] streamBuffer; // Contains whatever will be written to soundTrack
 
-	Player() {
+	public Player() {
 		// Determine constants for our soundTrack
 		int minBufferSize = AudioTrack.getMinBufferSize(SAMPLE_RATE,
 				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -37,7 +37,7 @@ public class Player {
 				AudioTrack.MODE_STREAM);
 	}
 	
-	Player(Sheet s) {
+	public Player(Sheet s) {
 		// Determine constants for our soundTrack
 		int minBufferSize = AudioTrack.getMinBufferSize(SAMPLE_RATE,
 				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
