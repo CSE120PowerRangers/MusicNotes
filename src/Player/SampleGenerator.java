@@ -131,16 +131,49 @@ public class SampleGenerator {
 
 	}
 
-	// Normalizes double samples into pure tone samples
+	// Normalizes double samples into pure tone samples (Range between -1 and 1)
 	public double[] normalizeDoubleSample(double[] sample) {
-		return null;
+		// Just look for abs(max/min) and divide by that
+		double absoluteMax = 0;
+		double[] newSample = new double[sample.length];
+
+		for (int i = 0; i < sample.length; i++) {
+			if (Math.abs(sample[i]) > absoluteMax) {
+				absoluteMax = Math.abs(sample[i]);
+			}
+		}
+
+		// Divide each value by absolute max
+		for (int i = 0; i < sample.length; i++) {
+			newSample[i] = sample[i] / absoluteMax;
+		}
+
+		return newSample;
 	}
 
 	// Converts double sample into PCM 16-bit array for playback
 	public byte[] convertToPCMArray16(double[] sample) {
-		double[] normalizedSample = normalizeDoubleSample(sample);
 
-		return null;
+		if (!sample.equals(null)) {
+			int idx = 0;
+			byte[] newSamplePCM = new byte[2 * sample.length];
+			double[] normalizedSample = normalizeDoubleSample(sample);
+
+			for (final double dVal : normalizedSample) {
+				// Scale to max amplitude -- LOOK AT THIS LATER
+				final short val = (short) ((dVal * 32767));
+
+				// In 16 bit wav PCM, first byte is the low order byte
+				newSamplePCM[idx++] = (byte) (val & 0x00ff);
+				newSamplePCM[idx++] = (byte) ((val & 0xff00) >>> 8);
+			}
+
+			return newSamplePCM;
+		} else if (sample.equals(null)) {
+			return null;
+		} else {
+			return null;
+		}
 	}
 
 	// Combines Staff Samples to form Sheet Samples
