@@ -10,19 +10,18 @@ public class SampleGenerator {
 	private Sheet activeSheet;
 
 	SampleGenerator(Sheet s, int sampleRate) {
-		this.activeSheet = new Sheet(s);
+		activeSheet = new Sheet(s);
 		this.SAMPLE_RATE = sampleRate;
 	}
 
 	public void createSample() {
 		int sampleSize = calculateLengthOfSheetSample();
 
-		this.activeSample = new byte[sampleSize];
+		activeSample = new byte[sampleSize];
 
 		// WARNING -- SPAGHETTI CODE -- REFACTOR LATER
 
 		// Set up some helper vars -- loop limits
-		int numStaffsInSheet, numSignaturesInStaff, numMeasuresInSignature, numChordsInMeasure, numNotesInChord;
 
 		// Signature settings to keep later
 		int tempo;
@@ -42,104 +41,79 @@ public class SampleGenerator {
 		noteSample = null;
 
 		// Determine the staffs in the sheet
-		numStaffsInSheet = this.activeSheet.getStaffSize();
+		int numStaffs = activeSheet.getStaffSize();
 
 		// Start reading the sheet -- For each staff
-		for (int staffInd = 0; staffInd < numStaffsInSheet; staffInd++) {
-
+		for (int staffInd = 0; staffInd < numStaffs; staffInd++) {
 			// Determine the signature in the staff
-			numSignaturesInStaff = this.activeSheet.getStaff(staffInd)
-					.getSize();
+			Staff iStaff = activeSheet.getStaff(staffInd);
+			int numSignatures = iStaff.getSize();
 
 			// For each signature in the staff
-			for (int signatureInd = 0; signatureInd < numSignaturesInStaff; signatureInd++) {
-
+			for (int signatureInd = 0; signatureInd < numSignatures; signatureInd++) {
 				// Determine the measures in the signature
-				numMeasuresInSignature = this.activeSheet.getStaff(staffInd)
-						.getSignature(signatureInd).getSize();
-
+				Signature iSignature = iStaff.getSignature(signatureInd);
+				int numMeasures = iSignature.getSize();
 				// As well as the settings of the signature
-				tempo = this.activeSheet.getStaff(staffInd)
-						.getSignature(signatureInd).getTempo();
-				timeSig = this.activeSheet.getStaff(staffInd)
-						.getSignature(signatureInd).getTimeSignature();
-
+				tempo = iSignature.getTempo();
+				timeSig = iSignature.getTimeSignature();
+				
 				// For each measure in the signature
-				for (int measureInd = 0; measureInd < numMeasuresInSignature; measureInd++) {
+				for (int measureInd = 0; measureInd < numMeasures; measureInd++) {
 					// Determine the number of chords in the measure
-					numChordsInMeasure = this.activeSheet.getStaff(staffInd)
-							.getSignature(signatureInd).getMeasure(measureInd)
-							.getSize();
+					Measure iMeasure = iSignature.getMeasure(measureInd);
+					int numChords = iMeasure.getSize();
 
 					// For each chord in the measure
-					for (int chordInd = 0; chordInd < numChordsInMeasure; chordInd++) {
+					for (int chordInd = 0; chordInd < numChords; chordInd++) {
 						// Need this when we find a chord
-
-						int chordPositionInMeasure = -1;
+						int numNotes = 0;
+						int chordPosition = -1;
+						Chord iChord = iMeasure.getChord(chordInd);
+						
 						// If the chord exists
-						if (!this.activeSheet.getStaff(staffInd)
-								.getSignature(signatureInd)
-								.getMeasure(measureInd).getChord(chordInd)
-								.equals(null)) {
-							// Get the number of notes in the chord
-							numNotesInChord = this.activeSheet
-									.getStaff(staffInd)
-									.getSignature(signatureInd)
-									.getMeasure(measureInd).getChord(chordInd)
-									.getSize();
-
-							// And its position
-							chordPositionInMeasure = chordInd;
+						if (!iChord.equals(null)) {
+							// Record the number of notes in the chord and its position
+							numNotes= iChord.getSize();
+							chordPosition = chordInd;
 						} else {
 							// Null chord, don't look for notes
-							numNotesInChord = 0;
+							numNotes = 0;
 						}
 
 						// For each note in the chord
-						for (int noteInd = 0; noteInd < numNotesInChord; noteInd++) {
+						for (int noteInd = 0; noteInd < numNotes; noteInd++) {
 							// Generate double SAMPLE!
-							Note currentNote = this.activeSheet
-									.getStaff(staffInd)
-									.getSignature(signatureInd)
-									.getMeasure(measureInd).getChord(chordInd)
-									.getNote(noteInd);
+							Note currentNote = iChord.getNote(noteInd);
 
 							// Generate a double sample
-							noteSample = generateNoteSample(timeSig, tempo,
-									currentNote);
+							noteSample = generateNoteSample(timeSig, tempo, currentNote);
 
 							// Combine it with the current chord sample
-							chordSample = combineNoteSampleIntoChordSample(
-									noteSample, chordSample);
+							chordSample = combineNoteSampleIntoChordSample(noteSample, chordSample);
 						}
-						// Determine where in the sample the chord should be
-						// placed
-						if (chordPositionInMeasure >= 0) {
+						
+						// Determine where in the sample the chord should be placed
+						if (chordPosition > -1) {
 							// Place chord samples correctly
-							measureSample = combineChordSampleIntoMeasureSample(
-									chordSample, measureSample,
-									timeSig, tempo, chordPositionInMeasure);
+							measureSample = mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
 						}
 					}
 
 					// Append Measure samples to Signature Samples
-					signatureSample = combineMeasureSampleIntoSignatureSample(
-							measureSample, signatureSample);
+					signatureSample = mergeMeasureToSignature(measureSample, signatureSample);
 				}
 
 				// Append Signature samples to Staff Samples
-				staffSample = combineSignatureSampleIntoStaffSample(
-						signatureSample, staffSample);
+				staffSample = mergeSignatureToStaff(signatureSample, staffSample);
 			}
 
 			// Combine Staff samples into Sheet samples
-			sheetSample = combineStaffSampleIntoSheetSample(staffSample,
-					sheetSample);
+			sheetSample = mergeStaffToSheet(staffSample,sheetSample);
 		}
 
 		// Convert the sheet into PCM 16-bit array -- SAMPLE READY
-		this.activeSample = convertToPCMArray16(sheetSample);
-
+		activeSample = convertToPCMArray16(sheetSample);
 	}
 
 	// Normalizes double samples into pure tone samples (Range between -1 and 1)
@@ -188,7 +162,7 @@ public class SampleGenerator {
 	}
 
 	// Combines Staff Samples to form Sheet Samples
-	private double[] combineStaffSampleIntoSheetSample(double[] staffSample,
+	private double[] mergeStaffToSheet(double[] staffSample,
 			double[] sheetSample) {
 		double[] newSheetSample = null;
 
@@ -237,7 +211,7 @@ public class SampleGenerator {
 	}
 
 	// Appends Signature samples into Staff Samples
-	private double[] combineSignatureSampleIntoStaffSample(
+	private double[] mergeSignatureToStaff(
 			double[] signatureSample, double[] staffSample) {
 		double[] newStaffSample;
 		int sampleLength;
@@ -275,7 +249,7 @@ public class SampleGenerator {
 	}
 
 	// Appends Measure samples to a Signature Samples
-	private double[] combineMeasureSampleIntoSignatureSample(
+	private double[] mergeMeasureToSignature(
 			double[] measureSample, double[] signatureSample) {
 		double[] newSignatureSample;
 		int sampleLength;
@@ -313,7 +287,7 @@ public class SampleGenerator {
 	}
 
 	// Appends Chord Samples hopefully correctly
-	private double[] combineChordSampleIntoMeasureSample(double[] chordSample,
+	private double[] mergeChordToMeasure(double[] chordSample,
 			double[] measureSample, TimeSignature timeSig, int tempo,
 			int chordPositionInMeasure) {
 		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
@@ -434,7 +408,7 @@ public class SampleGenerator {
 	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length) {
 		byte[] newSample = new byte[length];
-		System.arraycopy(this.activeSample, startIndex, newSample, 0, length);
+		System.arraycopy(activeSample, startIndex, newSample, 0, length);
 		return newSample;
 	}
 
@@ -465,19 +439,19 @@ public class SampleGenerator {
 
 		// Calculate the number of beats on the Sheet
 
-		int numSignatures = this.activeSheet.getStaff(0).getSize();
+		int numSignatures = activeSheet.getStaff(0).getSize();
 		int numMeasures, beatsPerMeasure, beatsPerSignature, tempo, minSampleSize, finalSampleSize;
 		double totalDuration = 0;
 		TimeSignature t;
 
 		for (int i = 0; i < numSignatures; i++) {
-			numMeasures = this.activeSheet.getStaff(0).getSize();
+			numMeasures = activeSheet.getStaff(0).getSize();
 
-			t = this.activeSheet.getStaff(0).getSignature(i).getTimeSignature();
+			t = activeSheet.getStaff(0).getSignature(i).getTimeSignature();
 			beatsPerMeasure = getBeatsPerMeasure(t);
 
 			beatsPerSignature = beatsPerMeasure * numMeasures;
-			tempo = this.activeSheet.getStaff(0).getSignature(i).getTempo();
+			tempo = activeSheet.getStaff(0).getSignature(i).getTempo();
 
 			totalDuration += ((beatsPerSignature / (double) tempo) * 60);
 		}
