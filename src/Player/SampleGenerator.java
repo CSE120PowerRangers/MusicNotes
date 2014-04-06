@@ -73,6 +73,9 @@ public class SampleGenerator {
 
 					// For each chord in the measure
 					for (int chordInd = 0; chordInd < numChordsInMeasure; chordInd++) {
+						// Need this when we find a chord
+
+						int chordPositionInMeasure = -1;
 						// If the chord exists
 						if (!this.activeSheet.getStaff(staffInd)
 								.getSignature(signatureInd)
@@ -84,6 +87,9 @@ public class SampleGenerator {
 									.getSignature(signatureInd)
 									.getMeasure(measureInd).getChord(chordInd)
 									.getSize();
+
+							// And its position
+							chordPositionInMeasure = chordInd;
 						} else {
 							// Null chord, don't look for notes
 							numNotesInChord = 0;
@@ -106,9 +112,14 @@ public class SampleGenerator {
 							chordSample = combineNoteSampleIntoChordSample(
 									noteSample, chordSample);
 						}
-						// Place chord samples correctly
-						measureSample = combineChordSampleIntoMeasureSample(
-								chordSample, measureSample);
+						// Determine where in the sample the chord should be
+						// placed
+						if (chordPositionInMeasure >= 0) {
+							// Place chord samples correctly
+							measureSample = combineChordSampleIntoMeasureSample(
+									chordSample, measureSample,
+									timeSig, tempo, chordPositionInMeasure);
+						}
 					}
 
 					// Append Measure samples to Signature Samples
@@ -303,7 +314,46 @@ public class SampleGenerator {
 
 	// Appends Chord Samples hopefully correctly
 	private double[] combineChordSampleIntoMeasureSample(double[] chordSample,
-			double[] measureSample) {
+			double[] measureSample, TimeSignature timeSig, int tempo,
+			int chordPositionInMeasure) {
+		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
+		double[] newMeasureSample = null;
+
+		beatsPerMeasure = this.getBeatsPerMeasure(timeSig);
+		beatNote = this.getMeasureBeatNote(timeSig); // Either quarter(4) or
+												// eighth(8);
+
+		// Determine if we measureSample needs to be initialized first
+		if (measureSample.equals(null)) {
+			if (beatNote == 4) {
+				sampleLengthOfMeasure = this.getSampleLengthOfNote(
+						NoteType.QUARTER_NOTE, timeSig, tempo) * beatsPerMeasure;
+			} else {
+				sampleLengthOfMeasure = this.getSampleLengthOfNote(
+						NoteType.EIGHTH_NOTE, timeSig, tempo) * beatsPerMeasure;
+			}
+
+			newMeasureSample = new double[sampleLengthOfMeasure];
+		}
+		
+		// Get the sample length of a division in a measure
+		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(NoteType.EIGHTH_NOTE, timeSig, tempo);
+		
+		
+		if(!chordSample.equals(null)){
+			// Determine position in sample
+			chordPositionInSample = chordPositionInMeasure * sampleLengthOfMeasureDivision;
+			
+			// Combine sample information
+			for(int i = 0; i < chordSample.length; i++) {
+				newMeasureSample[i + chordPositionInSample] += chordSample[i];
+			}
+		}
+		// chordSample is null, nothing to be done
+		else if(chordSample.equals(null)) {
+			return measureSample;
+		}
+		// Shouldn't happen but return null anyways.
 		return null;
 	}
 
@@ -359,7 +409,7 @@ public class SampleGenerator {
 	// Generates a note sample -- return null for invalid note
 	public double[] generateNoteSample(TimeSignature timeSig, int tempo, Note n) {
 
-		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig);
+		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig, tempo);
 		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(),
 				n.getOctave());
 
@@ -453,13 +503,12 @@ public class SampleGenerator {
 	 *            - time signature in sheet
 	 * @return
 	 */
-	private int getSampleLengthOfNote(NoteType n, TimeSignature t) {
+	private int getSampleLengthOfNote(NoteType n, TimeSignature t, int tempo) {
 		double beats, noteDurationInSeconds;
-		int tempo, beatNote, minNoteSampleSize;
+		int beatNote, minNoteSampleSize;
 
 		beatNote = getMeasureBeatNote(t);
 		beats = getBeatLengthOfNote(n, beatNote);
-		tempo = this.activeSheet.getStaff(0).getSignature(0).getTempo();
 
 		noteDurationInSeconds = beats * (tempo / 60);
 

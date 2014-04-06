@@ -111,9 +111,6 @@ public class NoteTable {
 			frequency = calculateFrequency((12 * octave) - STEP_DIFFERENCE + 11);
 			noteFrequency.put(new Note(NoteName.CFLAT, NoteType.NOTANOTE, octave), frequency);
 		}
-
-		//?? Why create a copy of the map? - Robert
-		noteFrequency = new HashMap<Note, Double>(noteFrequency);
 	}
 
 	private static double calculateFrequency(int halfStepDistance) {
