@@ -1,7 +1,5 @@
 package Player;
 
-import java.util.Queue;
-
 import MusicSheet.*;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -15,6 +13,8 @@ public class Player {
 	private AudioTrack soundTrack; 	   // Actually outputs the music
 	
 	private byte[] streamBuffer; // Contains whatever will be written to soundTrack
+	
+	private int bufferPosition; // Allows use to keep track of where we want to draw our sample from
 
 	public Player() {
 		// Determine constants for our soundTrack
@@ -25,6 +25,8 @@ public class Player {
 											// AudioTrack
 		
 		// Initialize members
+		this.bufferPosition = 0;
+		
 		this.streamBuffer = new byte[bufferSize / 2]; // Encourages double
 														// buffering
 
@@ -46,11 +48,13 @@ public class Player {
 											// AudioTrack
 		
 		// Initialize members
+		this.bufferPosition = 0;
+		
 		this.streamBuffer = new byte[bufferSize / 2]; // Encourages double
 														// buffering
 
 		// Need to initialize later if no sheet passed in
-		this.sampleGen = new SampleGenerator(new Sheet(s), this.SAMPLE_RATE);
+		this.sampleGen = new SampleGenerator(new Sheet(s), Player.SAMPLE_RATE);
 		
 		this.soundTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
 				SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
@@ -60,10 +64,40 @@ public class Player {
 	
 	// SampleGenerator
 	public void initializeSampleGenerator(Sheet s){		
-		this.sampleGen = new SampleGenerator(new Sheet(s), this.SAMPLE_RATE);
+		this.sampleGen = new SampleGenerator(new Sheet(s), Player.SAMPLE_RATE);
+		sampleGen.createSample();
 	}
 
+	private byte[] getNextSample() {
+		byte[] newSample = sampleGen.getActiveSampleChunk(this.bufferPosition, this.streamBuffer.length);
+		this.bufferPosition += this.streamBuffer.length;
+		return newSample;
+	}
+	
 	public void play() {
+		// Open up audio channel to begin streaming
+		soundTrack.play();
+		
+		// Read from the SampleGenerator
+		while(!streamBuffer.equals(null)) {  
+			streamBuffer = getNextSample();
+			soundTrack.write(streamBuffer, 0, streamBuffer.length);
+		}
+		
+		soundTrack.stop();
+	}
+	
+	public void pause() {
+		soundTrack.pause();
+	}
+	
+	public void resume() {
+		soundTrack.play();
+	}
+	
+	public void stop() {
+		soundTrack.pause();
+		soundTrack.flush();
 	}
 
 	/*
@@ -111,10 +145,6 @@ public class Player {
 			}
 		}
 	};
-
-	private byte[] getNextSample() {
-		return null;
-	}
 
 	private void RunAudioThreads() {
 		mStopAudioThreads = false;

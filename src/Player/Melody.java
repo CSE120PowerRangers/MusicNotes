@@ -6,17 +6,14 @@ public class Melody {
 	// Just a test class while working on Player
 	public Sheet music;
 	
-	Melody(){
+	public Melody(){
 		/*
 		 * MARY HAD A LITTLE LAMB
 		 * 
 		 * E4 D4 C4 D4 | E4 E4 E4 | D4 D4 D4 | E4 G4 G4
 		 */
-
-		this.music = new Sheet();
-
-		Chord E4Q= new Chord();
 		
+		Chord E4Q= new Chord();
 		Chord D4Q = new Chord();
 		Chord C4Q = new Chord();
 		Chord G4Q = new Chord();
@@ -39,21 +36,21 @@ public class Melody {
 		Measure measure4 = new Measure();
 		
 		measure1.addChord(0, new Chord(E4Q));
+		measure1.addChord(2, new Chord(D4Q));
+		measure1.addChord(4, new Chord(C4Q));
 		measure1.addChord(8, new Chord(D4Q));
-		measure1.addChord(16, new Chord(C4Q));
-		measure1.addChord(24, new Chord(D4Q));
 		
 		measure2.addChord(0, new Chord(E4Q));
-		measure2.addChord(8, new Chord(E4Q));
-		measure2.addChord(16, new Chord(E4H));
+		measure2.addChord(2, new Chord(E4Q));
+		measure2.addChord(4, new Chord(E4H));
 		
 		measure3.addChord(0, new Chord(D4Q));
-		measure3.addChord(8, new Chord(D4Q));
-		measure3.addChord(16, new Chord(D4H));
+		measure3.addChord(2, new Chord(D4Q));
+		measure3.addChord(4, new Chord(D4H));
 		
 		measure4.addChord(0, new Chord(E4Q));
-		measure4.addChord(8, new Chord(G4Q));
-		measure4.addChord(16, new Chord(G4H));
+		measure4.addChord(2, new Chord(G4Q));
+		measure4.addChord(4, new Chord(G4H));
 		
 		Signature sig1 = new Signature();
 		
@@ -64,8 +61,11 @@ public class Melody {
 		
 		Staff treble = new Staff();
 		
+		treble.deleteSignature(new Signature());
 		treble.addSignature(sig1);
 		
-		music.addStaff(treble);		
+		this.music = new Sheet();
+		this.music.deleteStaff(0);
+		this.music.addStaff(treble);		
 	}
 }
