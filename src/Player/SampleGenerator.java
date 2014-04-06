@@ -399,17 +399,18 @@ public class SampleGenerator {
 	 */
 	private int calculateLengthOfSheetSample() {
 		/*
-		 * Tempo = beats per minute; Duration of a Signature in seconds = Total
-		 * beats *(Tempo / 60) Duration of whole Sheet in seconds =
-		 * Sum(Signatures in a staff)
+		 * Tempo = beats per minute; -----------------------------------------
+		 * Duration of a Signature in seconds = ((Total beats / Tempo) * 60);
 		 * 
-		 * Beats per Signature = Beats per Measure * NumMeasures Beats per
-		 * Measure = f(TimeSignature)
+		 * Duration of whole Sheet in seconds = Sum(Signatures in a staff);
 		 * 
-		 * SampleRate = Samples/Second
+		 * Beats per Signature = Beats per Measure * NumMeasures; ------------
+		 * Beats per Measure = f(TimeSignature);
 		 * 
-		 * SampleLength = Sum(Signature Duration) * SampleRate = Sum(Total beats
-		 * * (Tempo / 60)) * SampleRate
+		 * SampleRate = Samples/Second;
+		 * 
+		 * SampleLength = Sum(Signature Duration) * SampleRate; ---------------
+		 * SampleLength = Sum((Total beats / Tempo) * 60)) * SampleRate;
 		 */
 
 		// Calculate the number of beats on the Sheet
@@ -428,7 +429,7 @@ public class SampleGenerator {
 			beatsPerSignature = beatsPerMeasure * numMeasures;
 			tempo = this.activeSheet.getStaff(0).getSignature(i).getTempo();
 
-			totalDuration += beatsPerSignature * ((double) tempo / 60);
+			totalDuration += ((beatsPerSignature / (double) tempo) * 60);
 		}
 
 		// Calculate the minimum length
