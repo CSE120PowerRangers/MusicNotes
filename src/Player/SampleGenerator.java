@@ -26,7 +26,6 @@ public class SampleGenerator {
 
 		// Signature settings to keep later
 		int tempo;
-		KeySignature keySig;
 		TimeSignature timeSig;
 
 		// Somewhere to store the double samples before combination and
@@ -433,8 +432,33 @@ public class SampleGenerator {
 
 	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length) {
-		byte[] newSample = new byte[length];
-		System.arraycopy(this.activeSample, startIndex, newSample, 0, length);
+		byte[] newSample = null;
+		
+		// Check the boundaries
+		if(startIndex + length < this.activeSample.length) {
+			// Safe to do straight copy
+			newSample = new byte[length];
+			System.arraycopy(this.activeSample, startIndex, newSample, 0, length);
+		}
+		else if(startIndex + length >= this.activeSample.length) {
+			// Init the new sample
+			newSample = new byte[length];
+			
+			// Copy the remainder of the active sample
+			for(int i = 0; i < length; i++) {
+				if(startIndex + i < this.activeSample.length){
+					newSample[i] = this.activeSample[startIndex + i];
+				}
+				else {
+					// Fill the buffer with 0's
+					newSample[i] = 0;
+				}
+			}
+			
+		}
+		else {
+			return null;
+		}
 		return newSample;
 	}
 
