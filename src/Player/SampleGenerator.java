@@ -46,7 +46,11 @@ public class SampleGenerator {
 	// Need to calculate the sample length of the whole sample
 	private int calculateLengthOfSheetSample() {
 		/*
+		 * Tempo = beats per minute;
+		 * Duration of a Signature in seconds = Total beats *(Tempo / 60)
+		 * Duration of Total Song in seconds =  Sum(Signatures in a staff)
 		 * 
+		 * Sample =
 		 */
 		return 0;
 	}
