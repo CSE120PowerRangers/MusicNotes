@@ -13,7 +13,6 @@ public class Player {
 
 	private SampleGenerator sampleGen; // Creates the samples we interpret
 	private AudioTrack soundTrack; 	   // Actually outputs the music
-	private Sheet activeSheet;		   // Contains the rendering of the sheet
 	
 	private byte[] streamBuffer; // Contains whatever will be written to soundTrack
 
@@ -29,8 +28,8 @@ public class Player {
 		this.streamBuffer = new byte[bufferSize / 2]; // Encourages double
 														// buffering
 
-		
-		this.sampleGen = new SampleGenerator();
+		// Need to initialize later if no sheet passed in
+		this.sampleGen = null;
 		
 		this.soundTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
 				SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
@@ -38,13 +37,33 @@ public class Player {
 				AudioTrack.MODE_STREAM);
 	}
 	
-	public void setActiveSheet(Sheet s){
-		this.activeSheet = new Sheet(s);
+	Player(Sheet s) {
+		// Determine constants for our soundTrack
+		int minBufferSize = AudioTrack.getMinBufferSize(SAMPLE_RATE,
+				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+
+		int bufferSize = 4 * minBufferSize; // Supposedly a decent size for
+											// AudioTrack
 		
-		sampleGen.createSample(this.activeSheet);
+		// Initialize members
+		this.streamBuffer = new byte[bufferSize / 2]; // Encourages double
+														// buffering
+
+		// Need to initialize later if no sheet passed in
+		this.sampleGen = new SampleGenerator(new Sheet(s));
+		
+		this.soundTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+				SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+				AudioFormat.ENCODING_PCM_16BIT, bufferSize,
+				AudioTrack.MODE_STREAM);
+	}
+	
+	// SampleGenerator
+	public void initializeSampleGenerator(Sheet s){		
+		this.sampleGen = new SampleGenerator(new Sheet(s));
 	}
 
-	public void play() {	
+	public void play() {
 	}
 
 	/*
