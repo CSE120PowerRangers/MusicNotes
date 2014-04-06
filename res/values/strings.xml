@@ -7,8 +7,16 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="editor_name">Editor</string>
-    <string name="mainMenu_name">Main Menu</string>
-    <string name="timesigtop_file_path">@drawable/four</string>
+
+      <string name="mainMenu_name">Main Menu</string>
+      <string name="timesigtop_file_path">@drawable/four</string>
+      
+      <string-array name="toolbarSpinnerArray">
+          <item>Notes</item>
+          <item>Rests</item>
+          <item>Accidentals</item>
+      </string-array>
+
     <string name="hello_world">Hello world!</string>
 
 </resources>
