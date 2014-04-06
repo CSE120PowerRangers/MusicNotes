@@ -50,7 +50,7 @@ public class Player {
 														// buffering
 
 		// Need to initialize later if no sheet passed in
-		this.sampleGen = new SampleGenerator(new Sheet(s));
+		this.sampleGen = new SampleGenerator(new Sheet(s), this.SAMPLE_RATE);
 		
 		this.soundTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
 				SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
@@ -60,7 +60,7 @@ public class Player {
 	
 	// SampleGenerator
 	public void initializeSampleGenerator(Sheet s){		
-		this.sampleGen = new SampleGenerator(new Sheet(s));
+		this.sampleGen = new SampleGenerator(new Sheet(s), this.SAMPLE_RATE);
 	}
 
 	public void play() {

@@ -5,16 +5,17 @@ import MusicSheet.*;
 public class SampleGenerator {
 	private static final NoteTable FREQUENCIES = new NoteTable();
 	
+	private final int SAMPLE_RATE;
 	private byte[] activeSample;
 	private Sheet activeSheet;
 	
-	SampleGenerator(Sheet s) {
+	SampleGenerator(Sheet s, int sampleRate) {
 		this.activeSheet = new Sheet(s);
-		calculateLengthOfSheetSample();
+		this.SAMPLE_RATE = sampleRate;
 	}
 	
 	public void createSample() {
-		
+		int sampleSize = calculateLengthOfSheetSample();
 	}
 	
 	public void createSample(Sheet s) {
@@ -42,8 +43,11 @@ public class SampleGenerator {
 		
 	}
 	
-	// Need to calculate the length of the whole sample
+	// Need to calculate the sample length of the whole sample
 	private int calculateLengthOfSheetSample() {
+		/*
+		 * 
+		 */
 		return 0;
 	}
 	
