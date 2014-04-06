@@ -22,7 +22,7 @@ public class EditorActivity extends Activity{
     	updateToolBar();
     	ImageView timeSigTop = (ImageView) findViewById(R.id.timesigtop);
     	timeSigTop.setImageResource(R.drawable.halfnote);
-    	//sheet = new Sheet();
+    	sheet = new Sheet();
     	//Add Buttons to notesToolBar
     }
 

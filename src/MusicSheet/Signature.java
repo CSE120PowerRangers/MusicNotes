@@ -26,6 +26,7 @@ public class Signature {
 		keySignature = KeySignature.C_MAJOR;
 		flats = new int[8];
 		sharps = new int[8];
+		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
 	}
 
@@ -43,6 +44,7 @@ public class Signature {
 
 		setKeySignature(keySig);
 		setTimeSignature(timeSig);
+		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
 	}
 
