@@ -28,6 +28,7 @@ public class Signature {
 		sharps = new int[8];
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
+		measures.add(new Measure());
 	}
 
 	/**
