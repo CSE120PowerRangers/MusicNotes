@@ -61,8 +61,6 @@ public class SampleGenerator {
 				// As well as the settings of the signature
 				tempo = this.activeSheet.getStaff(staffInd)
 						.getSignature(signatureInd).getTempo();
-				keySig = this.activeSheet.getStaff(staffInd)
-						.getSignature(signatureInd).getKeySignature();
 				timeSig = this.activeSheet.getStaff(staffInd)
 						.getSignature(signatureInd).getTimeSignature();
 
@@ -101,8 +99,8 @@ public class SampleGenerator {
 									.getNote(noteInd);
 
 							// Generate a double sample
-							noteSample = generateNoteSample(timeSig, keySig,
-									tempo, currentNote);
+							noteSample = generateNoteSample(timeSig, tempo,
+									currentNote);
 
 							// Combine it with the current chord sample
 							chordSample = combineNoteSampleIntoChordSample(
@@ -148,19 +146,126 @@ public class SampleGenerator {
 	// Combines Staff Samples to form Sheet Samples
 	private double[] combineStaffSampleIntoSheetSample(double[] staffSample,
 			double[] sheetSample) {
-		return null;
+		double[] newSheetSample = null;
+
+		// If noteSample is shorter than sheetSample and neither are null
+		if ((staffSample.length <= sheetSample.length)
+				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+			// Create with size equal to bigger array
+			newSheetSample = new double[sheetSample.length];
+
+			// Initialize with bigger array
+			for (int i = 0; i < sheetSample.length; i++) {
+				newSheetSample[i] = sheetSample[i];
+			}
+
+			// Add smaller arrays elements
+			for (int i = 0; i < staffSample.length; i++) {
+				newSheetSample[i] += staffSample[i];
+			}
+		}
+		// Else if staffSample is longer than sheetSample and neither are null
+		else if ((staffSample.length > sheetSample.length)
+				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+			// Create with size equal to bigger array
+			newSheetSample = new double[staffSample.length];
+
+			// Initialize with bigger array
+			for (int i = 0; i < staffSample.length; i++) {
+				newSheetSample[i] = staffSample[i];
+			}
+
+			// Add smaller array elements
+			for (int i = 0; i < sheetSample.length; i++) {
+				newSheetSample[i] += sheetSample[i];
+			}
+		} else if (sheetSample.equals(null)) {
+			// newsheetSample = staffSample;
+			return staffSample;
+		} else if (staffSample.equals(null)) {
+			// newsheetSample = sheetSample
+			return sheetSample;
+		} else {
+			// Not sure what would happen here
+		}
+
+		return newSheetSample;
 	}
 
 	// Appends Signature samples into Staff Samples
 	private double[] combineSignatureSampleIntoStaffSample(
 			double[] signatureSample, double[] staffSample) {
-		return null;
+		double[] newStaffSample;
+		int sampleLength;
+
+		// Combining in this case is simple -- just append them
+		if (!(staffSample.equals(null) || signatureSample.equals(null))) {
+			sampleLength = staffSample.length + signatureSample.length;
+			// Create appropriate length new sample
+			newStaffSample = new double[sampleLength];
+
+			// Copy old samples over
+			for (int i = 0; i < staffSample.length; i++) {
+				newStaffSample[i] = staffSample[i];
+			}
+
+			for (int i = 0; i < signatureSample.length; i++) {
+				newStaffSample[i + staffSample.length] = signatureSample[i];
+			}
+
+			return newStaffSample;
+		}
+		// Either Staff is null
+		else if (staffSample.equals(null)) {
+
+			return signatureSample;
+		}
+		// Or Signature is null
+		else if (signatureSample.equals(null)) {
+			return staffSample;
+		}
+		// Or it's all broken
+		else {
+			return null;
+		}
 	}
 
 	// Appends Measure samples to a Signature Samples
 	private double[] combineMeasureSampleIntoSignatureSample(
 			double[] measureSample, double[] signatureSample) {
-		return null;
+		double[] newSignatureSample;
+		int sampleLength;
+
+		// Combining in this case is simple -- just append them
+		if (!(signatureSample.equals(null) || measureSample.equals(null))) {
+			sampleLength = signatureSample.length + measureSample.length;
+			// Create appropriate length new sample
+			newSignatureSample = new double[sampleLength];
+
+			// Copy old samples over
+			for (int i = 0; i < signatureSample.length; i++) {
+				newSignatureSample[i] = signatureSample[i];
+			}
+
+			for (int i = 0; i < measureSample.length; i++) {
+				newSignatureSample[i + signatureSample.length] = measureSample[i];
+			}
+
+			return newSignatureSample;
+		}
+		// Either Signature is null
+		else if (signatureSample.equals(null)) {
+
+			return measureSample;
+		}
+		// Or measure is null
+		else if (measureSample.equals(null)) {
+			return signatureSample;
+		}
+		// Or it's all broken
+		else {
+			return null;
+		}
 	}
 
 	// Appends Chord Samples hopefully correctly
@@ -219,8 +324,7 @@ public class SampleGenerator {
 	}
 
 	// Generates a note sample -- return null for invalid note
-	public double[] generateNoteSample(TimeSignature timeSig,
-			KeySignature keySig, int tempo, Note n) {
+	public double[] generateNoteSample(TimeSignature timeSig, int tempo, Note n) {
 
 		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig);
 		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(),
