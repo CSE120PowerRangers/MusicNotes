@@ -10,7 +10,8 @@
 
       <string name="mainMenu_name">Main Menu</string>
       <string name="timesigtop_file_path">@drawable/four</string>
-      
+     
+          
       <string-array name="toolbarSpinnerArray">
           <item>Notes</item>
           <item>Rests</item>

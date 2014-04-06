@@ -4,6 +4,7 @@ import MusicSheet.*;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +25,17 @@ public class EditorActivity extends Activity{
       
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.editor_layout);
-    	ImageView timeSigTop = (ImageView) findViewById(R.id.timesigtop);
-    	timeSigTop.setImageResource(R.drawable.halfnote);
     	
+    	//Set Spinner and Default Value for Spinner
     	currentVal = EditorVal.NOTES;
     	spinner = (Spinner) findViewById(R.id.toolbarSpinner);
     	
+    	// Insert Options into Spinner
     	ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.toolbarSpinnerArray, android.R.layout.simple_spinner_item);
     	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	spinner.setAdapter(adapter);
     	
+    	//Add Selection Listener to Spinner
     	spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
     	    @Override
     	    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -58,12 +60,26 @@ public class EditorActivity extends Activity{
     	    }
 
     	});
-    	updateToolBar();
+    	
+    	//Update the ToolBar with default Items
+    	
     	
     	
     	sheet = new Sheet();
 
+    	
+    	//Create Gridview of measures
+    	
+    	
     }
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		updateToolBar();
+		updateMeasures();
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,8 +128,23 @@ public class EditorActivity extends Activity{
     		toolbar.addView(toolbarButtons[i]);
     	}
     	
-    	
-
+    }
     
+    public void updateMeasures()
+    {
+    	LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
+    	
+    	for(int measure = 0; measure < 8; measure++)
+    	{
+      		for(int note = 0; note < 15; note++)
+    		{
+      			LinearLayout chordIndex = (LinearLayout)measureLayout.getChildAt(measure);
+      			ImageView noteUpdate = (ImageView) chordIndex.getChildAt(note);
+      			if(note >= 3 && note <=11 && note%2 == 1)
+      			{
+      				noteUpdate.setImageResource(R.drawable.fillednoteline);
+      			}
+    		}
+    	}
     }
 }
