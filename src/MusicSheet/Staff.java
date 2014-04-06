@@ -12,6 +12,7 @@ public class Staff {
 	 */
 	public Staff() {
 		clef = Clef.TREBLE;
+		signatures = new ArrayList<Signature>();
 		signatures.add(new Signature());
 	}
 	
@@ -21,6 +22,7 @@ public class Staff {
 	 */
 	public Staff(Clef clef) {
 		this.clef = clef;
+		signatures = new ArrayList<Signature>();
 		signatures.add(new Signature());
 	}
 	
@@ -31,6 +33,7 @@ public class Staff {
 	 */
 	public Staff(Clef clef, Signature signature) {
 		this.clef = clef;
+		signatures = new ArrayList<Signature>();
 		signatures.add(signature);
 	}
 	
