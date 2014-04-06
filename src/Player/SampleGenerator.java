@@ -119,10 +119,10 @@ public class SampleGenerator {
 	// Normalizes double samples into pure tone samples (Range between -1 and 1)
 	public double[] normalizeDoubleSample(double[] sample) {
 		// Just look for abs(max/min) and divide by that
-		double absoluteMax = 0;
+		double absoluteMax = Math.abs(sample[0]);
 		double[] newSample = new double[sample.length];
 
-		for (int i = 0; i < sample.length; i++) {
+		for (int i = 1; i < sample.length; i++) {
 			if (Math.abs(sample[i]) > absoluteMax) {
 				absoluteMax = Math.abs(sample[i]);
 			}
@@ -138,7 +138,6 @@ public class SampleGenerator {
 
 	// Converts double sample into PCM 16-bit array for playback
 	public byte[] convertToPCMArray16(double[] sample) {
-
 		if (!sample.equals(null)) {
 			int idx = 0;
 			byte[] newSamplePCM = new byte[2 * sample.length];
@@ -154,8 +153,6 @@ public class SampleGenerator {
 			}
 
 			return newSamplePCM;
-		} else if (sample.equals(null)) {
-			return null;
 		} else {
 			return null;
 		}
@@ -166,7 +163,7 @@ public class SampleGenerator {
 			double[] sheetSample) {
 		double[] newSheetSample = null;
 
-		// If noteSample is shorter than sheetSample and neither are null
+		// If staffSample is shorter than sheetSample and neither are null
 		if ((staffSample.length <= sheetSample.length)
 				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
 			// Create with size equal to bigger array
@@ -182,6 +179,7 @@ public class SampleGenerator {
 				newSheetSample[i] += staffSample[i];
 			}
 		}
+		
 		// Else if staffSample is longer than sheetSample and neither are null
 		else if ((staffSample.length > sheetSample.length)
 				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
