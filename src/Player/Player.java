@@ -16,7 +16,7 @@ public class Player {
 	
 	private int bufferPosition; // Allows use to keep track of where we want to draw our sample from
 
-	Player() {
+	public Player() {
 		// Determine constants for our soundTrack
 		int minBufferSize = AudioTrack.getMinBufferSize(SAMPLE_RATE,
 				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -39,7 +39,7 @@ public class Player {
 				AudioTrack.MODE_STREAM);
 	}
 	
-	Player(Sheet s) {
+	public Player(Sheet s) {
 		// Determine constants for our soundTrack
 		int minBufferSize = AudioTrack.getMinBufferSize(SAMPLE_RATE,
 				AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -65,6 +65,7 @@ public class Player {
 	// SampleGenerator
 	public void initializeSampleGenerator(Sheet s){		
 		this.sampleGen = new SampleGenerator(new Sheet(s), Player.SAMPLE_RATE);
+		sampleGen.createSample();
 	}
 
 	private byte[] getNextSample() {

@@ -76,10 +76,9 @@ public class SampleGenerator {
 
 						int chordPositionInMeasure = -1;
 						// If the chord exists
-						if (!this.activeSheet.getStaff(staffInd)
+						if (this.activeSheet.getStaff(staffInd)
 								.getSignature(signatureInd)
-								.getMeasure(measureInd).getChord(chordInd)
-								.equals(null)) {
+								.getMeasure(measureInd).getChord(chordInd) != null) {
 							// Get the number of notes in the chord
 							numNotesInChord = this.activeSheet
 									.getStaff(staffInd)
@@ -116,8 +115,8 @@ public class SampleGenerator {
 						if (chordPositionInMeasure >= 0) {
 							// Place chord samples correctly
 							measureSample = combineChordSampleIntoMeasureSample(
-									chordSample, measureSample,
-									timeSig, tempo, chordPositionInMeasure);
+									chordSample, measureSample, timeSig, tempo,
+									chordPositionInMeasure);
 						}
 					}
 
@@ -164,7 +163,7 @@ public class SampleGenerator {
 	// Converts double sample into PCM 16-bit array for playback
 	public byte[] convertToPCMArray16(double[] sample) {
 
-		if (!sample.equals(null)) {
+		if (sample != null) {
 			int idx = 0;
 			byte[] newSamplePCM = new byte[2 * sample.length];
 			double[] normalizedSample = normalizeDoubleSample(sample);
@@ -179,8 +178,6 @@ public class SampleGenerator {
 			}
 
 			return newSamplePCM;
-		} else if (sample.equals(null)) {
-			return null;
 		} else {
 			return null;
 		}
@@ -192,8 +189,8 @@ public class SampleGenerator {
 		double[] newSheetSample = null;
 
 		// If noteSample is shorter than sheetSample and neither are null
-		if ((staffSample.length <= sheetSample.length)
-				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+		if (!(sheetSample == null || staffSample == null)
+				&& (staffSample.length <= sheetSample.length)) {
 			// Create with size equal to bigger array
 			newSheetSample = new double[sheetSample.length];
 
@@ -208,8 +205,8 @@ public class SampleGenerator {
 			}
 		}
 		// Else if staffSample is longer than sheetSample and neither are null
-		else if ((staffSample.length > sheetSample.length)
-				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+		else if (!(sheetSample == null || staffSample == null)
+				&& (staffSample.length > sheetSample.length)) {
 			// Create with size equal to bigger array
 			newSheetSample = new double[staffSample.length];
 
@@ -222,10 +219,10 @@ public class SampleGenerator {
 			for (int i = 0; i < sheetSample.length; i++) {
 				newSheetSample[i] += sheetSample[i];
 			}
-		} else if (sheetSample.equals(null)) {
+		} else if (sheetSample == null) {
 			// newsheetSample = staffSample;
 			return staffSample;
-		} else if (staffSample.equals(null)) {
+		} else if (staffSample == null) {
 			// newsheetSample = sheetSample
 			return sheetSample;
 		} else {
@@ -242,7 +239,7 @@ public class SampleGenerator {
 		int sampleLength;
 
 		// Combining in this case is simple -- just append them
-		if (!(staffSample.equals(null) || signatureSample.equals(null))) {
+		if (!(staffSample == null || signatureSample == null)) {
 			sampleLength = staffSample.length + signatureSample.length;
 			// Create appropriate length new sample
 			newStaffSample = new double[sampleLength];
@@ -259,12 +256,12 @@ public class SampleGenerator {
 			return newStaffSample;
 		}
 		// Either Staff is null
-		else if (staffSample.equals(null)) {
+		else if (staffSample == null) {
 
 			return signatureSample;
 		}
 		// Or Signature is null
-		else if (signatureSample.equals(null)) {
+		else if (signatureSample == null) {
 			return staffSample;
 		}
 		// Or it's all broken
@@ -280,7 +277,7 @@ public class SampleGenerator {
 		int sampleLength;
 
 		// Combining in this case is simple -- just append them
-		if (!(signatureSample.equals(null) || measureSample.equals(null))) {
+		if (!(signatureSample == null || measureSample == null)) {
 			sampleLength = signatureSample.length + measureSample.length;
 			// Create appropriate length new sample
 			newSignatureSample = new double[sampleLength];
@@ -297,12 +294,12 @@ public class SampleGenerator {
 			return newSignatureSample;
 		}
 		// Either Signature is null
-		else if (signatureSample.equals(null)) {
+		else if (signatureSample == null) {
 
 			return measureSample;
 		}
 		// Or measure is null
-		else if (measureSample.equals(null)) {
+		else if (measureSample == null) {
 			return signatureSample;
 		}
 		// Or it's all broken
@@ -320,13 +317,14 @@ public class SampleGenerator {
 
 		beatsPerMeasure = this.getBeatsPerMeasure(timeSig);
 		beatNote = this.getMeasureBeatNote(timeSig); // Either quarter(4) or
-												// eighth(8);
+		// eighth(8);
 
 		// Determine if we measureSample needs to be initialized first
-		if (measureSample.equals(null)) {
+		if (measureSample == null) {
 			if (beatNote == 4) {
 				sampleLengthOfMeasure = this.getSampleLengthOfNote(
-						NoteType.QUARTER_NOTE, timeSig, tempo) * beatsPerMeasure;
+						NoteType.QUARTER_NOTE, timeSig, tempo)
+						* beatsPerMeasure;
 			} else {
 				sampleLengthOfMeasure = this.getSampleLengthOfNote(
 						NoteType.EIGHTH_NOTE, timeSig, tempo) * beatsPerMeasure;
@@ -334,22 +332,23 @@ public class SampleGenerator {
 
 			newMeasureSample = new double[sampleLengthOfMeasure];
 		}
-		
+
 		// Get the sample length of a division in a measure
-		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(NoteType.EIGHTH_NOTE, timeSig, tempo);
-		
-		
-		if(!chordSample.equals(null)){
+		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(
+				NoteType.EIGHTH_NOTE, timeSig, tempo);
+
+		if (chordSample != null) {
 			// Determine position in sample
-			chordPositionInSample = chordPositionInMeasure * sampleLengthOfMeasureDivision;
-			
+			chordPositionInSample = chordPositionInMeasure
+					* sampleLengthOfMeasureDivision;
+
 			// Combine sample information
-			for(int i = 0; i < chordSample.length; i++) {
+			for (int i = 0; i < chordSample.length; i++) {
 				newMeasureSample[i + chordPositionInSample] += chordSample[i];
 			}
 		}
 		// chordSample is null, nothing to be done
-		else if(chordSample.equals(null)) {
+		else if (chordSample == null) {
 			return measureSample;
 		}
 		// Shouldn't happen but return null anyways.
@@ -362,8 +361,8 @@ public class SampleGenerator {
 		double[] newChordSample = null;
 
 		// If noteSample is shorter than chordSample and neither are null
-		if ((noteSample.length <= chordSample.length)
-				&& !(chordSample.equals(null) || noteSample.equals(null))) {
+		if (!(chordSample == null || noteSample == null)
+				&& (noteSample.length <= chordSample.length)) {
 			// Create with size equal to bigger array
 			newChordSample = new double[chordSample.length];
 
@@ -378,8 +377,8 @@ public class SampleGenerator {
 			}
 		}
 		// Else if noteSample is longer than chordSample and neither are null
-		else if ((noteSample.length > chordSample.length)
-				&& !(chordSample.equals(null) || noteSample.equals(null))) {
+		else if (!(chordSample == null || noteSample == null)
+				&& (noteSample.length > chordSample.length)) {
 			// Create with size equal to bigger array
 			newChordSample = new double[noteSample.length];
 
@@ -392,10 +391,10 @@ public class SampleGenerator {
 			for (int i = 0; i < chordSample.length; i++) {
 				newChordSample[i] += chordSample[i];
 			}
-		} else if (chordSample.equals(null)) {
+		} else if (chordSample == null) {
 			// newChordSample = noteSample;
 			return noteSample;
-		} else if (noteSample.equals(null)) {
+		} else if (noteSample == null) {
 			// newChordSample = chordSample
 			return chordSample;
 		} else {
@@ -433,30 +432,28 @@ public class SampleGenerator {
 	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length) {
 		byte[] newSample = null;
-		
+
 		// Check the boundaries
-		if(startIndex + length < this.activeSample.length) {
+		if (startIndex + length < this.activeSample.length) {
 			// Safe to do straight copy
 			newSample = new byte[length];
-			System.arraycopy(this.activeSample, startIndex, newSample, 0, length);
-		}
-		else if(startIndex + length >= this.activeSample.length) {
+			System.arraycopy(this.activeSample, startIndex, newSample, 0,
+					length);
+		} else if (startIndex + length >= this.activeSample.length) {
 			// Init the new sample
 			newSample = new byte[length];
-			
+
 			// Copy the remainder of the active sample
-			for(int i = 0; i < length; i++) {
-				if(startIndex + i < this.activeSample.length){
+			for (int i = 0; i < length; i++) {
+				if (startIndex + i < this.activeSample.length) {
 					newSample[i] = this.activeSample[startIndex + i];
-				}
-				else {
+				} else {
 					// Fill the buffer with 0's
 					newSample[i] = 0;
 				}
 			}
-			
-		}
-		else {
+
+		} else {
 			return null;
 		}
 		return newSample;
@@ -495,7 +492,8 @@ public class SampleGenerator {
 		TimeSignature t;
 
 		for (int i = 0; i < numSignatures; i++) {
-			numMeasures = this.activeSheet.getStaff(0).getSize();
+			numMeasures = this.activeSheet.getStaff(0).getSignature(i)
+					.getSize();
 
 			t = this.activeSheet.getStaff(0).getSignature(i).getTimeSignature();
 			beatsPerMeasure = getBeatsPerMeasure(t);
