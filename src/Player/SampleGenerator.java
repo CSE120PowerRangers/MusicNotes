@@ -399,6 +399,12 @@ public class SampleGenerator {
 	 */
 	private int calculateLengthOfSheetSample() {
 		/*
+		 * Total duration of a signature in seconds is actually
+		 * (Total # beats in signature / tempo)*60
+		 * (beats/beats per minute)*60 seconds per minute
+		 */
+		
+		/*
 		 * Tempo = beats per minute; Duration of a Signature in seconds = Total
 		 * beats *(Tempo / 60) Duration of whole Sheet in seconds =
 		 * Sum(Signatures in a staff)
@@ -420,7 +426,7 @@ public class SampleGenerator {
 		TimeSignature t;
 
 		for (int i = 0; i < numSignatures; i++) {
-			numMeasures = this.activeSheet.getStaff(0).getSize();
+			numMeasures = this.activeSheet.getStaff(0).getSignature(i).getSize();
 
 			t = this.activeSheet.getStaff(0).getSignature(i).getTimeSignature();
 			beatsPerMeasure = getBeatsPerMeasure(t);
