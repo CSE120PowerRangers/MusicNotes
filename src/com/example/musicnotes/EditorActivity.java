@@ -22,6 +22,7 @@ public class EditorActivity extends Activity{
     	setContentView(R.layout.editor_layout);
     	ImageView timeSigTop = (ImageView) findViewById(R.id.timesigtop);
     	timeSigTop.setImageResource(R.drawable.halfnote);
+
     	
     	Spinner spinner = (Spinner) findViewById(R.id.toolbarSpinner);
     	ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -31,7 +32,9 @@ public class EditorActivity extends Activity{
     	
     	updateToolBar();
     	
-    	//sheet = new Sheet();
+    	
+    	sheet = new Sheet();
+
     	//Add Buttons to notesToolBar
     	
     	//Add Spinner Options

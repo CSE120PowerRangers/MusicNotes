@@ -10,6 +10,7 @@ public class Sheet {
 	 */
 	public Sheet() {
 		name = "";
+		staffs = new ArrayList<Staff>();
 		staffs.add(new Staff());
 	}
 	
@@ -19,6 +20,7 @@ public class Sheet {
 	 */
 	public Sheet(String name) {
 		this.name = name;
+		staffs = new ArrayList<Staff>();
 		staffs.add(new Staff());
 	}
 	

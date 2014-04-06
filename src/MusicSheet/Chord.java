@@ -11,7 +11,7 @@ public class Chord {
 	 * Chords cannot contain duplicate frequencies
 	 */
 	public Chord() {
-		
+		noteList = new ArrayList<Note>();
 	}
 
 	public Chord(Chord toCopy) {
