@@ -4,6 +4,7 @@ import MusicSheet.*;
 
 public class SampleGenerator {
 	private static final NoteTable FREQUENCIES = new NoteTable();
+	private final SampleMerger Merger;
 
 	private final int SAMPLE_RATE;
 	private byte[] activeSample;
@@ -12,6 +13,7 @@ public class SampleGenerator {
 	SampleGenerator(Sheet s, int sampleRate) {
 		activeSheet = new Sheet(s);
 		this.SAMPLE_RATE = sampleRate;
+		Merger = new SampleMerger(sampleRate);
 	}
 
 	public void createSample() {
@@ -71,45 +73,38 @@ public class SampleGenerator {
 						int chordPosition = -1;
 						Chord iChord = iMeasure.getChord(chordInd);
 						
-						// If the chord exists
 						if (!iChord.equals(null)) {
 							// Record the number of notes in the chord and its position
 							numNotes= iChord.getSize();
 							chordPosition = chordInd;
 						} else {
-							// Null chord, don't look for notes
 							numNotes = 0;
 						}
 
 						// For each note in the chord
 						for (int noteInd = 0; noteInd < numNotes; noteInd++) {
-							// Generate double SAMPLE!
+
 							Note currentNote = iChord.getNote(noteInd);
-
-							// Generate a double sample
 							noteSample = generateNoteSample(timeSig, tempo, currentNote);
-
-							// Combine it with the current chord sample
-							chordSample = combineNoteSampleIntoChordSample(noteSample, chordSample);
+							chordSample = Merger.mergeNoteToChord(noteSample, chordSample);
 						}
 						
 						// Determine where in the sample the chord should be placed
 						if (chordPosition > -1) {
-							// Place chord samples correctly
-							measureSample = mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
+							measureSample = Merger.mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
 						}
 					}
 
 					// Append Measure samples to Signature Samples
-					signatureSample = mergeMeasureToSignature(measureSample, signatureSample);
+					signatureSample = Merger.mergeMeasureToSignature(measureSample, signatureSample);
 				}
 
 				// Append Signature samples to Staff Samples
-				staffSample = mergeSignatureToStaff(signatureSample, staffSample);
+				staffSample = Merger.mergeSignatureToStaff(signatureSample, staffSample);
 			}
 
 			// Combine Staff samples into Sheet samples
-			sheetSample = mergeStaffToSheet(staffSample,sheetSample);
+			sheetSample = Merger.mergeStaffToSheet(staffSample,sheetSample);
 		}
 
 		// Convert the sheet into PCM 16-bit array -- SAMPLE READY
@@ -157,7 +152,8 @@ public class SampleGenerator {
 			return null;
 		}
 	}
-
+	
+	/*
 	// Combines Staff Samples to form Sheet Samples
 	private double[] mergeStaffToSheet(double[] staffSample,
 			double[] sheetSample) {
@@ -330,7 +326,7 @@ public class SampleGenerator {
 	}
 
 	// Adds a note sample to a chord sample
-	private double[] combineNoteSampleIntoChordSample(double[] noteSample,
+	private double[] mergeNoteToChord(double[] noteSample,
 			double[] chordSample) {
 		double[] newChordSample = null;
 
@@ -377,7 +373,7 @@ public class SampleGenerator {
 
 		return newChordSample;
 	}
-
+*/
 	// Generates a note sample -- return null for invalid note
 	public double[] generateNoteSample(TimeSignature timeSig, int tempo, Note n) {
 
@@ -401,6 +397,45 @@ public class SampleGenerator {
 			// Invalid note, return null.
 			return null;
 		}
+	}
+	
+	public double[] generateChordSample(Chord toGenerate, TimeSignature timeSig, int tempo) {
+		// Determine the number of chords in the measure
+		int numNotes = toGenerate.getSize();
+		double[] chordSample = null;
+		
+		for(int i = 0; i < numNotes; i++) {
+			Note currentNote = toGenerate.getNote(i);
+			double[] noteSample = generateNoteSample(timeSig, tempo, currentNote);
+			chordSample = Merger.mergeNoteToChord(noteSample, chordSample);
+		}
+		
+		return chordSample;
+	}
+	
+	public double[] generateMeasureSample(Measure toGenerate, TimeSignature timeSig, int tempo) {
+		int numChords = toGenerate.getSize();
+		int chordPosition = -1;
+		double[] measureSample = null;
+		
+		for(int i = 0; i < numChords; i++) {
+			Chord c = toGenerate.getChord(i);
+			
+			if(c != null) {
+				chordPosition = i;
+				double[] chordSample = generateChordSample(c, timeSig, tempo);
+				measureSample = Merger.mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
+			}
+		}
+		
+		return measureSample;
+	}
+	
+	public double[] generateSignatureSample(Signature toGenerate) {
+		TimeSignature timeSig = toGenerate.getTimeSignature();
+		double[] signatureSample = null;
+		
+		return signatureSample;
 	}
 
 	// Should be accessed in small intervals
