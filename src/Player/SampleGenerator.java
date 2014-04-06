@@ -16,41 +16,100 @@ public class SampleGenerator {
 	
 	public void createSample() {
 		int sampleSize = calculateLengthOfSheetSample();
+		
 		this.activeSample = new byte[sampleSize];
-	}
-	
-	public void createSample(Sheet s) {
-		this.activeSheet = new Sheet(s);
-	}
-	
-	public void createSample(Staff s) {
+		
+		// WARNING -- SPAGHETTI CODE -- REFACTOR LATER
+		
+		// Set up some helper vars -- loop limits
+		int numStaffsInSheet, numSignaturesInStaff, numMeasuresInSignature, numChordsInMeasure, numNotesInChord;
+		
+		// Signature settings to keep later
+		int tempo;
+		KeySignature keySig;
+		TimeSignature timeSig;
+		
+		// Somewhere to store the double samples before combination and conversion
+		double[] staffSample, signatureSample, measureSample, chordSample, noteSample;
+		
+		// Determine the staffs in the sheet
+		numStaffsInSheet = this.activeSheet.getStaffSize();
+		
+		// Start reading the sheet -- For each staff
+		for(int staffInd = 0; staffInd < numStaffsInSheet; staffInd++) {
+			
+			// Determine the signature in the staff
+			numSignaturesInStaff = this.activeSheet.getStaff(staffInd).getSize();
+			
+			// For each signature in the staff
+			for(int signatureInd = 0; signatureInd < numSignaturesInStaff; signatureInd++) {
+				
+				// Determine the measures in the signature
+				numMeasuresInSignature = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getSize();
+				
+				// As well as the settings of the signature
+				tempo = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getTempo();
+				keySig = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getKeySignature();
+				timeSig = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getTimeSignature();
+				
+				// For each measure in the signature
+				for(int measureInd = 0; measureInd < numMeasuresInSignature; measureInd++) {
+					// Determine the number of chords in the measure
+					numChordsInMeasure = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getMeasure(measureInd).getSize();
+					
+					// For each chord in the measure
+					for(int chordInd = 0; chordInd < numChordsInMeasure; chordInd++) {
+						// Determine the number of notes in the chord -- if a chord exists
+						if(!this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getMeasure(measureInd).getChord(chordInd).equals(null)) {
+							numNotesInChord = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getMeasure(measureInd).getChord(chordInd).getSize();
+						}
+						else {
+							// Null chord, don't look for notes
+							numNotesInChord = 0;
+						}
+						
+						// For each note in the chord
+						for(int noteInd = 0; noteInd < numNotesInChord; noteInd++) {
+							// Generate byte SAMPLE!
+							Note currentNote = this.activeSheet.getStaff(staffInd).getSignature(signatureInd).getMeasure(measureInd).getChord(chordInd).getNote(noteInd);
+							
+							// Generate a double sample
+							noteSample = generateNoteSample(timeSig, keySig, tempo, currentNote);
+							
+							// Combine it with the current chord sample
+							
+						}
+					}
+					
+				}
+			}
+		}
 		
 	}
 	
-	public void createSample(Signature s) {
-		
+	// Generates a note sample
+	public double[] generateNoteSample(TimeSignature timeSig, KeySignature keySig, int tempo, Note n) {
+		double frequencyOfNote;
+		return null;
 	}
 	
-	public void createSample(Measure m) {
-		
-	}
 	
-	public void createSample(Chord c) {
-		
-	}
-	
-	// Generating a sample of a note is just the frequency
-	public void createSample(Note n) {
-		
-	}
-	
+	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length){
 		byte[] newSample = new byte[length];
 		System.arraycopy(this.activeSample, startIndex, newSample, 0, length);
 		return newSample;
 	}
 	
-	// Need to calculate the sample length of the whole sample
+	
+	/*
+	 * SAMPLE LENGTH FUNCTIONS
+	 */
+
+	/**
+	 * Calculates the number of samples required for the whole Sheet
+	 * @return
+	 */
 	private int calculateLengthOfSheetSample() {
 		/*
 		 * Tempo = beats per minute;
@@ -96,6 +155,37 @@ public class SampleGenerator {
 		return finalSampleSize;
 	}
 	
+	/**
+	 * Calculates the sample length of a note
+	 * @param n - type of note
+	 * @param t - time signature in sheet
+	 * @return
+	 */
+	private int getSampleLengthOfNote(NoteType n, TimeSignature t){
+		double beats, noteDurationInSeconds;
+		int tempo, beatNote, minNoteSampleSize;
+		
+		beatNote = getMeasureBeatNote(t);
+		beats = getBeatLengthOfNote(n, beatNote);
+		tempo = this.activeSheet.getStaff(0).getSignature(0).getTempo();
+		
+		noteDurationInSeconds = beats * (tempo / 60);
+		
+		minNoteSampleSize = (int)Math.floor(noteDurationInSeconds * this.SAMPLE_RATE);
+		
+		return minNoteSampleSize;
+
+	}
+	
+	/*
+	 * BEAT FUNCTIONS
+	 */
+	
+	/**
+	 * Returns the number of beats in a measure
+	 * @param t
+	 * @return
+	 */
 	private int getBeatsPerMeasure(TimeSignature t) {
 		int beats = 0;
 		switch(t){
@@ -126,52 +216,12 @@ public class SampleGenerator {
 		return beats;
 	}
 	
-	private int getMeasureBeatNote(TimeSignature t) {
-		int beat = 0;
-		switch(t){
-		case FOUR_FOUR:
-			beat = 4;
-			break;
-		case SEVEN_EIGHT:
-			beat = 8;
-			break;
-		case SIX_EIGHT:
-			beat = 8;
-			break;
-		case THREE_EIGHT:
-			beat = 8;
-			break;
-		case THREE_FOUR:
-			beat = 4;
-			break;
-		case TWO_FOUR:
-			beat = 4;
-			break;
-		default:
-			// Shouldn't happen.
-			beat = -1;
-			break;
-		}
-		return beat;
-	}
-	
-	// Used in calculating where a note sample goes in the sheet sample
-	private int getSampleLengthOfNote(NoteType n, TimeSignature t){
-		double beats, noteDurationInSeconds;
-		int tempo, beatNote, minNoteSampleSize;
-		
-		beatNote = getMeasureBeatNote(t);
-		beats = getBeatLengthOfNote(n, beatNote);
-		tempo = this.activeSheet.getStaff(0).getSignature(0).getTempo();
-		
-		noteDurationInSeconds = beats * (tempo / 60);
-		
-		minNoteSampleSize = (int)Math.floor(noteDurationInSeconds * this.SAMPLE_RATE);
-		
-		return minNoteSampleSize;
-
-	}
-	
+	/**
+	 * Returns the beat duration of a note
+	 * @param n
+	 * @param beatNote
+	 * @return
+	 */
 	private double getBeatLengthOfNote(NoteType n, int beatNote) {
 		double beatSize = 0;
 		switch(n) {
@@ -221,6 +271,41 @@ public class SampleGenerator {
 		}
 		return beatSize;
 	}
+	
+	/**
+	 * Returns the number corresponding to the note which gets the beat
+	 * @param t
+	 * @return
+	 */
+	private int getMeasureBeatNote(TimeSignature t) {
+		int beat = 0;
+		switch(t){
+		case FOUR_FOUR:
+			beat = 4;
+			break;
+		case SEVEN_EIGHT:
+			beat = 8;
+			break;
+		case SIX_EIGHT:
+			beat = 8;
+			break;
+		case THREE_EIGHT:
+			beat = 8;
+			break;
+		case THREE_FOUR:
+			beat = 4;
+			break;
+		case TWO_FOUR:
+			beat = 4;
+			break;
+		default:
+			// Shouldn't happen.
+			beat = -1;
+			break;
+		}
+		return beat;
+	}
+
 	
 
 }

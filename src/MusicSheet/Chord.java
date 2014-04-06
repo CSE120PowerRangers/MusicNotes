@@ -83,6 +83,15 @@ public class Chord {
 	}
 	
 	/**
+	 * Used in generating samples
+	 * @param index - index in noteList
+	 * @return note at desired index
+	 */
+	public Note getNote(int index) {
+		return noteList.get(index);
+	}
+	
+	/**
 	 * @return number of notes in the chord
 	 */
 	public int getSize() {
