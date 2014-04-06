@@ -73,7 +73,7 @@ public class Player {
 	private boolean mStopAudioThreads = false;
 	private Thread mSampleThread, mStreamThread;
 
-	// Runnable for creating samples -- experimental right now
+	// Runnable for creating samples
 	private Runnable mSample = new Runnable() {
 		// Render 4 measures at a time
 		public void run() {
@@ -82,7 +82,7 @@ public class Player {
 		}
 	};
 
-	// Runnable for streaming music -- experimental right now
+	// Runnable for streaming music
 	private Runnable mStreams = new Runnable() {
 		public void run() {
 			// Create a streaming AudioTrack for playback
