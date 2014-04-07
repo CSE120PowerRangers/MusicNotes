@@ -436,6 +436,8 @@ public class EditorActivity extends Activity{
 	
 	public void playButtonTouch(View v)
 	{
+		player = new Player(sheet);
+		player.initializeSampleGenerator(sheet);
 		player.play();
 		
 	}
