@@ -19,7 +19,7 @@ public class SampleGenerator {
 	public void createSample() {
 		int sampleSize = calculateLengthOfSheetSample();
 
-		this.activeSample = new byte[sampleSize];
+		activeSample = new byte[sampleSize];
 
 		// WARNING -- SPAGHETTI CODE -- REFACTOR LATER
 
@@ -175,19 +175,19 @@ public class SampleGenerator {
 		byte[] newSample = null;
 
 		// Check the boundaries
-		if (startIndex + length < this.activeSample.length) {
+		if (startIndex + length < activeSample.length) {
 			// Safe to do straight copy
 			newSample = new byte[length];
-			System.arraycopy(this.activeSample, startIndex, newSample, 0,
+			System.arraycopy(activeSample, startIndex, newSample, 0,
 					length);
-		} else if (startIndex + length >= this.activeSample.length) {
+		} else if (startIndex + length >= activeSample.length) {
 			// Init the new sample
 			newSample = new byte[length];
 
 			// Copy the remainder of the active sample
 			for (int i = 0; i < length; i++) {
-				if (startIndex + i < this.activeSample.length) {
-					newSample[i] = this.activeSample[startIndex + i];
+				if (startIndex + i < activeSample.length) {
+					newSample[i] = activeSample[startIndex + i];
 				} else {
 					// Fill the buffer with 0's
 					newSample[i] = 0;
