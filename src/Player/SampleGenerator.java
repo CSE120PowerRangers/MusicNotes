@@ -19,11 +19,124 @@ public class SampleGenerator {
 	public void createSample() {
 		int sampleSize = calculateLengthOfSheetSample();
 
-		activeSample = new byte[sampleSize];
+		this.activeSample = new byte[sampleSize];
 
-		// Somewhere to store the double samples before combination and conversion
-		double[] sheetSample;//, staffSample, signatureSample, measureSample, chordSample, noteSample;
-		sheetSample = generateSheetSample(activeSheet);
+		// WARNING -- SPAGHETTI CODE -- REFACTOR LATER
+
+		// Set up some helper vars -- loop limits
+		int numStaffsInSheet, numSignaturesInStaff, numMeasuresInSignature, numChordsInMeasure, numNotesInChord;
+
+		// Signature settings to keep later
+		int tempo;
+		TimeSignature timeSig;
+
+		// Somewhere to store the double samples before combination and
+		// conversion
+		double[] sheetSample, staffSample, signatureSample, measureSample, chordSample, noteSample;
+
+		// Initialize all to null
+		sheetSample = null;
+		staffSample = null;
+		signatureSample = null;
+		measureSample = null;
+		chordSample = null;
+		noteSample = null;
+
+		// Determine the staffs in the sheet
+		numStaffsInSheet = this.activeSheet.getStaffSize();
+
+		// Start reading the sheet -- For each staff
+		for (int staffInd = 0; staffInd < numStaffsInSheet; staffInd++) {
+
+			// Determine the signature in the staff
+			numSignaturesInStaff = this.activeSheet.getStaff(staffInd)
+					.getSize();
+
+			// For each signature in the staff
+			for (int signatureInd = 0; signatureInd < numSignaturesInStaff; signatureInd++) {
+
+				// Determine the measures in the signature
+				numMeasuresInSignature = this.activeSheet.getStaff(staffInd)
+						.getSignature(signatureInd).getSize();
+
+				// As well as the settings of the signature
+				tempo = this.activeSheet.getStaff(staffInd)
+						.getSignature(signatureInd).getTempo();
+				timeSig = this.activeSheet.getStaff(staffInd)
+						.getSignature(signatureInd).getTimeSignature();
+
+				// For each measure in the signature
+				for (int measureInd = 0; measureInd < numMeasuresInSignature; measureInd++) {
+					// Determine the number of chords in the measure
+					numChordsInMeasure = this.activeSheet.getStaff(staffInd)
+							.getSignature(signatureInd).getMeasure(measureInd)
+							.getSize();
+
+					// For each chord in the measure
+					for (int chordInd = 0; chordInd < numChordsInMeasure; chordInd++) {
+						// Need this when we find a chord
+
+						int chordPositionInMeasure = -1;
+						// If the chord exists
+						if (this.activeSheet.getStaff(staffInd)
+								.getSignature(signatureInd)
+								.getMeasure(measureInd).getChord(chordInd) != null) {
+							// Get the number of notes in the chord
+							numNotesInChord = this.activeSheet
+									.getStaff(staffInd)
+									.getSignature(signatureInd)
+									.getMeasure(measureInd).getChord(chordInd)
+									.getSize();
+
+							// And its position
+							chordPositionInMeasure = chordInd;
+						} else {
+							// Null chord, don't look for notes
+							numNotesInChord = 0;
+						}
+
+						// For each note in the chord
+						for (int noteInd = 0; noteInd < numNotesInChord; noteInd++) {
+							// Generate double SAMPLE!
+							Note currentNote = this.activeSheet
+									.getStaff(staffInd)
+									.getSignature(signatureInd)
+									.getMeasure(measureInd).getChord(chordInd)
+									.getNote(noteInd);
+
+							// Generate a double sample
+							noteSample = generateNoteSample(timeSig, tempo,
+									currentNote);
+
+							// Combine it with the current chord sample
+							chordSample = combineNoteSampleIntoChordSample(
+									noteSample, chordSample);
+						}
+						// Determine where in the sample the chord should be
+						// placed
+						if (chordPositionInMeasure >= 0) {
+							// Place chord samples correctly
+							measureSample = combineChordSampleIntoMeasureSample(
+									chordSample, measureSample, timeSig, tempo,
+									chordPositionInMeasure);
+						}
+					}
+
+					// Append Measure samples to Signature Samples
+					signatureSample = combineMeasureSampleIntoSignatureSample(
+							measureSample, signatureSample);
+				}
+
+				// Append Signature samples to Staff Samples
+				staffSample = combineSignatureSampleIntoStaffSample(
+						signatureSample, staffSample);
+			}
+
+			sheetSample = combineStaffSampleIntoSheetSample(staffSample, sheetSample);
+		}
+
+		//This next line was how I reorganized the generation
+		//sheetSample = generateSheetSample(activeSheet);
 
 		// Convert the sheet into PCM 16-bit array -- SAMPLE READY
 		activeSample = convertToPCMArray16(sheetSample);
@@ -51,7 +164,7 @@ public class SampleGenerator {
 
 	// Converts double sample into PCM 16-bit array for playback
 	public byte[] convertToPCMArray16(double[] sample) {
-		if (!sample.equals(null)) {
+		if (sample != null) {
 			int idx = 0;
 			byte[] newSamplePCM = new byte[2 * sample.length];
 			double[] normalizedSample = normalizeDoubleSample(sample);
@@ -76,6 +189,7 @@ public class SampleGenerator {
 
 		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig, tempo);
 		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(), n.getOctave());
+
 
 		if (sampleLength > 0 && frequencyOfNote > 0) {
 			double[] noteSample = new double[sampleLength];
@@ -153,6 +267,220 @@ public class SampleGenerator {
 		return staffSample;
 	}
 
+	// Combines Staff Samples to form Sheet Samples
+	private double[] combineStaffSampleIntoSheetSample(double[] staffSample,
+			double[] sheetSample) {
+		double[] newSheetSample = null;
+
+		// If noteSample is shorter than sheetSample and neither are null
+		if (!(sheetSample == null || staffSample == null)
+				&& (staffSample.length <= sheetSample.length)) {
+			// Create with size equal to bigger array
+			newSheetSample = new double[sheetSample.length];
+			// Add smaller arrays elements
+			for (int i = 0; i < staffSample.length; i++) {
+				newSheetSample[i] += staffSample[i];
+			}
+		}
+		// Else if staffSample is longer than sheetSample and neither are null
+		else if (!(sheetSample == null || staffSample == null)
+				&& (staffSample.length > sheetSample.length)) {
+			// Create with size equal to bigger array
+			newSheetSample = new double[staffSample.length];
+
+			// Initialize with bigger array
+			for (int i = 0; i < staffSample.length; i++) {
+				newSheetSample[i] = staffSample[i];
+			}
+
+			// Add smaller array elements
+			for (int i = 0; i < sheetSample.length; i++) {
+				newSheetSample[i] += sheetSample[i];
+			}
+		} else if (sheetSample == null) {
+			// newsheetSample = staffSample;
+			return staffSample;
+		} else if (staffSample == null) {
+			// newsheetSample = sheetSample
+			return sheetSample;
+		} else {
+			// Not sure what would happen here
+		}
+
+		return newSheetSample;
+	}
+
+	// Appends Signature samples into Staff Samples
+	private double[] combineSignatureSampleIntoStaffSample(
+			double[] signatureSample, double[] staffSample) {
+		double[] newStaffSample;
+		int sampleLength;
+
+		// Combining in this case is simple -- just append them
+		if (!(staffSample == null || signatureSample == null)) {
+			sampleLength = staffSample.length + signatureSample.length;
+			// Create appropriate length new sample
+			newStaffSample = new double[sampleLength];
+
+			// Copy old samples over
+			for (int i = 0; i < staffSample.length; i++) {
+				newStaffSample[i] = staffSample[i];
+			}
+
+			for (int i = 0; i < signatureSample.length; i++) {
+				newStaffSample[i + staffSample.length] = signatureSample[i];
+			}
+
+			return newStaffSample;
+		}
+		// Either Staff is null
+		else if (staffSample == null) {
+
+			return signatureSample;
+		}
+		// Or Signature is null
+		else if (signatureSample == null) {
+			return staffSample;
+		}
+		// Or it's all broken
+		else {
+			return null;
+		}
+	}
+
+	// Appends Measure samples to a Signature Samples
+	private double[] combineMeasureSampleIntoSignatureSample(
+			double[] measureSample, double[] signatureSample) {
+		double[] newSignatureSample;
+		int sampleLength;
+
+		// Combining in this case is simple -- just append them
+		if (!(signatureSample == null || measureSample == null)) {
+			sampleLength = signatureSample.length + measureSample.length;
+			// Create appropriate length new sample
+			newSignatureSample = new double[sampleLength];
+
+			// Copy old samples over
+			for (int i = 0; i < signatureSample.length; i++) {
+				newSignatureSample[i] = signatureSample[i];
+			}
+
+			for (int i = 0; i < measureSample.length; i++) {
+				newSignatureSample[i + signatureSample.length] = measureSample[i];
+			}
+
+			return newSignatureSample;
+		}
+		// Either Signature is null
+		else if (signatureSample == null) {
+
+			return measureSample;
+		}
+		// Or measure is null
+		else if (measureSample == null) {
+			return signatureSample;
+		}
+		// Or it's all broken
+		else {
+			return null;
+		}
+	}
+
+	// Appends Chord Samples hopefully correctly
+	private double[] combineChordSampleIntoMeasureSample(double[] chordSample,
+			double[] measureSample, TimeSignature timeSig, int tempo,
+			int chordPositionInMeasure) {
+		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
+		double[] newMeasureSample = null;
+
+		beatsPerMeasure = this.getBeatsPerMeasure(timeSig);
+		beatNote = this.getMeasureBeatNote(timeSig); // Either quarter(4) or
+		// eighth(8);
+
+		// Determine if we measureSample needs to be initialized first
+		if (measureSample == null) {
+			if (beatNote == 4) {
+				sampleLengthOfMeasure = this.getSampleLengthOfNote(
+						NoteType.QUARTER_NOTE, timeSig, tempo)
+						* beatsPerMeasure;
+			} else {
+				sampleLengthOfMeasure = this.getSampleLengthOfNote(
+						NoteType.EIGHTH_NOTE, timeSig, tempo) * beatsPerMeasure;
+			}
+
+			newMeasureSample = new double[sampleLengthOfMeasure];
+		}
+
+		// Get the sample length of a division in a measure
+		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(
+				NoteType.EIGHTH_NOTE, timeSig, tempo);
+
+		if (chordSample != null) {
+			// Determine position in sample
+			chordPositionInSample = chordPositionInMeasure
+					* sampleLengthOfMeasureDivision;
+
+			// Combine sample information
+			for (int i = 0; i < chordSample.length; i++) {
+				newMeasureSample[i + chordPositionInSample] += chordSample[i];
+			}
+		}
+		// chordSample is null, nothing to be done
+		else if (chordSample == null) {
+			return measureSample;
+		}
+		// Shouldn't happen but return null anyways.
+		return null;
+	}
+
+	// Adds a note sample to a chord sample
+	private double[] combineNoteSampleIntoChordSample(double[] noteSample,
+			double[] chordSample) {
+		double[] newChordSample = null;
+
+		// If noteSample is shorter than chordSample and neither are null
+		if (!(chordSample == null || noteSample == null)
+				&& (noteSample.length <= chordSample.length)) {
+			// Create with size equal to bigger array
+			newChordSample = new double[chordSample.length];
+
+			// Initialize with bigger array
+			for (int i = 0; i < chordSample.length; i++) {
+				newChordSample[i] = chordSample[i];
+			}
+
+			// Add smaller arrays elements
+			for (int i = 0; i < noteSample.length; i++) {
+				newChordSample[i] += noteSample[i];
+			}
+		}
+		// Else if noteSample is longer than chordSample and neither are null
+		else if (!(chordSample == null || noteSample == null)
+				&& (noteSample.length > chordSample.length)) {
+			// Create with size equal to bigger array
+			newChordSample = new double[noteSample.length];
+
+			// Initialize with bigger array
+			for (int i = 0; i < noteSample.length; i++) {
+				newChordSample[i] = noteSample[i];
+			}
+
+			// Add smaller array elements
+			for (int i = 0; i < chordSample.length; i++) {
+				newChordSample[i] += chordSample[i];
+			}
+		} else if (chordSample == null) {
+			// newChordSample = noteSample;
+			return noteSample;
+		} else if (noteSample == null) {
+			// newChordSample = chordSample
+			return chordSample;
+		} else {
+			// Not sure what would happen here
+		}
+		return null;
+	}
+
 	public double[] generateSheetSample(Sheet toGenerate) {
 		int numStaffs = toGenerate.getStaffSize();
 		double[] sheetSample = null;
@@ -168,8 +496,31 @@ public class SampleGenerator {
 	
 	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length) {
-		byte[] newSample = new byte[length];
-		System.arraycopy(activeSample, startIndex, newSample, 0, length);
+		byte[] newSample = null;
+
+		// Check the boundaries
+		if (startIndex + length < this.activeSample.length) {
+			// Safe to do straight copy
+			newSample = new byte[length];
+			System.arraycopy(this.activeSample, startIndex, newSample, 0,
+					length);
+		} else if (startIndex + length >= this.activeSample.length) {
+			// Init the new sample
+			newSample = new byte[length];
+
+			// Copy the remainder of the active sample
+			for (int i = 0; i < length; i++) {
+				if (startIndex + i < this.activeSample.length) {
+					newSample[i] = this.activeSample[startIndex + i];
+				} else {
+					// Fill the buffer with 0's
+					newSample[i] = 0;
+				}
+			}
+
+		} else {
+			return null;
+		}
 		return newSample;
 	}
 
@@ -206,7 +557,8 @@ public class SampleGenerator {
 		TimeSignature t;
 
 		for (int i = 0; i < numSignatures; i++) {
-			numMeasures = activeSheet.getStaff(0).getSize();
+			numMeasures = this.activeSheet.getStaff(0).getSignature(i)
+					.getSize();
 
 			t = activeSheet.getStaff(0).getSignature(i).getTimeSignature();
 			beatsPerMeasure = getBeatsPerMeasure(t);

@@ -1,6 +1,7 @@
 package com.example.musicnotes;
 
 import MusicSheet.*;
+import Player.Player;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface.OnClickListener;
@@ -23,6 +24,7 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	Spinner spinner;
+	Player player;
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
@@ -74,7 +76,7 @@ public class EditorActivity extends Activity{
 
 
 		sheet = new Sheet();
-
+		player = new Player(sheet);
 
 
 
@@ -313,6 +315,11 @@ public class EditorActivity extends Activity{
 						}
 						
 						Chord chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
+						if(chordSel == null)
+						{
+							sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).addChord(chordsPos);
+							chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
+						}
 						switch(event.getAction())
 						{
 							case MotionEvent.ACTION_DOWN:
@@ -425,5 +432,11 @@ public class EditorActivity extends Activity{
 				}
 			}
 		}
+	}
+	
+	public void playButtonTouch(View v)
+	{
+		player.play();
+		
 	}
 }

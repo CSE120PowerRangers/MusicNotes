@@ -31,7 +31,16 @@
         android:layout_height="50dp"
  
         android:layout_alignParentRight="true"
-       	
+      
+        />
+    
+    <Button
+        android:id="@+id/tempPlayButton"
+        android:layout_width="wrap_content"
+        android:layout_height ="50dp"
+        android:layout_alignParentLeft="true"
+        android:onClick="playButtonTouch"
+        android:text="Play!"
         />
       <LinearLayout
           android:id="@+id/leftPanel"
