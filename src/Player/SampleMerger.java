@@ -17,7 +17,7 @@ public class SampleMerger {
 
 		// If staffSample is shorter than sheetSample and neither are null
 		if ((staffSample.length <= sheetSample.length)
-				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+				&& !(sheetSample== null || staffSample== null)) {
 			// Create with size equal to bigger array
 			newSheetSample = new double[sheetSample.length];
 
@@ -34,7 +34,7 @@ public class SampleMerger {
 		
 		// Else if staffSample is longer than sheetSample and neither are null
 		else if ((staffSample.length > sheetSample.length)
-				&& !(sheetSample.equals(null) || staffSample.equals(null))) {
+				&& !(sheetSample== null || staffSample== null)) {
 			// Create with size equal to bigger array
 			newSheetSample = new double[staffSample.length];
 
@@ -47,10 +47,10 @@ public class SampleMerger {
 			for (int i = 0; i < sheetSample.length; i++) {
 				newSheetSample[i] += sheetSample[i];
 			}
-		} else if (sheetSample.equals(null)) {
+		} else if (sheetSample== null) {
 			// newsheetSample = staffSample;
 			return staffSample;
-		} else if (staffSample.equals(null)) {
+		} else if (staffSample== null) {
 			// newsheetSample = sheetSample
 			return sheetSample;
 		} else {
@@ -67,7 +67,7 @@ public class SampleMerger {
 		int sampleLength;
 
 		// Combining in this case is simple -- just append them
-		if (!(staffSample.equals(null) || signatureSample.equals(null))) {
+		if (!(staffSample== null || signatureSample== null)) {
 			sampleLength = staffSample.length + signatureSample.length;
 			// Create appropriate length new sample
 			newStaffSample = new double[sampleLength];
@@ -84,12 +84,12 @@ public class SampleMerger {
 			return newStaffSample;
 		}
 		// Either Staff is null
-		else if (staffSample.equals(null)) {
+		else if (staffSample== null) {
 
 			return signatureSample;
 		}
 		// Or Signature is null
-		else if (signatureSample.equals(null)) {
+		else if (signatureSample== null) {
 			return staffSample;
 		}
 		// Or it's all broken
@@ -105,7 +105,7 @@ public class SampleMerger {
 		int sampleLength;
 
 		// Combining in this case is simple -- just append them
-		if (!(signatureSample.equals(null) || measureSample.equals(null))) {
+		if (!(signatureSample== null || measureSample== null)) {
 			sampleLength = signatureSample.length + measureSample.length;
 			// Create appropriate length new sample
 			newSignatureSample = new double[sampleLength];
@@ -122,12 +122,12 @@ public class SampleMerger {
 			return newSignatureSample;
 		}
 		// Either Signature is null
-		else if (signatureSample.equals(null)) {
+		else if (signatureSample== null) {
 
 			return measureSample;
 		}
 		// Or measure is null
-		else if (measureSample.equals(null)) {
+		else if (measureSample== null) {
 			return signatureSample;
 		}
 		// Or it's all broken
@@ -148,7 +148,7 @@ public class SampleMerger {
 												// eighth(8);
 
 		// Determine if we measureSample needs to be initialized first
-		if (measureSample.equals(null)) {
+		if (measureSample== null) {
 			if (beatNote == 4) {
 				sampleLengthOfMeasure = this.getSampleLengthOfNote(
 						NoteType.QUARTER_NOTE, timeSig, tempo) * beatsPerMeasure;
@@ -164,7 +164,7 @@ public class SampleMerger {
 		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(NoteType.EIGHTH_NOTE, timeSig, tempo);
 		
 		
-		if(!chordSample.equals(null)){
+		if(chordSample != null){
 			// Determine position in sample
 			chordPositionInSample = chordPositionInMeasure * sampleLengthOfMeasureDivision;
 			
@@ -174,7 +174,7 @@ public class SampleMerger {
 			}
 		}
 		// chordSample is null, nothing to be done
-		else if(chordSample.equals(null)) {
+		else if(chordSample== null) {
 			return measureSample;
 		}
 		// Shouldn't happen but return null anyways.
@@ -188,7 +188,7 @@ public class SampleMerger {
 
 		// If noteSample is shorter than chordSample and neither are null
 		if ((noteSample.length <= chordSample.length)
-				&& !(chordSample.equals(null) || noteSample.equals(null))) {
+				&& !(chordSample== null || noteSample== null)) {
 			// Create with size equal to bigger array
 			newChordSample = new double[chordSample.length];
 
@@ -204,7 +204,7 @@ public class SampleMerger {
 		}
 		// Else if noteSample is longer than chordSample and neither are null
 		else if ((noteSample.length > chordSample.length)
-				&& !(chordSample.equals(null) || noteSample.equals(null))) {
+				&& !(chordSample== null || noteSample== null)) {
 			// Create with size equal to bigger array
 			newChordSample = new double[noteSample.length];
 
@@ -217,10 +217,10 @@ public class SampleMerger {
 			for (int i = 0; i < chordSample.length; i++) {
 				newChordSample[i] += chordSample[i];
 			}
-		} else if (chordSample.equals(null)) {
+		} else if (chordSample== null) {
 			// newChordSample = noteSample;
 			return noteSample;
-		} else if (noteSample.equals(null)) {
+		} else if (noteSample== null) {
 			// newChordSample = chordSample
 			return chordSample;
 		} else {
