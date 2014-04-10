@@ -277,4 +277,56 @@ public class NoteTable {
 			return -1.0;
 		}
 	}
+
+	// Returns true if the note is a rest
+	public boolean isARest(Note n) {
+		boolean isARest = false;
+		
+		switch(n.getType()) {
+		case EIGHTH_NOTE:
+			isARest = false;
+			break;
+		case EIGTH_REST:
+			isARest = true;
+			break;
+		case HALF_NOTE:
+			isARest = false;
+			break;
+		case HALF_REST:
+			isARest = true;
+			break;
+		case NOTANOTE:
+			isARest = false;
+			break;
+		case QUARTER_NOTE:
+			isARest = false;
+			break;
+		case QUARTER_REST:
+			isARest = true;
+			break;
+		case SIXTEENTH_NOTE:
+			isARest = false;
+			break;
+		case SIXTEENTH_REST:
+			isARest = true;
+			break;
+		case THIRTYSECOND_NOTE:
+			isARest = false;
+			break;
+		case THIRTYSECOND_REST:
+			isARest = true;
+			break;
+		case WHOLE_NOTE:
+			isARest = false;
+			break;
+		case WHOLE_REST:
+			isARest = true;
+			break;
+		default:
+			isARest = false;
+			break;
+		
+		}
+		return isARest;
+	}
 }
