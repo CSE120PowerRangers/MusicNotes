@@ -85,8 +85,7 @@ public class SampleGenerator {
 
 			// Fill it out.
 			for (int i = 0; i < sampleLength; i++) {
-				noteSample[i] = Math.sin(2 * Math.PI * i
-						/ (this.SAMPLE_RATE / frequencyOfNote));
+				noteSample[i] = Math.sin(2 * Math.PI * i / (this.SAMPLE_RATE / frequencyOfNote));
 			}
 
 			return noteSample;
@@ -122,8 +121,7 @@ public class SampleGenerator {
 		}
 	}
 
-	public double[] generateMeasureSample(Measure toGenerate,
-			TimeSignature timeSig, int tempo) {
+	public double[] generateMeasureSample(Measure toGenerate, TimeSignature timeSig, int tempo) {
 		int numChords = toGenerate.getSize();
 		int chordPosition = -1;
 		double[] measureSample = null;
@@ -133,8 +131,7 @@ public class SampleGenerator {
 
 			chordPosition = i;
 			double[] chordSample = generateChordSample(c, timeSig, tempo);
-			measureSample = Merger.mergeChordToMeasure(chordSample,
-					measureSample, timeSig, tempo, chordPosition);
+			measureSample = Merger.mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
 		}
 
 		return measureSample;
@@ -149,8 +146,7 @@ public class SampleGenerator {
 		for (int i = 0; i < numMeasures; i++) {
 			Measure m = toGenerate.getMeasure(i);
 			double[] measureSample = generateMeasureSample(m, timeSig, tempo);
-			signatureSample = Merger.mergeMeasureToSignature(measureSample,
-					signatureSample);
+			signatureSample = Merger.mergeMeasureToSignature(measureSample, signatureSample);
 		}
 
 		return signatureSample;
@@ -163,8 +159,7 @@ public class SampleGenerator {
 		for (int i = 0; i < numSignatures; i++) {
 			Signature s = toGenerate.getSignature(i);
 			double[] signatureSample = generateSignatureSample(s);
-			staffSample = Merger.mergeSignatureToStaff(signatureSample,
-					staffSample);
+			staffSample = Merger.mergeSignatureToStaff(signatureSample, staffSample);
 		}
 
 		return staffSample;

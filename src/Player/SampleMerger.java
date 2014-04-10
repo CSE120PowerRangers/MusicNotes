@@ -1,5 +1,6 @@
 package Player;
 
+import MusicSheet.Measure;
 import MusicSheet.NoteType;
 import MusicSheet.TimeSignature;
 
@@ -56,8 +57,7 @@ public class SampleMerger {
 	}
 
 	// Appends Signature samples into Staff Samples
-	public double[] mergeSignatureToStaff(double[] signatureSample,
-			double[] staffSample) {
+	public double[] mergeSignatureToStaff(double[] signatureSample, double[] staffSample) {
 		double[] newStaffSample;
 		int sampleLength;
 
@@ -78,7 +78,6 @@ public class SampleMerger {
 		}
 		// Either Staff is null
 		else if (staffSample == null) {
-
 			newStaffSample = signatureSample;
 		}
 		// Or Signature is null
@@ -90,8 +89,7 @@ public class SampleMerger {
 	}
 
 	// Appends Measure samples to a Signature Samples
-	public double[] mergeMeasureToSignature(double[] measureSample,
-			double[] signatureSample) {
+	public double[] mergeMeasureToSignature(double[] measureSample, double[] signatureSample) {
 		double[] newSignatureSample;
 		int sampleLength;
 
@@ -132,54 +130,69 @@ public class SampleMerger {
 	 * @param chordPositionInMeasure
 	 * @return newMeasureSample -- SHOULD NEVER BE NULL
 	 */
-	public double[] mergeChordToMeasure(double[] chordSample,
-			double[] measureSample, TimeSignature timeSig, int tempo,
-			int chordPositionInMeasure) {
+	public double[] mergeChordToMeasure(double[] chordSample, double[] measureSample, TimeSignature timeSig, int tempo, int chordPositionInMeasure) {
 		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
 		double[] newMeasureSample = null;
 
-		beatsPerMeasure = this.getBeatsPerMeasure(timeSig);
-		beatNote = this.getMeasureBeatNote(timeSig); // Either quarter(4) or
-		// eighth(8);
+		beatsPerMeasure = getBeatsPerMeasure(timeSig);
+		beatNote = getMeasureBeatNote(timeSig); // Either quarter(4) or eighth(8);
 
 		// Calculate the sample length for a measure division
-		if (beatNote == 4) {
-			// Quarter notes get the beat
-			sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(
-					NoteType.QUARTER_NOTE, timeSig, tempo);
-			// Multiply by beats per measure
-			sampleLengthOfMeasure = sampleLengthOfMeasureDivision
-					* beatsPerMeasure;
+		// This actually calculates the sample length for a note type
+		// The divisions here are actually in eighth notes
+		
+		//Default sample length is length of measure division * number of divisions
+		//number of divisions = #beats in measure / type of beat * smallest beat (can assume to be 8 for now)
+		int divisionType = Measure.getDivisionType();
+		double lengthScale = beatsPerMeasure/beatNote;
+		
+		//This should be okay since the result should always end up as an integral type
+		//The divisionType is always equal to or is a multiple of the beat
+		//i.e. In 3/4 time, you have 3 quarter notes in a measure
+		//However the measure can support divisions down to eighth or sixteen notes, which are multiples of the quarter note
+		//This allows for flexible sample lengths and measures
+		int numDivisions = (int) (divisionType * lengthScale);
+		
+		NoteType nType;
+		if(divisionType == 4) {
+			nType = NoteType.QUARTER_NOTE;
+		} else if(divisionType == 8) {
+			nType = NoteType.EIGHTH_NOTE;
 		} else {
-			// Eighth notes get the beat
-			sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(
-					NoteType.EIGHTH_NOTE, timeSig, tempo);
-			// Multiply by beats per measure
-			sampleLengthOfMeasure = sampleLengthOfMeasureDivision
-					* beatsPerMeasure;
+			//Default note type will be quarter
+			nType = NoteType.QUARTER_NOTE;
 		}
 
-		// Determine if we need to create the measure
+		sampleLengthOfMeasureDivision = getSampleLengthOfNote(nType, timeSig, tempo);
+		//Default measure sample length, will override if chord sample length + chord start positition > sample length
+		sampleLengthOfMeasure = sampleLengthOfMeasureDivision * numDivisions;
+
 		if (measureSample == null) {
-			// Create the new measure sample with the calculated length
 			newMeasureSample = new double[sampleLengthOfMeasure];
 		} else {
 			newMeasureSample = measureSample;
 		}
+		
+		
 		// Determine how to place the chordSample
 		if (chordSample != null) {
-			// Determine position in sample
-			chordPositionInSample = chordPositionInMeasure
-					* sampleLengthOfMeasureDivision;
+			//Determine position in sample
+			chordPositionInSample = chordPositionInMeasure * sampleLengthOfMeasureDivision;
+			if(chordSample.length + chordPositionInSample > sampleLengthOfMeasure) {
+				//Set the new length of the measure to be the chord sample length + its position in the measure
+				sampleLengthOfMeasure = chordSample.length + chordPositionInSample;
+				newMeasureSample = new double[sampleLengthOfMeasure];
+				
+				//Copy values over
+				System.arraycopy(measureSample, 0, newMeasureSample, 0, measureSample.length);
+			}
 
 			// Combine sample information
 			for (int i = 0; i < chordSample.length; i++) {
 				newMeasureSample[i + chordPositionInSample] += chordSample[i];
 			}
 		}
-		else {
-			// chordSample is null, nothing to be done
-		}
+
 		return newMeasureSample;
 	}
 
@@ -251,11 +264,9 @@ public class SampleMerger {
 
 		noteDurationInSeconds = beats * (tempo / 60);
 
-		minNoteSampleSize = (int) Math.floor(noteDurationInSeconds
-				* this.SAMPLE_RATE);
+		minNoteSampleSize = (int) Math.floor(noteDurationInSeconds * SAMPLE_RATE);
 
 		return minNoteSampleSize;
-
 	}
 
 	/*
