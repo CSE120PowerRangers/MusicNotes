@@ -16,9 +16,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ImageView.ScaleType;
 
 public class EditorActivity extends Activity{
 
@@ -146,7 +148,8 @@ public class EditorActivity extends Activity{
 		LinearLayout selChord;
 		ImageView selNote;
 		
-	
+		
+		//**Drawing the measure
 		for(int chords = 0; chords < measureLayout.getChildCount(); chords++)
 		{
 			selChord = (LinearLayout)measureLayout.getChildAt(chords);
@@ -157,7 +160,10 @@ public class EditorActivity extends Activity{
 				if(notes >= 3 && notes <=11 && notes%2 == 1)
 				{
 					selNote.setImageResource(R.drawable.line);
+					selNote.setScaleType(ScaleType.FIT_XY);
+					
 				}
+				
 				
 				/*
 				OnDragListener dragListener = new OnDragListener() {
@@ -390,13 +396,14 @@ public class EditorActivity extends Activity{
 				for(int notes = 0; notes < chordLookUp.getSize(); notes++)
 				{
 					Note noteLookUp = chordLookUp.getNote(notes);
-					
 					switch(noteLookUp.getName())
 					{
 					case A:
 						selChord = (LinearLayout) measureLayout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(8);
 						selNote.setImageResource(R.drawable.fillednotenote);
+						
+						
 						break;
 					case B:
 						selChord = (LinearLayout) measureLayout.getChildAt(chords);

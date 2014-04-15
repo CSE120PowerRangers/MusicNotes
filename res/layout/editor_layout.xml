@@ -149,7 +149,7 @@
         >
 
 		<LinearLayout
-		   android:id="@+id/chord1"
+		android:id="@+id/chord1"
         android:layout_width="@dimen/chordWidth"
         android:layout_height="match_parent"
         android:orientation="vertical"  
@@ -158,22 +158,24 @@
 			    android:id="@+id/note15"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
+        		    
         					    />
-			<ImageView
+			  <ImageView
 			    android:id="@+id/note14"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
         					    />
+			 
 			<ImageView
 			    android:id="@+id/note13"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
-        					    />
+        					    /> 
 			<ImageView
 			    android:id="@+id/note12"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
-        					    />
+        					    /> 
 			<ImageView
 			    android:id="@+id/note11"
 			    android:layout_width="match_parent"
@@ -229,23 +231,26 @@
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
         					    />
-					
 	
 			    
 
 		</LinearLayout>
-	
+	  
 				<LinearLayout
 		   android:id="@+id/chord2"
         android:layout_width="@dimen/chordWidth"
         android:layout_height="match_parent"
-        android:orientation="vertical"  
+        android:orientation="vertical" 
+        android:layout_toRightOf="@+id/chord1" 
 		    >
+			
 			<ImageView
 			    android:id="@+id/note15"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
+        		    
         					    />
+			 
 			<ImageView
 			    android:id="@+id/note14"
 			    android:layout_width="match_parent"
@@ -265,7 +270,7 @@
 			    android:id="@+id/note11"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
-        					    />
+        					    /> 
 			<ImageView
 			    android:id="@+id/note10"
 			    android:layout_width="match_parent"
@@ -311,13 +316,12 @@
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
         					    />
+
 			<ImageView
 			    android:id="@+id/note1"
 			    android:layout_width="match_parent"
-        		android:layout_height="@dimen/noteHeight"
-        					    />
-					
-	
+			    android:layout_height="@dimen/noteHeight"
+			    android:adjustViewBounds="true" />
 			    
 
 		</LinearLayout>
@@ -332,6 +336,7 @@
 			    android:id="@+id/note15"
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
+        		    
         					    />
 			<ImageView
 			    android:id="@+id/note14"
@@ -398,11 +403,12 @@
 			    android:layout_width="match_parent"
         		android:layout_height="@dimen/noteHeight"
         					    />
+
 			<ImageView
 			    android:id="@+id/note1"
 			    android:layout_width="match_parent"
-        		android:layout_height="@dimen/noteHeight"
-        					    />
+			    android:layout_height="@dimen/noteHeight"
+			    android:adjustViewBounds="true" />
 					
 	
 			    
@@ -843,7 +849,7 @@
 			    
 
 		</LinearLayout>
-															
+														
 			
 	
 			    
