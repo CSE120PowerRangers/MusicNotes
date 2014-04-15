@@ -1,18 +1,18 @@
 package Player;
 
+import MusicSheet.Measure;
 import MusicSheet.NoteType;
 import MusicSheet.TimeSignature;
 
 public class SampleMerger {
 	private int SAMPLE_RATE;
-	
+
 	public SampleMerger(int sampleRate) {
 		SAMPLE_RATE = sampleRate;
 	}
-	
+
 	// Combines Staff Samples to form Sheet Samples
-	public double[] mergeStaffToSheet(double[] staffSample,
-			double[] sheetSample) {
+	public double[] mergeStaffToSheet(double[] staffSample, double[] sheetSample) {
 		double[] newSheetSample = null;
 
 		// If staffSample is shorter than sheetSample and neither are null
@@ -31,10 +31,10 @@ public class SampleMerger {
 				newSheetSample[i] += staffSample[i];
 			}
 		}
-		
+
 		// Else if staffSample is longer than sheetSample and neither are null
 		else if (!(sheetSample == null || staffSample == null)
-				&& (staffSample.length > sheetSample.length)) {
+				&& (staffSample.length < sheetSample.length)) {
 			// Create with size equal to bigger array
 			newSheetSample = new double[staffSample.length];
 
@@ -48,21 +48,16 @@ public class SampleMerger {
 				newSheetSample[i] += sheetSample[i];
 			}
 		} else if (sheetSample == null) {
-			// newsheetSample = staffSample;
-			return staffSample;
+			newSheetSample = staffSample;
 		} else if (staffSample == null) {
-			// newsheetSample = sheetSample
-			return sheetSample;
-		} else {
-			// Not sure what would happen here
+			newSheetSample = sheetSample;
 		}
 
 		return newSheetSample;
 	}
 
 	// Appends Signature samples into Staff Samples
-	public double[] mergeSignatureToStaff(
-			double[] signatureSample, double[] staffSample) {
+	public double[] mergeSignatureToStaff(double[] signatureSample, double[] staffSample) {
 		double[] newStaffSample;
 		int sampleLength;
 
@@ -80,27 +75,21 @@ public class SampleMerger {
 			for (int i = 0; i < signatureSample.length; i++) {
 				newStaffSample[i + staffSample.length] = signatureSample[i];
 			}
-
-			return newStaffSample;
 		}
 		// Either Staff is null
 		else if (staffSample == null) {
-
-			return signatureSample;
+			newStaffSample = signatureSample;
 		}
 		// Or Signature is null
-		else if (signatureSample == null) {
-			return staffSample;
-		}
-		// Or it's all broken
 		else {
-			return null;
+			newStaffSample = staffSample;
 		}
+
+		return newStaffSample;
 	}
 
 	// Appends Measure samples to a Signature Samples
-	public double[] mergeMeasureToSignature(
-			double[] measureSample, double[] signatureSample) {
+	public double[] mergeMeasureToSignature(double[] measureSample, double[] signatureSample) {
 		double[] newSignatureSample;
 		int sampleLength;
 
@@ -118,72 +107,97 @@ public class SampleMerger {
 			for (int i = 0; i < measureSample.length; i++) {
 				newSignatureSample[i + signatureSample.length] = measureSample[i];
 			}
-
-			return newSignatureSample;
 		}
 		// Either Signature is null
 		else if (signatureSample == null) {
-
-			return measureSample;
+			newSignatureSample = measureSample;
 		}
 		// Or measure is null
-		else if (measureSample == null) {
-			return signatureSample;
-		}
-		// Or it's all broken
 		else {
-			return null;
+			newSignatureSample = signatureSample;
 		}
+
+		return newSignatureSample;
 	}
 
-	// Appends Chord Samples hopefully correctly
-	public double[] mergeChordToMeasure(double[] chordSample,
-			double[] measureSample, TimeSignature timeSig, int tempo,
-			int chordPositionInMeasure) {
+	/**
+	 * Places chord samples in the correct spot in a measure sample
+	 * 
+	 * @param chordSample
+	 * @param measureSample
+	 * @param timeSig
+	 * @param tempo
+	 * @param chordPositionInMeasure
+	 * @return newMeasureSample -- SHOULD NEVER BE NULL
+	 */
+	public double[] mergeChordToMeasure(double[] chordSample, double[] measureSample, TimeSignature timeSig, int tempo, int chordPositionInMeasure) {
 		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
 		double[] newMeasureSample = null;
 
-		beatsPerMeasure = this.getBeatsPerMeasure(timeSig);
-		beatNote = this.getMeasureBeatNote(timeSig); // Either quarter(4) or
-												// eighth(8);
+		beatsPerMeasure = getBeatsPerMeasure(timeSig);
+		beatNote = getMeasureBeatNote(timeSig); // Either quarter(4) or eighth(8);
 
-		// Determine if we measureSample needs to be initialized first
+		// Calculate the sample length for a measure division
+		// This actually calculates the sample length for a note type
+		// The divisions here are actually in eighth notes
+		
+		//Default sample length is length of measure division * number of divisions
+		//number of divisions = #beats in measure / type of beat * smallest beat (can assume to be 8 for now)
+		int divisionType = Measure.getDivisionType();
+		double lengthScale = beatsPerMeasure/beatNote;
+		
+		//This should be okay since the result should always end up as an integral type
+		//The divisionType is always equal to or is a multiple of the beat
+		//i.e. In 3/4 time, you have 3 quarter notes in a measure
+		//However the measure can support divisions down to eighth or sixteen notes, which are multiples of the quarter note
+		//This allows for flexible sample lengths and measures
+		int numDivisions = (int) (divisionType * lengthScale);
+		
+		NoteType nType;
+		if(divisionType == 4) {
+			nType = NoteType.QUARTER_NOTE;
+		} else if(divisionType == 8) {
+			nType = NoteType.EIGHTH_NOTE;
+		} else {
+			//Default note type will be quarter
+			nType = NoteType.QUARTER_NOTE;
+		}
+
+		sampleLengthOfMeasureDivision = getSampleLengthOfNote(nType, timeSig, tempo);
+		//Default measure sample length, will override if chord sample length + chord start positition > sample length
+		sampleLengthOfMeasure = sampleLengthOfMeasureDivision * numDivisions;
+
 		if (measureSample == null) {
-			if (beatNote == 4) {
-				sampleLengthOfMeasure = this.getSampleLengthOfNote(
-						NoteType.QUARTER_NOTE, timeSig, tempo) * beatsPerMeasure;
-			} else {
-				sampleLengthOfMeasure = this.getSampleLengthOfNote(
-						NoteType.EIGHTH_NOTE, timeSig, tempo) * beatsPerMeasure;
-			}
-
 			newMeasureSample = new double[sampleLengthOfMeasure];
+		} else {
+			newMeasureSample = measureSample;
 		}
 		
-		// Get the sample length of a division in a measure
-		sampleLengthOfMeasureDivision = this.getSampleLengthOfNote(NoteType.EIGHTH_NOTE, timeSig, tempo);
 		
-		
-		if(chordSample != null){
-			// Determine position in sample
+		// Determine how to place the chordSample
+		if (chordSample != null) {
+			//Determine position in sample
 			chordPositionInSample = chordPositionInMeasure * sampleLengthOfMeasureDivision;
-			
+			if(chordSample.length + chordPositionInSample > sampleLengthOfMeasure) {
+				//Set the new length of the measure to be the chord sample length + its position in the measure
+				sampleLengthOfMeasure = chordSample.length + chordPositionInSample;
+				newMeasureSample = new double[sampleLengthOfMeasure];
+				
+				//Copy values over
+				System.arraycopy(measureSample, 0, newMeasureSample, 0, measureSample.length);
+			}
+
 			// Combine sample information
-			for(int i = 0; i < chordSample.length; i++) {
+			for (int i = 0; i < chordSample.length; i++) {
 				newMeasureSample[i + chordPositionInSample] += chordSample[i];
 			}
 		}
-		// chordSample is null, nothing to be done
-		else if(chordSample == null) {
-			return measureSample;
-		}
-		// Shouldn't happen but return null anyways.
-		return null;
+
+		return newMeasureSample;
 	}
 
 	// Adds a note sample to a chord sample
-	public double[] mergeNoteToChord(double[] noteSample,
-			double[] chordSample) {
+	public double[] mergeNoteToChord(double[] noteSample, double[] chordSample) {
 		double[] newChordSample = null;
 
 		// If noteSample is shorter than chordSample and neither are null
@@ -204,7 +218,7 @@ public class SampleMerger {
 		}
 		// Else if noteSample is longer than chordSample and neither are null
 		else if (!(chordSample == null || noteSample == null)
-				&& (noteSample.length <= chordSample.length)) {
+				&& (noteSample.length > chordSample.length)) {
 			// Create with size equal to bigger array
 			newChordSample = new double[noteSample.length];
 
@@ -219,16 +233,15 @@ public class SampleMerger {
 			}
 		} else if (chordSample == null) {
 			// newChordSample = noteSample;
-			return noteSample;
+			newChordSample = noteSample;
 		} else if (noteSample == null) {
 			// newChordSample = chordSample
-			return chordSample;
-		} else {
-			// Not sure what would happen here
+			newChordSample = chordSample;
 		}
 
 		return newChordSample;
 	}
+
 	/*
 	 * SAMPLE LENGTH FUNCTIONS
 	 */
@@ -251,11 +264,9 @@ public class SampleMerger {
 
 		noteDurationInSeconds = beats * (tempo / 60);
 
-		minNoteSampleSize = (int) Math.floor(noteDurationInSeconds
-				* this.SAMPLE_RATE);
+		minNoteSampleSize = (int) Math.floor(noteDurationInSeconds * SAMPLE_RATE);
 
 		return minNoteSampleSize;
-
 	}
 
 	/*

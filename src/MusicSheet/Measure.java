@@ -1,7 +1,16 @@
 package MusicSheet;
 
+/**TODO:
+ * May or may not be a good idea? Revisit
+ * Write static methods to allow signature to configure the measure properties
+ * i.e. allow signature to change numDivisions or divisionType according to the time signature stuff
+ * @author robert
+ *
+ */
+
 public class Measure {
 	private static int numDivisions = 8; //Currently supporting up to eighth notes only
+	private static int divisionType = 8;
 	private int chordMap;
 	private Chord[] chordList;
 	
@@ -94,7 +103,11 @@ public class Measure {
 	 * Returns the number of chords that are in the measure
 	 * @return
 	 */
-	public int getSize() {
+	public static int getSize() {
 		return numDivisions;
+	}
+	
+	public static int getDivisionType() {
+		return divisionType;
 	}
 }

@@ -21,11 +21,9 @@ public class SampleGenerator {
 
 		activeSample = new byte[sampleSize];
 
-		// WARNING -- SPAGHETTI CODE -- REFACTOR LATER
-
 		double[] sheetSample;
 
-		//This next line was how I reorganized the generation
+		// This next line was how I reorganized the generation
 		sheetSample = generateSheetSample(activeSheet);
 
 		// Convert the sheet into PCM 16-bit array -- SAMPLE READY
@@ -73,114 +71,125 @@ public class SampleGenerator {
 			return null;
 		}
 	}
-	
+
 	// Generates a note sample -- return null for invalid note
 	public double[] generateNoteSample(TimeSignature timeSig, int tempo, Note n) {
 
 		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig, tempo);
-		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(), n.getOctave());
-
-
+		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(),
+				n.getOctave());
+		
+		// Normal Note
 		if (sampleLength > 0 && frequencyOfNote > 0) {
 			double[] noteSample = new double[sampleLength];
 
 			// Fill it out.
 			for (int i = 0; i < sampleLength; i++) {
-				noteSample[i] = Math.sin(2 * Math.PI * i
-						/ (this.SAMPLE_RATE / frequencyOfNote));
+				noteSample[i] = Math.sin(2 * Math.PI * i / (this.SAMPLE_RATE / frequencyOfNote));
 			}
 
 			return noteSample;
+		// Rest Note
+		} else if(FREQUENCIES.isARest(n)) {
+			return (new double[sampleLength]);
 		} else {
 			// Invalid note, return null.
 			return null;
 		}
 	}
-	
-	public double[] generateChordSample(Chord toGenerate, TimeSignature timeSig, int tempo) {
+
+	public double[] generateChordSample(Chord toGenerate,
+			TimeSignature timeSig, int tempo) {
+		
+		if(toGenerate != null){
+		
 		// Determine the number of chords in the measure
 		int numNotes = toGenerate.getSize();
 		double[] chordSample = null;
-		
-		for(int i = 0; i < numNotes; i++) {
+
+		for (int i = 0; i < numNotes; i++) {
 			Note currentNote = toGenerate.getNote(i);
-			double[] noteSample = generateNoteSample(timeSig, tempo, currentNote);
+			double[] noteSample = generateNoteSample(timeSig, tempo,
+					currentNote);
 			chordSample = Merger.mergeNoteToChord(noteSample, chordSample);
 		}
-		
+
 		return chordSample;
+		}
+		else {
+			return null;
+		}
 	}
-	
+
 	public double[] generateMeasureSample(Measure toGenerate, TimeSignature timeSig, int tempo) {
 		int numChords = toGenerate.getSize();
 		int chordPosition = -1;
 		double[] measureSample = null;
-		
-		for(int i = 0; i < numChords; i++) {
+
+		for (int i = 0; i < numChords; i++) {
 			Chord c = toGenerate.getChord(i);
-			
-			if(c != null) {
-				chordPosition = i;
-				double[] chordSample = generateChordSample(c, timeSig, tempo);
-				measureSample = Merger.mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
-			}
+
+			chordPosition = i;
+			double[] chordSample = generateChordSample(c, timeSig, tempo);
+			measureSample = Merger.mergeChordToMeasure(chordSample, measureSample, timeSig, tempo, chordPosition);
 		}
-		
+
 		return measureSample;
 	}
-	
+
 	public double[] generateSignatureSample(Signature toGenerate) {
 		TimeSignature timeSig = toGenerate.getTimeSignature();
 		int numMeasures = toGenerate.getSize();
 		int tempo = toGenerate.getTempo();
 		double[] signatureSample = null;
 
-		for(int i = 0; i < numMeasures; i++) {
+		for (int i = 0; i < numMeasures; i++) {
 			Measure m = toGenerate.getMeasure(i);
 			double[] measureSample = generateMeasureSample(m, timeSig, tempo);
 			signatureSample = Merger.mergeMeasureToSignature(measureSample, signatureSample);
 		}
-		
+
 		return signatureSample;
 	}
-	
+
 	public double[] generateStaffSample(Staff toGenerate) {
 		int numSignatures = toGenerate.getSize();
 		double[] staffSample = null;
 
-		for(int i = 0; i < numSignatures; i++) {
+		for (int i = 0; i < numSignatures; i++) {
 			Signature s = toGenerate.getSignature(i);
 			double[] signatureSample = generateSignatureSample(s);
 			staffSample = Merger.mergeSignatureToStaff(signatureSample, staffSample);
 		}
-		
+
 		return staffSample;
 	}
 
 	public double[] generateSheetSample(Sheet toGenerate) {
 		int numStaffs = toGenerate.getStaffSize();
 		double[] sheetSample = null;
-		
-		for(int i = 0; i < numStaffs; i++) {
+
+		for (int i = 0; i < numStaffs; i++) {
 			Staff s = toGenerate.getStaff(i);
 			double[] staffSample = generateStaffSample(s);
 			sheetSample = Merger.mergeStaffToSheet(staffSample, sheetSample);
 		}
-		
+
 		return sheetSample;
 	}
-	
+
 	// Should be accessed in small intervals
 	public byte[] getActiveSampleChunk(int startIndex, int length) {
 		byte[] newSample = null;
 
 		// Check the boundaries
-		if (startIndex + length < activeSample.length) {
+		if (this.activeSample != null
+				&& (startIndex + length) < activeSample.length) {
 			// Safe to do straight copy
 			newSample = new byte[length];
-			System.arraycopy(activeSample, startIndex, newSample, 0,
-					length);
-		} else if (startIndex + length >= activeSample.length) {
+			System.arraycopy(activeSample, startIndex, newSample, 0, length);
+		} else if (this.activeSample != null
+				&& (startIndex + length) >= activeSample.length) {
 			// Init the new sample
 			newSample = new byte[length];
 
@@ -193,7 +202,8 @@ public class SampleGenerator {
 					newSample[i] = 0;
 				}
 			}
-
+		} else if (this.activeSample == null) {
+			return null;
 		} else {
 			return null;
 		}
