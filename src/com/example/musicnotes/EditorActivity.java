@@ -143,25 +143,25 @@ public class EditorActivity extends Activity{
 
 	public void updateMeasures(int start)
 	{
-		LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
+		RelativeLayout measureLayout = (RelativeLayout) findViewById(R.id.measureLayout);
+		RelativeLayout note_layout = (RelativeLayout) findViewById(R.id.NoteLayout);
 		Measure measureLookUp = sheet.getStaff(0).getSignature(0).getMeasure(start);
-		LinearLayout selChord;
+		RelativeLayout selChord;
 		ImageView selNote;
 		
 		
 		//**Drawing the measure
 		for(int chords = 0; chords < measureLayout.getChildCount(); chords++)
 		{
-			selChord = (LinearLayout)measureLayout.getChildAt(chords);
+			
+			selChord = (RelativeLayout)measureLayout.getChildAt(chords);
 			for(int notes = 0; notes < selChord.getChildCount(); notes++)
 			{
 				selNote = (ImageView) selChord.getChildAt(notes);
-				
 				if(notes >= 3 && notes <=11 && notes%2 == 1)
 				{
 					selNote.setImageResource(R.drawable.line);
 					selNote.setScaleType(ScaleType.FIT_XY);
-					
 				}
 				
 				
@@ -298,8 +298,8 @@ public class EditorActivity extends Activity{
 
 					@Override
 					public boolean onTouch(View v, MotionEvent event) {
-						LinearLayout chordParent = (LinearLayout)v.getParent();
-						LinearLayout measureParent = (LinearLayout) chordParent.getParent();
+						RelativeLayout chordParent = (RelativeLayout)v.getParent();
+						RelativeLayout measureParent = (RelativeLayout) chordParent.getParent();
 						int chordsPos = -1, notesPos = -1;
 						
 						for(int chords = 0; chords<measureParent.getChildCount(); chords++)
@@ -399,41 +399,41 @@ public class EditorActivity extends Activity{
 					switch(noteLookUp.getName())
 					{
 					case A:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(8);
 						selNote.setImageResource(R.drawable.fillednotenote);
 						
-						
 						break;
 					case B:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(7);
-						selNote.setImageResource(R.drawable.fillednoteline);
+						selNote.setImageResource(R.drawable.fillednotenote);
+						
 						break;
 					case C:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(6);
 						selNote.setImageResource(R.drawable.fillednotenote);
 						break;
 					case D:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(5);
-						selNote.setImageResource(R.drawable.fillednoteline);
+						selNote.setImageResource(R.drawable.fillednotenote);
 						break;
 					case E:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(4);
 						selNote.setImageResource(R.drawable.fillednotenote);
 						break;
 					case F:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(10);
 						selNote.setImageResource(R.drawable.fillednotenote);
 						break;
 					case G:
-						selChord = (LinearLayout) measureLayout.getChildAt(chords);
+						selChord = (RelativeLayout) note_layout.getChildAt(chords);
 						selNote = (ImageView) selChord.getChildAt(9);
-						selNote.setImageResource(R.drawable.fillednoteline);
+						selNote.setImageResource(R.drawable.fillednotenote);
 						break;
 					}
 				}
@@ -447,5 +447,14 @@ public class EditorActivity extends Activity{
 		player.initializeSampleGenerator(sheet);
 		player.play();
 		
+	}
+	
+	public void forward_measure(View v){
+		//**** If null, create a new measure****
+		
+		
+		//**** Increment the current Measure by one. ****
+		currentMeasure++;
+		updateMeasures(currentMeasure);
 	}
 }
