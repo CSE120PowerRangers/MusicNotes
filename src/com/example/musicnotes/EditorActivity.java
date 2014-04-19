@@ -341,25 +341,25 @@ public class EditorActivity extends Activity{
 									case 3:
 										break;
 									case 4:
-										chordSel.addNote(NoteName.E, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.E, NoteType.EIGHTH_NOTE, 5);
 										break;
 									case 5:
-										chordSel.addNote(NoteName.D, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.D, NoteType.EIGHTH_NOTE, 5);
 										break;
 									case 6:
-										chordSel.addNote(NoteName.C, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.C, NoteType.EIGHTH_NOTE, 5);
 										break;
 									case 7:
-										chordSel.addNote(NoteName.B, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.B, NoteType.EIGHTH_NOTE, 4);
 										break;
 									case 8:
-										chordSel.addNote(NoteName.A, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.A, NoteType.EIGHTH_NOTE, 4);
 										break;
 									case 9:
-										chordSel.addNote(NoteName.G, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.G, NoteType.EIGHTH_NOTE, 4);
 										break;
 									case 10:
-										chordSel.addNote(NoteName.F, NoteType.QUARTER_NOTE, 4);
+										chordSel.addNote(NoteName.F, NoteType.EIGHTH_NOTE, 4);
 										break;
 									case 11:
 										break;
