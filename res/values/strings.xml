@@ -19,5 +19,6 @@
       </string-array>
 
     <string name="hello_world">Hello world!</string>
+    <string name="new_sheet">New Sheet</string>
 
 </resources>
