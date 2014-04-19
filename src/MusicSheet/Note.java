@@ -197,53 +197,128 @@ public class Note {
 	public int getMidiPitch() {
 		int numberName = 0;
 		switch(name) {
-		case A:
-			break;
-		case AFLAT:
-			break;
-		case ASHARP:
-			break;
-		case B:
-			break;
-		case BFLAT:
-			break;
 		case BSHARP:
+			numberName = 0;
 			break;
 		case C:
-			break;
-		case CFLAT:
+			numberName = 0;
 			break;
 		case CSHARP:
-			break;
-		case D:
+			numberName = 1;
 			break;
 		case DFLAT:
+			numberName = 1;
+			break;
+		case D:
+			numberName = 2;
 			break;
 		case DSHARP:
-			break;
-		case E:
+			numberName = 3;
 			break;
 		case EFLAT:
+			numberName = 3;
+			break;
+		case E:
+			numberName = 4;
 			break;
 		case ESHARP:
-			break;
-		case F:
+			numberName = 5;
 			break;
 		case FFLAT:
+			numberName = 4;
+			break;
+		case F:
+			numberName = 5;
 			break;
 		case FSHARP:
-			break;
-		case G:
+			numberName = 6;
 			break;
 		case GFLAT:
+			numberName = 6;
+			break;
+		case G:
+			numberName = 7;
 			break;
 		case GSHARP:
+			numberName = 8;
+			break;
+		case AFLAT:
+			numberName = 8;
+			break;	
+		case A:
+			numberName = 9;
+			break;
+		case ASHARP:
+			numberName = 10;
+			break;
+		case BFLAT:
+			numberName = 10;
+			break;
+		case B:
+			numberName = 11;
+			break;
+		case CFLAT:
+			numberName = 11;
+			break;
+		default:
+			numberName = -1;
+			break;
+		}
+		
+		return (12 * this.octave) + numberName;
+	}
+
+	public long getNoteDurationInTicks(int PPQ) {
+		long duration = 0;
+		int modifier = 0;
+		
+		// Duration should be calculated as PPQ * (modifier / 8)
+		switch(this.getType()){
+		case EIGHTH_NOTE:
+			modifier = 4;
+			break;
+		case EIGTH_REST:
+			modifier = 4;
+			break;
+		case HALF_NOTE:
+			modifier = 16;
+			break;
+		case HALF_REST:
+			modifier = 16;
+			break;
+		case NOTANOTE:
+			modifier = 0;
+			break;
+		case QUARTER_NOTE:
+			modifier = 8;
+			break;
+		case QUARTER_REST:
+			modifier = 8;
+			break;
+		case SIXTEENTH_NOTE:
+			modifier = 2;
+			break;
+		case SIXTEENTH_REST:
+			modifier = 2;
+			break;
+		case THIRTYSECOND_NOTE:
+			modifier = 1;
+			break;
+		case THIRTYSECOND_REST:
+			modifier = 1;
+			break;
+		case WHOLE_NOTE:
+			modifier = 32;
+			break;
+		case WHOLE_REST:
+			modifier = 32;
 			break;
 		default:
 			break;
-
 		}
 		
-		return numberName;
+		duration = PPQ * (modifier / 8);
+		
+		return duration;
 	}
 }

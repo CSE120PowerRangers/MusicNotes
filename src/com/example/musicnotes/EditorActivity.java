@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
 import MusicSheet.*;
+import Player.Melody;
+import Player.MidiPlayer;
 import Player.Player;
 import android.R.string;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,11 +35,14 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	Spinner spinner, measureSpinner;
+	public static MidiPlayer player;
+	public Context context;
 	String[] measureArray;
-	Player player;
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
+	
+	private final Melody melody = new Melody();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,14 +111,6 @@ public class EditorActivity extends Activity{
 		});
 
 		//Update the ToolBar with default Items
-
-
-
-
-		player = new Player(sheet);
-
-
-
 	}
 
 	@Override
@@ -240,10 +238,13 @@ public class EditorActivity extends Activity{
 
 	public void playButtonTouch(View v)
 	{
-		player = new Player(sheet);
-		player.initializeSampleGenerator(sheet);
-		player.play();
-
+		context = getApplicationContext();
+		
+		
+		if(context != null && sheet != null) {
+			player = new MidiPlayer(sheet, context);
+			player.play();
+		}
 	}
 
 	public void forward_measure(View v){
