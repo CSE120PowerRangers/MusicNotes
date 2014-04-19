@@ -2,7 +2,7 @@ package Player;
 
 import MusicSheet.Measure;
 import MusicSheet.NoteType;
-import MusicSheet.TimeSignature;
+import MusicSheet.EnumTimeSignature;
 
 public class SampleMerger {
 	private int SAMPLE_RATE;
@@ -130,7 +130,7 @@ public class SampleMerger {
 	 * @param chordPositionInMeasure
 	 * @return newMeasureSample -- SHOULD NEVER BE NULL
 	 */
-	public double[] mergeChordToMeasure(double[] chordSample, double[] measureSample, TimeSignature timeSig, int tempo, int chordPositionInMeasure) {
+	public double[] mergeChordToMeasure(double[] chordSample, double[] measureSample, EnumTimeSignature timeSig, int tempo, int chordPositionInMeasure) {
 		int beatsPerMeasure, beatNote, sampleLengthOfMeasure, chordPositionInSample, sampleLengthOfMeasureDivision;
 		double[] newMeasureSample = null;
 
@@ -255,7 +255,7 @@ public class SampleMerger {
 	 *            - time signature in sheet
 	 * @return
 	 */
-	public int getSampleLengthOfNote(NoteType n, TimeSignature t, int tempo) {
+	public int getSampleLengthOfNote(NoteType n, EnumTimeSignature t, int tempo) {
 		double beats, noteDurationInSeconds;
 		int beatNote, minNoteSampleSize;
 
@@ -279,7 +279,7 @@ public class SampleMerger {
 	 * @param t
 	 * @return
 	 */
-	public int getBeatsPerMeasure(TimeSignature t) {
+	public int getBeatsPerMeasure(EnumTimeSignature t) {
 		int beats = 0;
 		switch (t) {
 		case FOUR_FOUR:
@@ -372,7 +372,7 @@ public class SampleMerger {
 	 * @param t
 	 * @return
 	 */
-	public int getMeasureBeatNote(TimeSignature t) {
+	public int getMeasureBeatNote(EnumTimeSignature t) {
 		int beat = 0;
 		switch (t) {
 		case FOUR_FOUR:

@@ -73,7 +73,7 @@ public class SampleGenerator {
 	}
 
 	// Generates a note sample -- return null for invalid note
-	public double[] generateNoteSample(TimeSignature timeSig, int tempo, Note n) {
+	public double[] generateNoteSample(EnumTimeSignature timeSig, int tempo, Note n) {
 
 		int sampleLength = getSampleLengthOfNote(n.getType(), timeSig, tempo);
 		double frequencyOfNote = FREQUENCIES.getNoteFrequency(n.getName(),
@@ -99,7 +99,7 @@ public class SampleGenerator {
 	}
 
 	public double[] generateChordSample(Chord toGenerate,
-			TimeSignature timeSig, int tempo) {
+			EnumTimeSignature timeSig, int tempo) {
 		
 		if(toGenerate != null){
 		
@@ -121,7 +121,7 @@ public class SampleGenerator {
 		}
 	}
 
-	public double[] generateMeasureSample(Measure toGenerate, TimeSignature timeSig, int tempo) {
+	public double[] generateMeasureSample(Measure toGenerate, EnumTimeSignature timeSig, int tempo) {
 		int numChords = toGenerate.getSize();
 		int chordPosition = -1;
 		double[] measureSample = null;
@@ -138,7 +138,7 @@ public class SampleGenerator {
 	}
 
 	public double[] generateSignatureSample(Signature toGenerate) {
-		TimeSignature timeSig = toGenerate.getTimeSignature();
+		EnumTimeSignature timeSig = toGenerate.getTimeSignature();
 		int numMeasures = toGenerate.getSize();
 		int tempo = toGenerate.getTempo();
 		double[] signatureSample = null;
@@ -240,7 +240,7 @@ public class SampleGenerator {
 		int numSignatures = activeSheet.getStaff(0).getSize();
 		int numMeasures, beatsPerMeasure, beatsPerSignature, tempo, minSampleSize, finalSampleSize;
 		double totalDuration = 0;
-		TimeSignature t;
+		EnumTimeSignature t;
 
 		for (int i = 0; i < numSignatures; i++) {
 			numMeasures = this.activeSheet.getStaff(0).getSignature(i)
@@ -276,7 +276,7 @@ public class SampleGenerator {
 	 *            - time signature in sheet
 	 * @return
 	 */
-	private int getSampleLengthOfNote(NoteType n, TimeSignature t, int tempo) {
+	private int getSampleLengthOfNote(NoteType n, EnumTimeSignature t, int tempo) {
 		double beats, noteDurationInSeconds;
 		int beatNote, minNoteSampleSize;
 
@@ -302,7 +302,7 @@ public class SampleGenerator {
 	 * @param t
 	 * @return
 	 */
-	private int getBeatsPerMeasure(TimeSignature t) {
+	private int getBeatsPerMeasure(EnumTimeSignature t) {
 		int beats = 0;
 		switch (t) {
 		case FOUR_FOUR:
@@ -395,7 +395,7 @@ public class SampleGenerator {
 	 * @param t
 	 * @return
 	 */
-	private int getMeasureBeatNote(TimeSignature t) {
+	private int getMeasureBeatNote(EnumTimeSignature t) {
 		int beat = 0;
 		switch (t) {
 		case FOUR_FOUR:
