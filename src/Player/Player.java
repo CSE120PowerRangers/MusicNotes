@@ -78,10 +78,11 @@ public class Player {
 		// Open up audio channel to begin streaming
 		soundTrack.play();
 		
+		streamBuffer = getNextSample();
 		// Read from the SampleGenerator
-		while(!streamBuffer.equals(null)) {  
-			streamBuffer = getNextSample();
+		while(streamBuffer != null) {  
 			soundTrack.write(streamBuffer, 0, streamBuffer.length);
+			streamBuffer = getNextSample();
 		}
 		
 		soundTrack.stop();
