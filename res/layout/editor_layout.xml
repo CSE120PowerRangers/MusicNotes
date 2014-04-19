@@ -124,6 +124,7 @@
 
     <RelativeLayout
         android:id="@+id/measureLayout"
+        android:background="@drawable/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/notesToolBar"
@@ -132,6 +133,7 @@
 
         <RelativeLayout
             android:id="@+id/line1"
+            android:background="@drawable/background"
             android:layout_width="@dimen/chordWidth"
             android:layout_height="match_parent"
             android:orientation="vertical" >
@@ -230,6 +232,7 @@
 
         <RelativeLayout
             android:id="@+id/line2"
+            android:background="@drawable/background"
             android:layout_width="@dimen/chordWidth"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/line1"
