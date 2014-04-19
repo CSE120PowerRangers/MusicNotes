@@ -1,6 +1,7 @@
 package com.example.musicnotes;
 
 import MusicSheet.*;
+import Player.MidiPlayer;
 import Player.Player;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -26,7 +27,7 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	Spinner spinner;
-	Player player;
+	MidiPlayer player;
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
@@ -74,14 +75,7 @@ public class EditorActivity extends Activity{
 		});
 
 		//Update the ToolBar with default Items
-
-
-
 		sheet = new Sheet();
-		player = new Player(sheet);
-
-
-
 	}
 
 	@Override
@@ -443,8 +437,7 @@ public class EditorActivity extends Activity{
 	
 	public void playButtonTouch(View v)
 	{
-		player = new Player(sheet);
-		player.initializeSampleGenerator(sheet);
+		player.initSheet(sheet, getApplicationContext());
 		player.play();
 		
 	}

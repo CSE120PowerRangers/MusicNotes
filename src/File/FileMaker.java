@@ -3,18 +3,14 @@ package File;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import MusicSheet.*;
 import android.content.Context;
 
 import com.leff.midi.*;
-import com.leff.midi.event.*;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
-import com.leff.midi.util.*;
 
 /*
  * Class responsible for generating different file types
@@ -126,9 +122,14 @@ public class FileMaker {
 	private static MidiTrack insertChordEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex, int measureIndex){
 		int numChords = Measure.getSize();
 		Chord currentChord;
+		Note currentNote;
+		EnumTimeSignature t;
 		
-		// Extra events
+		int num, denom, beatsPerQN;
+		
+		// Parameters for note events
 		int channel = 0, velocity = 100, pitch;
+		long tick, duration;
 		
 		// For all chords in the measure
 		for(int i = 0; i < numChords; i++){
@@ -136,12 +137,39 @@ public class FileMaker {
 			if(currentChord != null){
 				// If the chord isn't null, insert each note in the chord at the end of the track
 				for(int j = 0; j < currentChord.getSize(); j++){
-					pitch = currentChord.getNote(j).getMidiPitch();
+					currentNote = currentChord.getNote(j);
+					
+					pitch = currentNote.getMidiPitch();
+					
+					/*
+					 *  Position in the track -- apparently it's like a timestamp. Thought events were supposed to be relative.
+					 *  
+					 *  In that case, tick values for an event in the sheet should be...
+					 *  
+					 *  ((MidiFile resolution in PPQ) * (Quarter notes per measure) * measureIndex) 
+					 *  	+ (Div. Position in measure) * (Resolution per measure division)
+					 *  
+					 *   Pulses per measure division = PPQ / Divisions per Quarter Note
+					 */
+					
+					// TODO Will probably break when using time signatures that don't have even beats per quarter note
+					t = s.getStaff(staffIndex).getSignature(signatureIndex).getTimeSignature();
+					
+					num = EnumTimeSignature.getNumerator(t);
+					denom = EnumTimeSignature.getDenom(t);
+					beatsPerQN = denom / 4;
+					
+					// Finally calculate the tick timestamp
+					tick = MidiFile.DEFAULT_RESOLUTION * (beatsPerQN * num) * measureIndex;
+					
+					duration = currentNote.getNoteDurationInTicks(MidiFile.DEFAULT_RESOLUTION);
+					
+					track.insertNote(channel, pitch, velocity, tick, duration);
 				}
 			}
 		}
 		
-		return null;
+		return track;
 	}
 	
 
@@ -159,6 +187,19 @@ public class FileMaker {
 		}
 		return midi;
 	}
+	
+	public static void writeSheetToMidi(Sheet s, Context c) {
+		MidiFile midi = sheetToMidi(s);
+		
+		String path = c.getFilesDir().toString();
+
+		File output = new File(path, TEST_FILENAME);
+		try {
+			midi.writeToFile(output);
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
 
 	private static MidiFile testSampleFile() {
 		// Create some sample tracks, just a couple notes
@@ -174,7 +215,7 @@ public class FileMaker {
 				TimeSignature.DEFAULT_METER);
 
 		Tempo t = new Tempo();
-		t.setBpm(228);
+		t.setBpm(120);
 
 		tempoTrack.insertEvent(ts);
 		tempoTrack.insertEvent(t);
