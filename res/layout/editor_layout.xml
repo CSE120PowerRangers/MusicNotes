@@ -14,6 +14,35 @@
         android:orientation="horizontal" >
     </LinearLayout>
 
+   
+
+            <ImageView
+                android:id="@+id/backwardMeasure"
+                android:layout_width="35dp"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@+id/playButton"
+                android:layout_above="@+id/measureLayout"
+                android:src="@drawable/measurebackward" />
+
+            <Spinner
+                android:id="@+id/currentMeasure"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@+id/backwardMeasure"
+                android:layout_toLeftOf="@+id/forwardMeasure"
+                android:layout_above="@+id/measureLayout"
+                 />
+            
+
+            <ImageView
+                android:id="@+id/forwardMeasure"
+                android:layout_width="35dp"
+                android:layout_height="fill_parent"
+                android:onClick="forward_measure"
+                android:layout_above="@+id/measureLayout"
+                android:layout_toLeftOf="@+id/notesToolBar"
+                android:src="@drawable/measureforward" />
+         
     <Spinner
         android:id="@+id/toolbarSpinner"
         android:layout_width="100dp"
@@ -29,7 +58,7 @@
         android:layout_alignParentRight="true" />
 
     <Button
-        android:id="@+id/tempPlayButton"
+        android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -46,7 +75,7 @@
         <!-- Time Signature Layout -->
 
         <RelativeLayout
-            android:id="@+id/timeSignatureLayout"
+            android:id="@+id/keySignatureLayout"
             android:layout_width="fill_parent"
             android:layout_height="100dp"
             android:orientation="horizontal" >
@@ -62,15 +91,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 android:paddingBottom="22dp"
                 android:paddingTop="20dp"
                 android:src="@drawable/csignature" />
+
         </RelativeLayout>
 
         <!-- Key Signature Layout -->
 
         <RelativeLayout
-            android:id="@+id/keySignatureLayout"
+            android:id="@+id/timeSignatureLayout"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_alignParentLeft="true"
@@ -93,149 +124,25 @@
         </RelativeLayout>
         <!-- Measure navigation buttons -->
 
-        <LinearLayout
-            android:id="@+id/measureNavButtons"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingTop="5dp" >
-
-            <ImageView
-                android:id="@+id/backwardMeasure"
-                android:layout_width="35dp"
-                android:layout_height="fill_parent"
-                android:src="@drawable/measurebackward" />
-
-            <ImageView
-                android:id="@+id/spacingMeasure"
-                android:layout_width="5dp"
-                android:layout_height="fill_parent" />
-
-            <ImageView
-                android:id="@+id/forwardMeasure"
-                android:layout_width="35dp"
-                android:layout_height="fill_parent"
-                android:onClick="forward_measure"
-                android:src="@drawable/measureforward" />
-        </LinearLayout>
+       
     </LinearLayout>
 
     <!-- Measures -->
 
     <RelativeLayout
         android:id="@+id/measureLayout"
-        android:background="@drawable/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/notesToolBar"
         android:layout_toRightOf="@+id/leftPanel"
+        android:background="@drawable/background"
         android:orientation="horizontal" >
 
         <RelativeLayout
             android:id="@+id/line1"
-            android:background="@drawable/background"
             android:layout_width="@dimen/chordWidth"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/n15"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight" />
-
-            <ImageView
-                android:id="@+id/n14"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n15" />
-
-            <ImageView
-                android:id="@+id/n13"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n14" />
-
-            <ImageView
-                android:id="@+id/n12"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n13"
-                />
-
-            <ImageView
-                android:id="@+id/n11"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n12" />
-
-            <ImageView
-                android:id="@+id/n10"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n11"/>
-
-            <ImageView
-                android:id="@+id/n9"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n10" />
-
-            <ImageView
-                android:id="@+id/n8"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n9"/>
-
-            <ImageView
-                android:id="@+id/n7"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n8" />
-
-            <ImageView
-                android:id="@+id/n6"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n7" />
-
-            <ImageView
-                android:id="@+id/n5"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n6" />
-
-            <ImageView
-                android:id="@+id/n4"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n5" />
-
-            <ImageView
-                android:id="@+id/n3"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n4" />
-
-            <ImageView
-                android:id="@+id/n2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n3" />
-
-            <ImageView
-                android:id="@+id/n1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n2"
-                android:adjustViewBounds="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/line2"
             android:background="@drawable/background"
-            android:layout_width="@dimen/chordWidth"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/line1"
             android:orientation="vertical" >
 
             <ImageView
@@ -295,7 +202,106 @@
                 android:id="@+id/n6"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n7"/>
+                android:layout_below="@+id/n7" />
+
+            <ImageView
+                android:id="@+id/n5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n6" />
+
+            <ImageView
+                android:id="@+id/n4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n5" />
+
+            <ImageView
+                android:id="@+id/n3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n4" />
+
+            <ImageView
+                android:id="@+id/n2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n3" />
+
+            <ImageView
+                android:id="@+id/n1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n2"
+                android:adjustViewBounds="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/line2"
+            android:layout_width="@dimen/chordWidth"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/line1"
+            android:background="@drawable/background"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/n15"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight" />
+
+            <ImageView
+                android:id="@+id/n14"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n15" />
+
+            <ImageView
+                android:id="@+id/n13"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n14" />
+
+            <ImageView
+                android:id="@+id/n12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n13" />
+
+            <ImageView
+                android:id="@+id/n11"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n12" />
+
+            <ImageView
+                android:id="@+id/n10"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n11" />
+
+            <ImageView
+                android:id="@+id/n9"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n10" />
+
+            <ImageView
+                android:id="@+id/n8"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n9" />
+
+            <ImageView
+                android:id="@+id/n7"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n8" />
+
+            <ImageView
+                android:id="@+id/n6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/noteHeight"
+                android:layout_below="@+id/n7" />
 
             <ImageView
                 android:id="@+id/n5"
@@ -467,7 +473,7 @@
                 android:id="@+id/n10"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n11"/>
+                android:layout_below="@+id/n11" />
 
             <ImageView
                 android:id="@+id/n9"
@@ -491,7 +497,7 @@
                 android:id="@+id/n6"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n7"/>
+                android:layout_below="@+id/n7" />
 
             <ImageView
                 android:id="@+id/n5"
@@ -601,7 +607,7 @@
                 android:id="@+id/n4"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n5"/>
+                android:layout_below="@+id/n5" />
 
             <ImageView
                 android:id="@+id/n3"
@@ -797,7 +803,7 @@
                 android:id="@+id/n4"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/noteHeight"
-                android:layout_below="@+id/n5"/>
+                android:layout_below="@+id/n5" />
 
             <ImageView
                 android:id="@+id/n3"

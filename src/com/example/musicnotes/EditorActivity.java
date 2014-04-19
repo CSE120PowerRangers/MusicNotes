@@ -1,12 +1,18 @@
 package com.example.musicnotes;
 
+import java.util.ArrayList;
+
+import Listeners.EditorDragListener;
+import Listeners.EditorTouchListener;
 import MusicSheet.*;
 import Player.Player;
+import android.R.string;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.DragEvent;
@@ -25,7 +31,8 @@ import android.widget.ImageView.ScaleType;
 public class EditorActivity extends Activity{
 
 	Sheet sheet;
-	Spinner spinner;
+	Spinner spinner, measureSpinner;
+	String[] measureArray;
 	Player player;
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
@@ -36,13 +43,37 @@ public class EditorActivity extends Activity{
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
-
+		sheet = new Sheet();
 		//Set Spinner and Default Value for Spinner
 		currentVal = EditorVal.NOTES;
-		currentMeasure = 0;
+		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 		spinner = (Spinner) findViewById(R.id.toolbarSpinner);
 
-		// Insert Options into Spinner
+
+		measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
+		for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++)
+		{
+			measureArray[i] = "" +i;
+		}
+
+		// Insert Options into Spinners
+		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
+		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		measureSpinner.setAdapter(adapterMeasure);
+
+		measureSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+				currentMeasure = position;
+				updateMeasures(currentMeasure);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+
+			}
+
+		});
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.toolbarSpinnerArray, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
@@ -77,7 +108,7 @@ public class EditorActivity extends Activity{
 
 
 
-		sheet = new Sheet();
+
 		player = new Player(sheet);
 
 
@@ -144,16 +175,16 @@ public class EditorActivity extends Activity{
 	public void updateMeasures(int start)
 	{
 		RelativeLayout measureLayout = (RelativeLayout) findViewById(R.id.measureLayout);
-		RelativeLayout note_layout = (RelativeLayout) findViewById(R.id.NoteLayout);
-		Measure measureLookUp = sheet.getStaff(0).getSignature(0).getMeasure(start);
+		System.err.println(measureLayout.getId());
+
 		RelativeLayout selChord;
-		ImageView selNote;
-		
-		
+
+
+
 		//**Drawing the measure
 		for(int chords = 0; chords < measureLayout.getChildCount(); chords++)
 		{
-			
+			ImageView selNote;
 			selChord = (RelativeLayout)measureLayout.getChildAt(chords);
 			for(int notes = 0; notes < selChord.getChildCount(); notes++)
 			{
@@ -163,296 +194,62 @@ public class EditorActivity extends Activity{
 					selNote.setImageResource(R.drawable.line);
 					selNote.setScaleType(ScaleType.FIT_XY);
 				}
-				
-				
-				/*
-				OnDragListener dragListener = new OnDragListener() {
-					
-					@Override
-					public boolean onDrag(View v, DragEvent event) {
-						LinearLayout chordParent = (LinearLayout)v.getParent();
-						LinearLayout measureParent = (LinearLayout) chordParent.getParent();
-						int chordsPos = -1, notesPos = -1;
-						
-						for(int chords = 0; chords<measureParent.getChildCount(); chords++)
-						{
-							if(chordParent == measureParent.getChildAt(chords))
-							{
-								chordsPos = chords;
-								break;
-							}
-						}
-						
-						for(int notes = 0; notes < chordParent.getChildCount(); notes++)
-						{
-							if(v == chordParent.getChildAt(notes))
-							{
-								notesPos = notes;
-								break;
-							}
-						}
-						
-						Chord chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
-						switch(event.getAction())
-						{
-							case DragEvent.ACTION_DRAG_ENTERED:
-								
-								switch(notesPos)
-								{
-									case 0:
-										break;
-									case 1:
-										break;
-									case 2:
-										break;
-									case 3:
-										break;
-									case 4:
-										chordSel.addNote(NoteName.E, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 5:
-										chordSel.addNote(NoteName.D, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 6:
-										chordSel.addNote(NoteName.C, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 7:
-										chordSel.addNote(NoteName.B, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 8:
-										chordSel.addNote(NoteName.A, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 9:
-										chordSel.addNote(NoteName.G, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 10:
-										chordSel.addNote(NoteName.F, NoteType.QUARTER_NOTE, 4);
-										break;
-									case 11:
-										break;
-									case 12:
-										break;
-									case 13:
-										break;
-									case 14:
-										break;
-								}
-								updateMeasures(currentMeasure);
-								return true;
-						
-							
-							case DragEvent.ACTION_DRAG_EXITED:
-								
-								switch(notesPos)
-								{
-									case 0:
-										break;
-									case 1:
-										break;
-									case 2:
-										break;
-									case 3:
-										break;
-									case 4:
-										chordSel.deleteNote(NoteName.E, 4);
-										break;
-									case 5:
-										chordSel.deleteNote(NoteName.D, 4);
-										break;
-									case 6:
-										chordSel.deleteNote(NoteName.C, 4);
-										break;
-									case 7:
-										chordSel.deleteNote(NoteName.B, 4);
-										break;
-									case 8:
-										chordSel.deleteNote(NoteName.A, 4);
-										break;
-									case 9:
-										chordSel.deleteNote(NoteName.G, 4);
-										break;
-									case 10:
-										chordSel.deleteNote(NoteName.F, 4);
-										break;
-									case 11:
-										break;
-									case 12:
-										break;
-									case 13:
-										break;
-									case 14:
-										break;
-								}
-								updateMeasures(currentMeasure);
-								return true;
-						}
-				
-					
-					
-						return false;
-					}
-				};
-				*/
-				
-				OnTouchListener touchListener = new OnTouchListener() {
-
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						RelativeLayout chordParent = (RelativeLayout)v.getParent();
-						RelativeLayout measureParent = (RelativeLayout) chordParent.getParent();
-						int chordsPos = -1, notesPos = -1;
-						
-						for(int chords = 0; chords<measureParent.getChildCount(); chords++)
-						{
-							if(chordParent == measureParent.getChildAt(chords))
-							{
-								chordsPos = chords;
-								break;
-							}
-						}
-						
-						for(int notes = 0; notes < chordParent.getChildCount(); notes++)
-						{
-							if(v == chordParent.getChildAt(notes))
-							{
-								notesPos = notes;
-								break;
-							}
-						}
-						
-						Chord chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
-						if(chordSel == null)
-						{
-							sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).addChord(chordsPos);
-							chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
-						}
-						switch(event.getAction())
-						{
-							case MotionEvent.ACTION_DOWN:
-								
-								switch(notesPos)
-								{
-									case 0:
-										break;
-									case 1:
-										break;
-									case 2:
-										break;
-									case 3:
-										break;
-									case 4:
-										chordSel.addNote(NoteName.E, NoteType.EIGHTH_NOTE, 5);
-										break;
-									case 5:
-										chordSel.addNote(NoteName.D, NoteType.EIGHTH_NOTE, 5);
-										break;
-									case 6:
-										chordSel.addNote(NoteName.C, NoteType.EIGHTH_NOTE, 5);
-										break;
-									case 7:
-										chordSel.addNote(NoteName.B, NoteType.EIGHTH_NOTE, 4);
-										break;
-									case 8:
-										chordSel.addNote(NoteName.A, NoteType.EIGHTH_NOTE, 4);
-										break;
-									case 9:
-										chordSel.addNote(NoteName.G, NoteType.EIGHTH_NOTE, 4);
-										break;
-									case 10:
-										chordSel.addNote(NoteName.F, NoteType.EIGHTH_NOTE, 4);
-										break;
-									case 11:
-										break;
-									case 12:
-										break;
-									case 13:
-										break;
-									case 14:
-										break;
-								}
-								updateMeasures(currentMeasure);
-								return true;
-					}
-						return false;
-					}
-					
-				
-				};
-				
-				
-				selNote.setOnTouchListener(touchListener);
-				
 			}
-			
-			
 		}
-		
-		//Read from Chord
-		for(int chords = 0; chords < measureLookUp.getSize(); chords++)
+
+		RelativeLayout noteLayout = (RelativeLayout) findViewById(R.id.NoteLayout);
+		System.err.println(noteLayout.getId());
+		//Add Listener and Draw Notes
+		for(int chords = 0; chords < noteLayout.getChildCount(); chords++)
 		{
-			Chord chordLookUp = measureLookUp.getChord(chords);
-			if(chordLookUp!= null)
+			ImageView selNote;
+			selChord = (RelativeLayout)noteLayout.getChildAt(chords);
+			Chord c = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords);
+			for(int notes = 0; notes < selChord.getChildCount(); notes++)
 			{
-				for(int notes = 0; notes < chordLookUp.getSize(); notes++)
+				selNote = (ImageView) selChord.getChildAt(notes);
+
+				EditorTouchListener touchListener = new EditorTouchListener(sheet, currentMeasure);
+				selNote.setOnTouchListener(touchListener);
+
+				EditorDragListener dragListener = new EditorDragListener(sheet, currentMeasure);
+				selNote.setOnDragListener(dragListener);
+
+				if(c != null)
 				{
-					Note noteLookUp = chordLookUp.getNote(notes);
-					switch(noteLookUp.getName())
+					Note searchNote = NoteFinder.findNote(sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords), notes);
+					if(searchNote != null)
 					{
-					case A:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(8);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						
-						break;
-					case B:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(7);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						
-						break;
-					case C:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(6);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						break;
-					case D:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(5);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						break;
-					case E:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(4);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						break;
-					case F:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(10);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						break;
-					case G:
-						selChord = (RelativeLayout) note_layout.getChildAt(chords);
-						selNote = (ImageView) selChord.getChildAt(9);
-						selNote.setImageResource(R.drawable.fillednotenote);
-						break;
+						selNote.setImageResource(R.drawable.fillednotespace);
 					}
+					else
+					{
+						selNote.setImageResource(0);
+					}
+				}
+				else
+				{
+					selNote.setImageResource(0);
 				}
 			}
 		}
+
+		/*TextView myText = (TextView) findViewById(R.id.currentMeasure);
+		myText.setText(currentMeasure);*/
 	}
-	
+
 	public void playButtonTouch(View v)
 	{
 		player = new Player(sheet);
 		player.initializeSampleGenerator(sheet);
 		player.play();
-		
+
 	}
-	
+
 	public void forward_measure(View v){
 		//**** If null, create a new measure****
-		
-		
+
+
 		//**** Increment the current Measure by one. ****
 		currentMeasure++;
 		updateMeasures(currentMeasure);
