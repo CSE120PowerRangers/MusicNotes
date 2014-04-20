@@ -88,7 +88,11 @@ public class Chord {
 	 * @return note at desired index
 	 */
 	public Note getNote(int index) {
-		return noteList.get(index);
+		if(index < 0 || index >= noteList.size()) {
+			return null;
+		} else {			
+			return noteList.get(index);
+		}
 	}
 	
 	/**
