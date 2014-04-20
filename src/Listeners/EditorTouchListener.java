@@ -31,9 +31,6 @@ public class EditorTouchListener implements OnTouchListener {
 
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			noteView.setBackgroundResource(R.drawable.background);
-			noteView.setImageResource(currentTool.getID());
-			noteView.setScaleType(ScaleType.CENTER_INSIDE);
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 			v.startDrag(data, shadowBuilder, v, 0);
