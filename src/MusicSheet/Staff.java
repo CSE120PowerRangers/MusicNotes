@@ -2,16 +2,18 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+import MusicUtil.EnumClef;
+
 
 public class Staff {
 	private ArrayList<Signature> signatures;
-	private Clef clef;
+	private EnumClef clef;
 	
 	/**
 	 * Default constructor creates a staff with a treble clef and a default signature
 	 */
 	public Staff() {
-		clef = Clef.TREBLE;
+		clef = EnumClef.TREBLE;
 		signatures = new ArrayList<Signature>();
 		signatures.add(new Signature());
 	}
@@ -20,7 +22,7 @@ public class Staff {
 	 * Creates a staff with a given clef and a default signature
 	 * @param clef
 	 */
-	public Staff(Clef clef) {
+	public Staff(EnumClef clef) {
 		this.clef = clef;
 		signatures = new ArrayList<Signature>();
 		signatures.add(new Signature());
@@ -31,7 +33,7 @@ public class Staff {
 	 * @param clef
 	 * @param signature
 	 */
-	public Staff(Clef clef, Signature signature) {
+	public Staff(EnumClef clef, Signature signature) {
 		this.clef = clef;
 		signatures = new ArrayList<Signature>();
 		signatures.add(signature);
@@ -51,7 +53,7 @@ public class Staff {
 	 * Sets the clef of the staff
 	 * @param newClef
 	 */
-	public void setClef(Clef newClef) {
+	public void setClef(EnumClef newClef) {
 		clef = newClef;
 	}
 	
@@ -101,7 +103,7 @@ public class Staff {
 	 * Returns the clef of the staff
 	 * @return
 	 */
-	public Clef getClef() {
+	public EnumClef getClef() {
 		return clef;
 	}
 }

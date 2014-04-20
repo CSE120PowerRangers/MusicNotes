@@ -10,6 +10,9 @@
 
 package MusicSheet;
 
+import MusicUtil.NoteName;
+import MusicUtil.NoteType;
+
 public class Note {
 	private NoteName name;
 	private NoteType type;

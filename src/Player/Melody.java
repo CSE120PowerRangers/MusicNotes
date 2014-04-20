@@ -1,6 +1,8 @@
 package Player;
 
 import MusicSheet.*;
+import MusicUtil.NoteName;
+import MusicUtil.NoteType;
 
 public class Melody {
 	// Just a test class while working on Player

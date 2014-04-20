@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import MusicSheet.*;
+import MusicUtil.EnumTimeSignature;
 import android.content.Context;
 
 import com.leff.midi.*;
@@ -35,8 +36,7 @@ public class FileMaker {
 			// Start with time events
 			// Time Signature
 			TimeSignature ts = new TimeSignature();
-			EnumTimeSignature sheetTS = s.getStaff(0).getSignature(0)
-					.getTimeSignature();
+			EnumTimeSignature sheetTS = s.getStaff(0).getSignature(0).getTimeSignature();
 
 			// MIDI Clocks per whole note (constant for now I think)
 			// TODO Verify the relationship is for whole note not measure
@@ -80,10 +80,8 @@ public class FileMaker {
 		// Create 1 track per staff
 		for (int i = 0; i < numStaffs; i++) {
 			newTrack = createSingleTrack(s, i);
-
 			// On each track iterate through the all signatures and create
 			// the tracks
-
 			noteTracks.add(newTrack);
 
 		}
@@ -98,7 +96,6 @@ public class FileMaker {
 
 		// For all signatures that belong to the track
 		for (int i = 0; i < numSignatures; i++) {
-
 			// Insert note events to the track
 			noteTrack = insertMeasureEvents(noteTrack, s, staffIndex, i);
 		}
@@ -112,7 +109,6 @@ public class FileMaker {
 		
 		// For all measures in the signature
 		for(int i = 0; i < numMeasures; i++){
-			
 			track = insertChordEvents(track, s, staffIndex, signatureIndex, i);
 		}
 		

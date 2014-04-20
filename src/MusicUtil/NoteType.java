@@ -1,4 +1,4 @@
-package MusicSheet;
+package MusicUtil;
 
 public enum NoteType {
 	WHOLE_NOTE, 
