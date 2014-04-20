@@ -445,8 +445,8 @@ public class EditorActivity extends Activity{
 		context = getApplicationContext();
 		
 		
-		if(context != null && melody.music != null) {
-			player = new MidiPlayer(melody.music, context);
+		if(context != null && sheet != null) {
+			player = new MidiPlayer(sheet, context);
 			player.play();
 		}
 	}
