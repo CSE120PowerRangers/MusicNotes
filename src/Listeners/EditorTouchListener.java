@@ -3,6 +3,7 @@ package Listeners;
 import com.example.musicnotes.R;
 
 import MusicSheet.Sheet;
+import MusicUtil.NoteTool;
 import android.content.ClipData;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,10 +16,12 @@ public class EditorTouchListener implements OnTouchListener {
 
 	int currentMeasure;
 	Sheet sheet;
+	NoteTool currentTool;
 
-	public EditorTouchListener(Sheet sheet, int currentMeasure) {
+	public EditorTouchListener(Sheet sheet, int currentMeasure, NoteTool currentTool) {
 		this.currentMeasure =currentMeasure;
 		this.sheet = sheet;
+		this.currentTool = currentTool;
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class EditorTouchListener implements OnTouchListener {
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			noteView.setBackgroundResource(R.drawable.background);
-			noteView.setImageResource(R.drawable.fillednotespace);
+			noteView.setImageResource(currentTool.getID());
 			noteView.setScaleType(ScaleType.CENTER_INSIDE);
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);

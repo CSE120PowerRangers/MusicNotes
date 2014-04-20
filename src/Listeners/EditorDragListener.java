@@ -10,6 +10,7 @@ import com.example.musicnotes.R;
 import MusicSheet.Chord;
 import MusicSheet.Note;
 import MusicSheet.Sheet;
+import MusicUtil.NoteTool;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
@@ -20,11 +21,13 @@ public class EditorDragListener implements OnDragListener {
 
 	int currentMeasure;
 	Sheet sheet;
+	NoteTool currentTool;
 	enum DeleteFlag {FIRST, DELETE, NODELETE};
 	DeleteFlag myDelete;
-	public EditorDragListener(Sheet sheet, int currentMeasure) {
+	public EditorDragListener(Sheet sheet, int currentMeasure, NoteTool currentTool) {
 		this.currentMeasure =currentMeasure;
 		this.sheet = sheet;
+		this.currentTool = currentTool;
 		myDelete = DeleteFlag.NODELETE;
 	}
 
@@ -70,7 +73,7 @@ public class EditorDragListener implements OnDragListener {
 
 			if(searchNote == null ) {
 				noteView.setBackgroundResource(R.drawable.background);
-				noteView.setImageResource(R.drawable.fillednotespace);
+				noteView.setImageResource(currentTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
 				myDelete = DeleteFlag.DELETE;
 			} else if(searchNote != null && myDelete == DeleteFlag.FIRST) {
@@ -91,7 +94,7 @@ public class EditorDragListener implements OnDragListener {
 
 		case DragEvent.ACTION_DROP:
 			noteView.setBackgroundResource(R.drawable.nobackground);
-			NoteToScreen.addNote(chordSel, notePos);
+			NoteToScreen.addNote(chordSel, notePos, currentTool);
 			myDelete = DeleteFlag.NODELETE;
 			return true;
 
