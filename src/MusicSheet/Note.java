@@ -317,7 +317,7 @@ public class Note {
 			break;
 		}
 		
-		duration = PPQ * (modifier / 8);
+		duration = (PPQ * modifier) / 8;
 		
 		return duration;
 	}
