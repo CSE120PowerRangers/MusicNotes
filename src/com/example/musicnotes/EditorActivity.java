@@ -216,7 +216,7 @@ public class EditorActivity extends Activity{
 		}
 	}
 
-	public void forwardMeasure(View v){
+	public void nextMeasure(View v){
 		//**** If null, create a new measure****
 		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1) {
 			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
