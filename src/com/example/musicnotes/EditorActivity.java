@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
 import MusicSheet.*;
-import Player.Melody;
 import Player.MidiPlayer;
 import Player.Player;
 import android.R.string;
@@ -41,8 +40,6 @@ public class EditorActivity extends Activity{
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
-
-	private final Melody melody = new Melody();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

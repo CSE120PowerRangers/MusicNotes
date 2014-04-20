@@ -180,6 +180,12 @@ public class FileMaker {
 	 */
 	
 	public static Sheet midiToSheet(MidiFile midi) {
+		int numStaffs = midi.getTrackCount(); // 1 staff per track
+		
+		for(int i = 0; i < numStaffs; i++){
+			
+		}
+		
 		return null;
 	}
 
