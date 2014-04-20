@@ -30,6 +30,9 @@ public class MidiPlayer {
 			//mPlayer = new MediaPlayer();
 			//mPlayer.setDataSource(context, filePath);
 			//mPlayer.prepareAsync();
+			
+			System.out.println(stringPath);
+			System.out.println(filePath);
 			mPlayer = MediaPlayer.create(context, filePath);
 		} catch (Exception ex) {
 			System.err.println(ex);

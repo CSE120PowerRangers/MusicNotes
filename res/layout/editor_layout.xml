@@ -5,15 +5,47 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="playButtonTouch"
+        android:text="Play!" />
+
+    <ImageView
+        android:id="@+id/backwardMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_toRightOf="@+id/playButton"
+        android:onClick="previousMeasure"
+        android:src="@drawable/measurebackward" />
+
+    <Spinner
+        android:id="@+id/currentMeasure"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_toRightOf="@+id/backwardMeasure" />
+
+    <ImageView
+        android:id="@+id/forwardMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_toRightOf="@+id/currentMeasure"
+        android:onClick="nextMeasure"
+        android:src="@drawable/measureforward" />
+
     <LinearLayout
         android:id="@+id/notesToolBar"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/top_bar_height"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/toolbarSpinner"
+        android:layout_toRightOf="@+id/forwardMeasure"
         android:orientation="horizontal" >
     </LinearLayout>
 
+<<<<<<< HEAD
    
 
             <ImageView
@@ -43,27 +75,15 @@
                 android:layout_toLeftOf="@+id/notesToolBar"
                 android:src="@drawable/measureforward" />
          
+=======
+>>>>>>> eae8d40cc11b83d053ab68205e2d312a8bf80490
     <Spinner
         android:id="@+id/toolbarSpinner"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/toggleEditor"
         android:orientation="horizontal" />
-
-    <ToggleButton
-        android:id="@+id/toggleEditor"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true" />
-
-    <Button
-        android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:onClick="playButtonTouch"
-        android:text="Play!" />
 
     <LinearLayout
         android:id="@+id/leftPanel"
@@ -95,7 +115,6 @@
                 android:paddingBottom="22dp"
                 android:paddingTop="20dp"
                 android:src="@drawable/csignature" />
-
         </RelativeLayout>
 
         <!-- Key Signature Layout -->
@@ -124,15 +143,16 @@
         </RelativeLayout>
         <!-- Measure navigation buttons -->
 
-       
     </LinearLayout>
 
     <!-- Measures -->
 
     <RelativeLayout
         android:id="@+id/measureLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/notesToolBar"
         android:layout_toRightOf="@+id/leftPanel"
         android:background="@drawable/background"

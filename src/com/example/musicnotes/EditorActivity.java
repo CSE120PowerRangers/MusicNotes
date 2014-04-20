@@ -131,7 +131,7 @@ public class EditorActivity extends Activity{
 		// Make sure there is nothing in there
 		toolbar.removeAllViews();
 
-		ImageButton[] toolbarButtons = new ImageButton[2];
+		ImageButton[] toolbarButtons = new ImageButton[4];
 		for(int i = 0; i < toolbarButtons.length; i++) {
 			toolbarButtons[i] = new ImageButton(this);
 			switch(currentVal) {
@@ -253,5 +253,14 @@ public class EditorActivity extends Activity{
 
 		measureSpinner.setSelection(currentMeasure);
 		updateMeasures(currentMeasure);
+	}
+	
+	public void previousMeasure(View v){
+		if(currentMeasure > 0)
+		{
+			currentMeasure--;
+			measureSpinner.setSelection(currentMeasure);
+			updateMeasures(currentMeasure);
+		}
 	}
 }
