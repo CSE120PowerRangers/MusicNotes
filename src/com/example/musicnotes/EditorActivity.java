@@ -1,18 +1,13 @@
 package com.example.musicnotes;
 
-import com.leff.midi.MidiFile;
-
 import File.FileMaker;
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
 import Listeners.ToolButtonListener;
 import MusicSheet.*;
-<<<<<<< HEAD
-=======
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
 import Player.Melody;
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 import Player.MidiPlayer;
 import android.app.Activity;
 import android.content.Context;
@@ -29,25 +24,19 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView.ScaleType;
 
-public class EditorActivity extends Activity {
+public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	Spinner spinner, measureSpinner;
 	public static MidiPlayer player;
 	public Context context;
 	String[] measureArray;
-<<<<<<< HEAD
-
-	enum EditorVal {
-		NOTES, RESTS, ACCIDENTALS
-	};
-
-=======
 	public static enum EditorVal{NOTES, RESTS, ACCIDENTALS};
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 	EditorVal currentVal;
 	NoteTool currentTool;
 	int currentMeasure;
+
+	private final Melody melody = new Melody();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,32 +44,26 @@ public class EditorActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
 		sheet = new Sheet();
-<<<<<<< HEAD
-		// Set Spinner and Default Value for Spinner
-=======
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
 		//Set Spinner and Default Value for Spinner
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 		currentVal = EditorVal.NOTES;
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 		spinner = (Spinner) findViewById(R.id.toolbarSpinner);
 
+
 		measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
-		for (int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
-			measureArray[i] = "" + i;
+		for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
+			measureArray[i] = "" +i;
 		}
 
 		// Insert Options into Spinners
-		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, measureArray);
-		adapterMeasure
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
+		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		measureSpinner.setAdapter(adapterMeasure);
 
 		measureSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parentView,
-					View selectedItemView, int position, long id) {
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 				currentMeasure = position;
 				updateMeasures(currentMeasure);
 			}
@@ -91,22 +74,24 @@ public class EditorActivity extends Activity {
 			}
 
 		});
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				this, R.array.toolbarSpinnerArray,
-				android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.toolbarSpinnerArray, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 
-		// Add Selection Listener to Spinner
+		//Add Selection Listener to Spinner
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parentView,
-					View selectedItemView, int position, long id) {
-				if (position == 0) {
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+				if(position == 0)
+				{
 					currentVal = EditorVal.NOTES;
-				} else if (position == 1) {
+				}
+				else if(position == 1)
+				{
 					currentVal = EditorVal.RESTS;
-				} else {
+				}
+				else
+				{
 					currentVal = EditorVal.ACCIDENTALS;
 				}
 				updateToolBar();
@@ -119,7 +104,7 @@ public class EditorActivity extends Activity {
 
 		});
 
-		// Update the ToolBar with default Items
+		//Update the ToolBar with default Items
 	}
 
 	@Override
@@ -141,7 +126,7 @@ public class EditorActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.main_menu:
 			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+			startActivity(intent);            	
 			return true;
 
 		default:
@@ -149,21 +134,18 @@ public class EditorActivity extends Activity {
 		}
 	}
 
+
 	public void updateToolBar() {
 		LinearLayout toolbar = (LinearLayout) findViewById(R.id.notesToolBar);
 		// Make sure there is nothing in there
 		toolbar.removeAllViews();
 
 		ImageButton[] toolbarButtons = new ImageButton[2];
-<<<<<<< HEAD
-		for (int i = 0; i < toolbarButtons.length; i++) {
-=======
 		NoteType myType = NoteType.QUARTER_NOTE;
 		int imageID = 0;
 		for(int i = 0; i < toolbarButtons.length; i++) {
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			toolbarButtons[i] = new ImageButton(this);
-			switch (currentVal) {
+			switch(currentVal) {
 			case NOTES:
 				switch(i)
 				{
@@ -186,38 +168,32 @@ public class EditorActivity extends Activity {
 				toolbarButtons[i].setImageResource(R.drawable.four);
 				break;
 			}
-<<<<<<< HEAD
-			toolbarButtons[i].setLayoutParams(new LayoutParams(100,
-					LayoutParams.MATCH_PARENT));
-=======
 			NoteTool myTool = new NoteTool(myType, imageID);
 			ToolButtonListener myListener = new ToolButtonListener(this, myTool);
 			toolbarButtons[i].setOnClickListener(myListener);
 			toolbarButtons[i].setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			toolbar.addView(toolbarButtons[i]);
 		}
 
 	}
 
-	public void updateMeasures(int start) {
+	public void updateMeasures(int start)
+	{
 		RelativeLayout measureLayout = (RelativeLayout) findViewById(R.id.measureLayout);
+
 
 		RelativeLayout selChord;
 
-		// **Drawing the measure
-		for (int chords = 0; chords < measureLayout.getChildCount(); chords++) {
+
+
+		//**Drawing the measure
+		for(int chords = 0; chords < measureLayout.getChildCount(); chords++) {
 			ImageView selNote;
-			selChord = (RelativeLayout) measureLayout.getChildAt(chords);
-			for (int notes = 0; notes < selChord.getChildCount(); notes++) {
+			selChord = (RelativeLayout)measureLayout.getChildAt(chords);
+			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
 				selNote = (ImageView) selChord.getChildAt(notes);
-<<<<<<< HEAD
-				if (notes >= 3 && notes <= 11 && notes % 2 == 1) {
-					selNote.setImageResource(R.drawable.line);
-=======
 				if(notes >= 3 && notes <=11 && notes%2 == 1) {
 					selNote.setBackgroundResource(R.drawable.line);
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 					selNote.setScaleType(ScaleType.FIT_XY);
 				}
 			}
@@ -225,32 +201,9 @@ public class EditorActivity extends Activity {
 
 		RelativeLayout noteLayout = (RelativeLayout) findViewById(R.id.NoteLayout);
 
-		// Add Listener and Draw Notes
-		for (int chords = 0; chords < noteLayout.getChildCount(); chords++) {
+		//Add Listener and Draw Notes
+		for(int chords = 0; chords < noteLayout.getChildCount(); chords++) {
 			ImageView selNote;
-<<<<<<< HEAD
-			selChord = (RelativeLayout) noteLayout.getChildAt(chords);
-			Chord c = sheet.getStaff(0).getSignature(0)
-					.getMeasure(currentMeasure).getChord(chords);
-
-			for (int notes = 0; notes < selChord.getChildCount(); notes++) {
-				selNote = (ImageView) selChord.getChildAt(notes);
-
-				EditorTouchListener touchListener = new EditorTouchListener(
-						sheet, currentMeasure);
-				selNote.setOnTouchListener(touchListener);
-
-				EditorDragListener dragListener = new EditorDragListener(sheet,
-						currentMeasure);
-				selNote.setOnDragListener(dragListener);
-
-				if (c != null) {
-					Note searchNote = NoteToScreen.findNote(sheet.getStaff(0)
-							.getSignature(0).getMeasure(currentMeasure)
-							.getChord(chords), notes);
-					if (searchNote != null) {
-						selNote.setImageResource(R.drawable.fillednotespace);
-=======
 			selChord = (RelativeLayout)noteLayout.getChildAt(chords);
 			Chord c = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords);
 
@@ -281,7 +234,6 @@ public class EditorActivity extends Activity {
 							selNote.setImageResource(R.drawable.fillednotespace);
 							break;
 						}
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 					} else {
 						selNote.setImageResource(0);
 					}
@@ -291,18 +243,17 @@ public class EditorActivity extends Activity {
 			}
 		}
 
-		/*
-		 * TextView myText = (TextView) findViewById(R.id.currentMeasure);
-		 * myText.setText(currentMeasure);
-		 */
+		/*TextView myText = (TextView) findViewById(R.id.currentMeasure);
+		myText.setText(currentMeasure);*/
 	}
 
 	public void playButtonTouch(View v) {
 		context = getApplicationContext();
 
-		player = new MidiPlayer(sheet, context);
-		player.play();
-
+		if(context != null && sheet != null) {
+			player = new MidiPlayer(sheet, context);
+			player.play();
+		}
 	}
 
 	public void loadFile(View v) {
@@ -316,54 +267,38 @@ public class EditorActivity extends Activity {
 		FileMaker.writeSheetToMidiExternal(sheet, context, filename);
 	}
 
-	public void nextMeasure(View v) {
-		// **** If null, create a new measure****
-		if (currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1) {
+	public void nextMeasure(View v){
+		//**** If null, create a new measure****
+		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1) {
 			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
 			currentMeasure++;
 
-<<<<<<< HEAD
-			measureArray = new String[sheet.getStaff(0).getSignature(0)
-					.getSize()];
-			for (int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
-				measureArray[i] = "" + i;
-=======
 			measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
 			for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
 				measureArray[i] = "" +i;
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			}
 
 			// Insert Options into Spinners
-			ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(
-					this, android.R.layout.simple_list_item_1, measureArray);
-			adapterMeasure
-					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
+			adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			measureSpinner.setAdapter(adapterMeasure);
 
-			measureSpinner
-					.setOnItemSelectedListener(new OnItemSelectedListener() {
-						@Override
-						public void onItemSelected(AdapterView<?> parentView,
-								View selectedItemView, int position, long id) {
-							currentMeasure = position;
-							updateMeasures(currentMeasure);
-						}
+			measureSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+					currentMeasure = position;
+					updateMeasures(currentMeasure);
+				}
 
-						@Override
-						public void onNothingSelected(AdapterView<?> parentView) {
+				@Override
+				public void onNothingSelected(AdapterView<?> parentView) {
 
-						}
+				}
 
-					});
-
-<<<<<<< HEAD
-=======
 			});
 
->>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 		} else {
-			// **** Increment the current Measure by one. ****
+			//**** Increment the current Measure by one. ****
 			currentMeasure++;
 		}
 
