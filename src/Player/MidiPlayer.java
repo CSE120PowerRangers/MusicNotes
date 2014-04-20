@@ -42,6 +42,11 @@ public class MidiPlayer {
 
 
 	public boolean isPlaying() {
+		if(mPlayer == null)
+		{
+			System.out.println("Null Player");
+			return false;
+		}
 		return mPlayer.isPlaying();
 	}
 

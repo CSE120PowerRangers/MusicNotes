@@ -12,9 +12,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.graphics.Path.FillType;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +37,7 @@ public class EditorActivity extends Activity{
 	EditorVal currentVal;
 	NoteTool currentTool;
 	int currentMeasure;
+	int screenWidth, screenHeight;
 
 	private final Melody melody = new Melody();
 
@@ -42,8 +46,15 @@ public class EditorActivity extends Activity{
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		
+		screenWidth = size.x;
+		screenHeight = size.y;
+		initializeView();
 		sheet = new Sheet();
-		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
+		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.fillednotespace);
 		//Set Spinner and Default Value for Spinner
 		currentVal = EditorVal.NOTES;
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
@@ -245,7 +256,21 @@ public class EditorActivity extends Activity{
 		/*TextView myText = (TextView) findViewById(R.id.currentMeasure);
 		myText.setText(currentMeasure);*/
 	}
+	
+	public void initializeView()
+	{
 
+		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
+		for(int i = 0; i < topToolbar.getChildCount(); i++)
+		{
+			topToolbar.getChildAt(i).setLayoutParams(new LinearLayout.LayoutParams(screenWidth/topToolbar.getChildCount(),LayoutParams.MATCH_PARENT));
+		}
+		
+		//measureSpinner.setLayoutParams(new LayoutParams(screenWidth/20,screenHeight/5));
+		//LinearLayout measureLayout = (LinearLayout)findViewById(R.id.measureLayout);
+		
+	}
+	
 	public void playButtonTouch(View v) {
 		context = getApplicationContext();
 
