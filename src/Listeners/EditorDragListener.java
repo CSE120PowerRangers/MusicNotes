@@ -93,6 +93,8 @@ public class EditorDragListener implements OnDragListener {
 			return true;
 
 		case DragEvent.ACTION_DROP:
+			noteView.setImageResource(R.drawable.fillednotespace);
+			noteView.setScaleType(ScaleType.CENTER_INSIDE);
 			System.out.println("Dropping note");
 			NoteToScreen.addNote(chordSel, notePos);
 			myDelete = DeleteFlag.NODELETE;
