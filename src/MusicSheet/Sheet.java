@@ -89,4 +89,12 @@ public class Sheet {
 	public int getStaffSize() {
 		return staffs.size();
 	}
+	
+	/**
+	 * Inserts a chord at the end of the sheet.
+	 * @param n
+	 */
+	public void insertChord(Chord c) {
+		
+	}
 }

@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import MusicSheet.*;
-import MusicUtil.EnumTimeSignature;
+import MusicUtil.*;
 import android.content.Context;
 
 import com.leff.midi.*;
-import com.leff.midi.event.meta.Tempo;
-import com.leff.midi.event.meta.TimeSignature;
+import com.leff.midi.event.*;
+import com.leff.midi.event.meta.*;
 
 /*
  * Class responsible for generating different file types
@@ -176,10 +177,41 @@ public class FileMaker {
 	 */
 	
 	public static Sheet midiToSheet(MidiFile midi) {
-		int numStaffs = midi.getTrackCount(); // 1 staff per track
 		
+		
+		int numStaffs = midi.getTrackCount() - 1; // 1 staff per track - 1 for the tempo mapping track		
+		
+		// Signature information
+		EnumTimeSignature timeSig;
+		EnumKeySignature keySig;
+		int tempo, num, den;
+		
+		ArrayList<MidiTrack> tracks = midi.getTracks();
+		
+		// Decode the tempo mapping track
+		MidiEvent[] currentEvents = (MidiEvent[]) tracks.get(0).getEvents().toArray();
+		
+		for(int i = 0; i < currentEvents.length; i++){
+			// Either the time signature event
+			if(currentEvents[i].getClass() == TimeSignature.class){
+				num = ((TimeSignature) currentEvents[i]).getNumerator();
+				den = ((TimeSignature) currentEvents[i]).getDenominatorValue();
+				
+				timeSig = EnumTimeSignature.getTimeSig(num, den);
+			}
+			// Or the tempo event
+			else if(currentEvents[i].getClass() == Tempo.class) {
+				tempo = (int)((Tempo) currentEvents[i]).getBpm();
+			}
+			// Or something we probably shouldn't care about.
+			else {
+				
+			}	
+		}
+		
+		//
 		for(int i = 0; i < numStaffs; i++){
-			
+			// 
 		}
 		
 		return null;
