@@ -17,6 +17,11 @@
           <item>Rests</item>
           <item>Accidentals</item>
       </string-array>
+      
+      <string-array name = "currentMeasureArray">
+          
+          
+      </string-array>
 
     <string name="hello_world">Hello world!</string>
     <string name="new_sheet">New Sheet</string>
