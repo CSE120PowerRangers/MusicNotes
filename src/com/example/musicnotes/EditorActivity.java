@@ -1,5 +1,6 @@
 package com.example.musicnotes;
 
+import File.FileMaker;
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
 import Listeners.ToolButtonListener;
@@ -278,6 +279,17 @@ public class EditorActivity extends Activity{
 			player = new MidiPlayer(sheet, context);
 			player.play();
 		}
+	}
+
+	public void loadFile(View v) {
+		context = getApplicationContext();
+
+	}
+
+	public void saveFile(View v) {
+		context = getApplicationContext();
+		String filename = "TESTFILE.mid";
+		FileMaker.writeSheetToMidiExternal(sheet, context, filename);
 	}
 
 	public void nextMeasure(View v){
