@@ -1,5 +1,9 @@
 package Listeners;
 
+import android.content.*;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
@@ -69,7 +73,6 @@ public class EditorDragListener implements OnDragListener {
 			System.out.println("Entered a new view");
 			Note searchNote = NoteToScreen.findNote(chordSel, notePos);
 			if(searchNote == null ) {
-				noteView.setBackgroundResource(R.drawable.background);
 				noteView.setImageResource(R.drawable.fillednotespace);
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
 				myDelete = DeleteFlag.DELETE;
@@ -84,7 +87,6 @@ public class EditorDragListener implements OnDragListener {
 		case DragEvent.ACTION_DRAG_EXITED:
 			System.out.println("Exiting this view");
 			if(myDelete != DeleteFlag.NODELETE) {
-				noteView.setBackgroundResource(R.drawable.nobackground);
 				noteView.setImageResource(0);
 				NoteToScreen.deleteNote(chordSel, notePos);
 			}
@@ -92,7 +94,6 @@ public class EditorDragListener implements OnDragListener {
 
 		case DragEvent.ACTION_DROP:
 			System.out.println("Dropping note");
-			noteView.setBackgroundResource(R.drawable.nobackground);
 			NoteToScreen.addNote(chordSel, notePos);
 			myDelete = DeleteFlag.NODELETE;
 			return true;

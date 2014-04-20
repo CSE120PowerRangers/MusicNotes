@@ -8,6 +8,9 @@ import Player.MidiPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -167,7 +170,7 @@ public class EditorActivity extends Activity{
 			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
 				selNote = (ImageView) selChord.getChildAt(notes);
 				if(notes >= 3 && notes <=11 && notes%2 == 1) {
-					selNote.setImageResource(R.drawable.line);
+					selNote.setBackgroundResource(R.drawable.line);
 					selNote.setScaleType(ScaleType.FIT_XY);
 				}
 			}

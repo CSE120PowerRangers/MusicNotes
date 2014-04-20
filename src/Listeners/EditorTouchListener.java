@@ -28,7 +28,6 @@ public class EditorTouchListener implements OnTouchListener {
 
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			noteView.setBackgroundResource(R.drawable.background);
 			noteView.setImageResource(R.drawable.fillednotespace);
 			noteView.setScaleType(ScaleType.CENTER_INSIDE);
 			ClipData data = ClipData.newPlainText("", "");

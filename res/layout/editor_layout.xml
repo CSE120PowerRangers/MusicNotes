@@ -45,38 +45,6 @@
         android:orientation="horizontal" >
     </LinearLayout>
 
-<<<<<<< HEAD
-   
-
-            <ImageView
-                android:id="@+id/backwardMeasure"
-                android:layout_width="35dp"
-                android:layout_height="fill_parent"
-                android:layout_toRightOf="@+id/playButton"
-                android:layout_above="@+id/measureLayout"
-                android:src="@drawable/measurebackward" />
-
-            <Spinner
-                android:id="@+id/currentMeasure"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_toRightOf="@+id/backwardMeasure"
-                android:layout_toLeftOf="@+id/forwardMeasure"
-                android:layout_above="@+id/measureLayout"
-                 />
-            
-
-            <ImageView
-                android:id="@+id/forwardMeasure"
-                android:layout_width="35dp"
-                android:layout_height="fill_parent"
-                android:onClick="nextMeasure"
-                android:layout_above="@+id/measureLayout"
-                android:layout_toLeftOf="@+id/notesToolBar"
-                android:src="@drawable/measureforward" />
-         
-=======
->>>>>>> eae8d40cc11b83d053ab68205e2d312a8bf80490
     <Spinner
         android:id="@+id/toolbarSpinner"
         android:layout_width="100dp"
