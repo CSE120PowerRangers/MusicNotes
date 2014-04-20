@@ -125,7 +125,7 @@ public class FileMaker {
 		Note currentNote;
 		EnumTimeSignature t;
 		
-		int num, denom, beatsPerQN;
+		int num, denom, beatsPerQN, divisionsPerQN;
 		
 		// Parameters for note events
 		int channel = 0, velocity = 100, pitch;
@@ -141,10 +141,11 @@ public class FileMaker {
 					
 					pitch = currentNote.getMidiPitch();
 					
+					
 					/*
 					 *  Position in the track -- apparently it's like a timestamp. Thought events were supposed to be relative.
 					 *  
-					 *  In that case, tick values for an event in the sheet should be...
+					 *  In that case, tick values for an event in the sheeFt should be...
 					 *  
 					 *  ((MidiFile resolution in PPQ) * (Quarter notes per measure) * measureIndex) 
 					 *  	+ (Div. Position in measure) * (Resolution per measure division)
@@ -159,8 +160,10 @@ public class FileMaker {
 					denom = EnumTimeSignature.getDenom(t);
 					beatsPerQN = denom / 4;
 					
+					divisionsPerQN = numChords / denom;
+					
 					// Finally calculate the tick timestamp
-					tick = MidiFile.DEFAULT_RESOLUTION * (beatsPerQN * num) * measureIndex;
+					tick = (MidiFile.DEFAULT_RESOLUTION * (beatsPerQN * num) * measureIndex) + (i * (MidiFile.DEFAULT_RESOLUTION / divisionsPerQN));
 					
 					duration = currentNote.getNoteDurationInTicks(MidiFile.DEFAULT_RESOLUTION);
 					
@@ -182,7 +185,6 @@ public class FileMaker {
 		try {
 			midi = new MidiFile(fis);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return midi;
