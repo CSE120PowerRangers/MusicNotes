@@ -3,6 +3,7 @@ package com.example.musicnotes;
 import MusicSheet.Chord;
 import MusicSheet.Note;
 import MusicUtil.NoteName;
+import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
 
 public class NoteToScreen {
@@ -62,53 +63,53 @@ public class NoteToScreen {
 		return searchNote;
 	}
 
-	public static void addNote(Chord chordSel, int notePos) {
+	public static void addNote(Chord chordSel, int notePos, NoteTool noteTool) {
 		switch(notePos)
 		{
 		case 0:
-			chordSel.addNote(NoteName.B, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.B, noteTool.getType(), 5);
 			break;
 		case 1:
-			chordSel.addNote(NoteName.A, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.A, noteTool.getType(), 5);
 			break;
 		case 2:
-			chordSel.addNote(NoteName.G, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.G, noteTool.getType(), 5);
 			break;
 		case 3:
-			chordSel.addNote(NoteName.F, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.F, noteTool.getType(), 5);
 			break;
 		case 4:
-			chordSel.addNote(NoteName.E, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.E, noteTool.getType(), 5);
 			break;
 		case 5:
-			chordSel.addNote(NoteName.D, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.D, noteTool.getType(), 5);
 			break;
 		case 6:
-			chordSel.addNote(NoteName.C, NoteType.EIGHTH_NOTE, 5);
+			chordSel.addNote(NoteName.C, noteTool.getType(), 5);
 			break;
 		case 7:
-			chordSel.addNote(NoteName.B, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.B,noteTool.getType(), 4);
 			break;
 		case 8:
-			chordSel.addNote(NoteName.A, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.A, noteTool.getType(), 4);
 			break;
 		case 9:
-			chordSel.addNote(NoteName.G, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.G,noteTool.getType(), 4);
 			break;
 		case 10:
-			chordSel.addNote(NoteName.F, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.F, noteTool.getType(), 4);
 			break;
 		case 11:
-			chordSel.addNote(NoteName.E, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.E, noteTool.getType(), 4);
 			break;
 		case 12:
-			chordSel.addNote(NoteName.D, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.D, noteTool.getType(), 4);
 			break;
 		case 13:
-			chordSel.addNote(NoteName.C, NoteType.EIGHTH_NOTE, 4);
+			chordSel.addNote(NoteName.C, noteTool.getType(), 4);
 			break;
 		case 14:
-			chordSel.addNote(NoteName.B, NoteType.EIGHTH_NOTE, 3);
+			chordSel.addNote(NoteName.B, noteTool.getType(), 3);
 			break;
 		}	
 	}

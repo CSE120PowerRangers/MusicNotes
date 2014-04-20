@@ -5,11 +5,21 @@ import com.leff.midi.MidiFile;
 import File.FileMaker;
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
+import Listeners.ToolButtonListener;
 import MusicSheet.*;
+<<<<<<< HEAD
+=======
+import MusicUtil.NoteTool;
+import MusicUtil.NoteType;
+import Player.Melody;
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 import Player.MidiPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,12 +36,17 @@ public class EditorActivity extends Activity {
 	public static MidiPlayer player;
 	public Context context;
 	String[] measureArray;
+<<<<<<< HEAD
 
 	enum EditorVal {
 		NOTES, RESTS, ACCIDENTALS
 	};
 
+=======
+	public static enum EditorVal{NOTES, RESTS, ACCIDENTALS};
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 	EditorVal currentVal;
+	NoteTool currentTool;
 	int currentMeasure;
 
 	@Override
@@ -40,7 +55,12 @@ public class EditorActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
 		sheet = new Sheet();
+<<<<<<< HEAD
 		// Set Spinner and Default Value for Spinner
+=======
+		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
+		//Set Spinner and Default Value for Spinner
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 		currentVal = EditorVal.NOTES;
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 		spinner = (Spinner) findViewById(R.id.toolbarSpinner);
@@ -135,11 +155,29 @@ public class EditorActivity extends Activity {
 		toolbar.removeAllViews();
 
 		ImageButton[] toolbarButtons = new ImageButton[2];
+<<<<<<< HEAD
 		for (int i = 0; i < toolbarButtons.length; i++) {
+=======
+		NoteType myType = NoteType.QUARTER_NOTE;
+		int imageID = 0;
+		for(int i = 0; i < toolbarButtons.length; i++) {
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			toolbarButtons[i] = new ImageButton(this);
 			switch (currentVal) {
 			case NOTES:
-				toolbarButtons[i].setImageResource(R.drawable.fillednote);
+				switch(i)
+				{
+				case 0:
+					toolbarButtons[i].setImageResource(R.drawable.fillednote);
+					myType = NoteType.QUARTER_NOTE;
+					imageID = R.drawable.fillednotespace;
+					break;
+				case 1:
+					toolbarButtons[i].setImageResource(R.drawable.halfnote);
+					myType = NoteType.HALF_NOTE;
+					imageID = R.drawable.halfnote;
+					break;
+				}
 				break;
 			case RESTS:
 				toolbarButtons[i].setImageResource(R.drawable.halfnote);
@@ -148,8 +186,15 @@ public class EditorActivity extends Activity {
 				toolbarButtons[i].setImageResource(R.drawable.four);
 				break;
 			}
+<<<<<<< HEAD
 			toolbarButtons[i].setLayoutParams(new LayoutParams(100,
 					LayoutParams.MATCH_PARENT));
+=======
+			NoteTool myTool = new NoteTool(myType, imageID);
+			ToolButtonListener myListener = new ToolButtonListener(this, myTool);
+			toolbarButtons[i].setOnClickListener(myListener);
+			toolbarButtons[i].setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			toolbar.addView(toolbarButtons[i]);
 		}
 
@@ -166,8 +211,13 @@ public class EditorActivity extends Activity {
 			selChord = (RelativeLayout) measureLayout.getChildAt(chords);
 			for (int notes = 0; notes < selChord.getChildCount(); notes++) {
 				selNote = (ImageView) selChord.getChildAt(notes);
+<<<<<<< HEAD
 				if (notes >= 3 && notes <= 11 && notes % 2 == 1) {
 					selNote.setImageResource(R.drawable.line);
+=======
+				if(notes >= 3 && notes <=11 && notes%2 == 1) {
+					selNote.setBackgroundResource(R.drawable.line);
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 					selNote.setScaleType(ScaleType.FIT_XY);
 				}
 			}
@@ -178,6 +228,7 @@ public class EditorActivity extends Activity {
 		// Add Listener and Draw Notes
 		for (int chords = 0; chords < noteLayout.getChildCount(); chords++) {
 			ImageView selNote;
+<<<<<<< HEAD
 			selChord = (RelativeLayout) noteLayout.getChildAt(chords);
 			Chord c = sheet.getStaff(0).getSignature(0)
 					.getMeasure(currentMeasure).getChord(chords);
@@ -199,6 +250,38 @@ public class EditorActivity extends Activity {
 							.getChord(chords), notes);
 					if (searchNote != null) {
 						selNote.setImageResource(R.drawable.fillednotespace);
+=======
+			selChord = (RelativeLayout)noteLayout.getChildAt(chords);
+			Chord c = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords);
+
+			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
+				selNote = (ImageView) selChord.getChildAt(notes);
+
+				EditorTouchListener touchListener = new EditorTouchListener(sheet, currentMeasure, currentTool);
+				selNote.setOnTouchListener(touchListener);
+
+				EditorDragListener dragListener = new EditorDragListener(sheet, currentMeasure, currentTool);
+				selNote.setOnDragListener(dragListener);
+
+				if(c != null) {
+					Note searchNote = NoteToScreen.findNote(sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords), notes);
+					if(searchNote != null) {
+						switch(searchNote.getType())
+						{
+						case EIGHTH_NOTE:
+							selNote.setImageResource(R.drawable.fillednotespace);
+							break;
+						case QUARTER_NOTE:
+							selNote.setImageResource(R.drawable.fillednotespace);
+							break;
+						case HALF_NOTE:
+							selNote.setImageResource(R.drawable.halfnote);
+							break;
+						default:
+							selNote.setImageResource(R.drawable.fillednotespace);
+							break;
+						}
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 					} else {
 						selNote.setImageResource(0);
 					}
@@ -239,10 +322,16 @@ public class EditorActivity extends Activity {
 			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
 			currentMeasure++;
 
+<<<<<<< HEAD
 			measureArray = new String[sheet.getStaff(0).getSignature(0)
 					.getSize()];
 			for (int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
 				measureArray[i] = "" + i;
+=======
+			measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
+			for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
+				measureArray[i] = "" +i;
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 			}
 
 			// Insert Options into Spinners
@@ -268,12 +357,36 @@ public class EditorActivity extends Activity {
 
 					});
 
+<<<<<<< HEAD
+=======
+			});
+
+>>>>>>> 60060ce123e283f13ba22bfdbed76751cfece81e
 		} else {
 			// **** Increment the current Measure by one. ****
 			currentMeasure++;
 		}
 
 		measureSpinner.setSelection(currentMeasure);
+		updateMeasures(currentMeasure);
+	}
+
+	public void previousMeasure(View v){
+		if(currentMeasure > 0)
+		{
+			currentMeasure--;
+			measureSpinner.setSelection(currentMeasure);
+			updateMeasures(currentMeasure);
+		}
+	}
+
+	public void setTool(NoteTool newTool)
+	{
+		System.out.println("HEY YOU ADDED A TOOL");
+		currentTool = newTool;
+	}
+	public void updateTools()
+	{
 		updateMeasures(currentMeasure);
 	}
 }

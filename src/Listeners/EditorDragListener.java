@@ -1,5 +1,9 @@
 package Listeners;
 
+import android.content.*;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
@@ -10,6 +14,7 @@ import com.example.musicnotes.R;
 import MusicSheet.Chord;
 import MusicSheet.Note;
 import MusicSheet.Sheet;
+import MusicUtil.NoteTool;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
@@ -20,11 +25,13 @@ public class EditorDragListener implements OnDragListener {
 
 	int currentMeasure;
 	Sheet sheet;
+	NoteTool currentTool;
 	enum DeleteFlag {FIRST, DELETE, NODELETE};
 	DeleteFlag myDelete;
-	public EditorDragListener(Sheet sheet, int currentMeasure) {
+	public EditorDragListener(Sheet sheet, int currentMeasure, NoteTool currentTool) {
 		this.currentMeasure =currentMeasure;
 		this.sheet = sheet;
+		this.currentTool = currentTool;
 		myDelete = DeleteFlag.NODELETE;
 	}
 
@@ -61,16 +68,15 @@ public class EditorDragListener implements OnDragListener {
 			/*noteView.setBackgroundResource(R.drawable.background);
 			noteView.setImageResource(R.drawable.fillednotespace);
 			noteView.setScaleType(ScaleType.CENTER_INSIDE);*/
-
+			//System.out.println("Started dragging");
 			myDelete = DeleteFlag.FIRST;
 			return true;
 
 		case DragEvent.ACTION_DRAG_ENTERED:
+			System.out.println("Entered a new view");
 			Note searchNote = NoteToScreen.findNote(chordSel, notePos);
-
 			if(searchNote == null ) {
-				noteView.setBackgroundResource(R.drawable.background);
-				noteView.setImageResource(R.drawable.fillednotespace);
+				noteView.setImageResource(currentTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
 				myDelete = DeleteFlag.DELETE;
 			} else if(searchNote != null && myDelete == DeleteFlag.FIRST) {
@@ -82,16 +88,17 @@ public class EditorDragListener implements OnDragListener {
 			return true;
 
 		case DragEvent.ACTION_DRAG_EXITED:
+			System.out.println("Exiting this view");
 			if(myDelete != DeleteFlag.NODELETE) {
-				noteView.setBackgroundResource(R.drawable.nobackground);
 				noteView.setImageResource(0);
 				NoteToScreen.deleteNote(chordSel, notePos);
 			}
 			return true;
 
 		case DragEvent.ACTION_DROP:
-			noteView.setBackgroundResource(R.drawable.nobackground);
-			NoteToScreen.addNote(chordSel, notePos);
+			noteView.setImageResource(currentTool.getID());
+			noteView.setScaleType(ScaleType.CENTER_INSIDE);
+			NoteToScreen.addNote(chordSel, notePos, currentTool);
 			myDelete = DeleteFlag.NODELETE;
 			return true;
 
