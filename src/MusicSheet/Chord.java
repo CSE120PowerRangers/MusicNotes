@@ -2,6 +2,9 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+import MusicUtil.NoteName;
+import MusicUtil.NoteType;
+
 public class Chord {
 	private ArrayList<Note> noteList;
 	
@@ -88,7 +91,11 @@ public class Chord {
 	 * @return note at desired index
 	 */
 	public Note getNote(int index) {
-		return noteList.get(index);
+		if(index < 0 || index >= noteList.size()) {
+			return null;
+		} else {			
+			return noteList.get(index);
+		}
 	}
 	
 	/**

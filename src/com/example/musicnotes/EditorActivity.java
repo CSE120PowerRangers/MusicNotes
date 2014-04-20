@@ -1,31 +1,17 @@
 package com.example.musicnotes;
 
-import java.util.ArrayList;
-
 import Listeners.EditorDragListener;
 import Listeners.EditorTouchListener;
 import MusicSheet.*;
 import Player.Melody;
 import Player.MidiPlayer;
-import Player.Player;
-import android.R.string;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnDragListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -57,8 +43,7 @@ public class EditorActivity extends Activity{
 
 
 		measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
-		for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++)
-		{
+		for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
 			measureArray[i] = "" +i;
 		}
 
@@ -114,8 +99,7 @@ public class EditorActivity extends Activity{
 	}
 
 	@Override
-	public void onStart()
-	{
+	public void onStart() {
 		super.onStart();
 		updateToolBar();
 		updateMeasures(currentMeasure);
@@ -142,18 +126,15 @@ public class EditorActivity extends Activity{
 	}
 
 
-	public void updateToolBar()
-	{
+	public void updateToolBar() {
 		LinearLayout toolbar = (LinearLayout) findViewById(R.id.notesToolBar);
 		// Make sure there is nothing in there
 		toolbar.removeAllViews();
 
-		ImageButton[] toolbarButtons = new ImageButton[2];
-		for(int i = 0; i < toolbarButtons.length; i++)
-		{
+		ImageButton[] toolbarButtons = new ImageButton[4];
+		for(int i = 0; i < toolbarButtons.length; i++) {
 			toolbarButtons[i] = new ImageButton(this);
-			switch(currentVal)
-			{
+			switch(currentVal) {
 			case NOTES:
 				toolbarButtons[i].setImageResource(R.drawable.fillednote);
 				break;
@@ -180,15 +161,12 @@ public class EditorActivity extends Activity{
 
 
 		//**Drawing the measure
-		for(int chords = 0; chords < measureLayout.getChildCount(); chords++)
-		{
+		for(int chords = 0; chords < measureLayout.getChildCount(); chords++) {
 			ImageView selNote;
 			selChord = (RelativeLayout)measureLayout.getChildAt(chords);
-			for(int notes = 0; notes < selChord.getChildCount(); notes++)
-			{
+			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
 				selNote = (ImageView) selChord.getChildAt(notes);
-				if(notes >= 3 && notes <=11 && notes%2 == 1)
-				{
+				if(notes >= 3 && notes <=11 && notes%2 == 1) {
 					selNote.setImageResource(R.drawable.line);
 					selNote.setScaleType(ScaleType.FIT_XY);
 				}
@@ -198,13 +176,12 @@ public class EditorActivity extends Activity{
 		RelativeLayout noteLayout = (RelativeLayout) findViewById(R.id.NoteLayout);
 
 		//Add Listener and Draw Notes
-		for(int chords = 0; chords < noteLayout.getChildCount(); chords++)
-		{
+		for(int chords = 0; chords < noteLayout.getChildCount(); chords++) {
 			ImageView selNote;
 			selChord = (RelativeLayout)noteLayout.getChildAt(chords);
 			Chord c = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords);
-			for(int notes = 0; notes < selChord.getChildCount(); notes++)
-			{
+			
+			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
 				selNote = (ImageView) selChord.getChildAt(notes);
 
 				EditorTouchListener touchListener = new EditorTouchListener(sheet, currentMeasure);
@@ -213,20 +190,14 @@ public class EditorActivity extends Activity{
 				EditorDragListener dragListener = new EditorDragListener(sheet, currentMeasure);
 				selNote.setOnDragListener(dragListener);
 
-				if(c != null)
-				{
-					Note searchNote = NoteFinder.findNote(sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords), notes);
-					if(searchNote != null)
-					{
+				if(c != null) {
+					Note searchNote = NoteToScreen.findNote(sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords), notes);
+					if(searchNote != null) {
 						selNote.setImageResource(R.drawable.fillednotespace);
-					}
-					else
-					{
+					} else {
 						selNote.setImageResource(0);
 					}
-				}
-				else
-				{
+				} else {
 					selNote.setImageResource(0);
 				}
 			}
@@ -236,10 +207,8 @@ public class EditorActivity extends Activity{
 		myText.setText(currentMeasure);*/
 	}
 
-	public void playButtonTouch(View v)
-	{
+	public void playButtonTouch(View v) {
 		context = getApplicationContext();
-
 
 		if(context != null && sheet != null) {
 			player = new MidiPlayer(sheet, context);
@@ -247,16 +216,14 @@ public class EditorActivity extends Activity{
 		}
 	}
 
-	public void forward_measure(View v){
+	public void nextMeasure(View v){
 		//**** If null, create a new measure****
-		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1)
-		{
+		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1) {
 			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
 			currentMeasure++;
 			
 			measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
-			for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++)
-			{
+			for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++) {
 				measureArray[i] = "" +i;
 			}
 
@@ -279,14 +246,21 @@ public class EditorActivity extends Activity{
 
 			});
 			
-		}
-		else
-		{
+		} else {
 			//**** Increment the current Measure by one. ****
 			currentMeasure++;
-			
 		}
+
 		measureSpinner.setSelection(currentMeasure);
 		updateMeasures(currentMeasure);
+	}
+	
+	public void previousMeasure(View v){
+		if(currentMeasure > 0)
+		{
+			currentMeasure--;
+			measureSpinner.setSelection(currentMeasure);
+			updateMeasures(currentMeasure);
+		}
 	}
 }
