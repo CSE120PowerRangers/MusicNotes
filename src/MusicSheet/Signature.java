@@ -2,6 +2,10 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+import MusicUtil.EnumKeySignature;
+import MusicUtil.EnumTimeSignature;
+import MusicUtil.NoteName;
+
 /**
  * TODO: Allow for adding measures at a particular index instead of just appending
  * See if "copying" measures can be done
@@ -11,7 +15,7 @@ import java.util.ArrayList;
 public class Signature {
 	private int tempo; //Beats per minute
 	private EnumTimeSignature timeSignature;
-	private KeySignature keySignature;
+	private EnumKeySignature keySignature;
 	private int[] flats;
 	private int[] sharps;
 	private ArrayList<Measure> measures;
@@ -23,7 +27,7 @@ public class Signature {
 	public Signature() {
 		tempo = 120;
 		timeSignature = EnumTimeSignature.FOUR_FOUR;
-		keySignature = KeySignature.C_MAJOR;
+		keySignature = EnumKeySignature.C_MAJOR;
 		flats = new int[8];
 		sharps = new int[8];
 		measures = new ArrayList<Measure>();
@@ -38,7 +42,7 @@ public class Signature {
 	 * @param timeSig
 	 * @param newTempo
 	 */
-	public Signature(KeySignature keySig, EnumTimeSignature timeSig, int newTempo) {
+	public Signature(EnumKeySignature keySig, EnumTimeSignature timeSig, int newTempo) {
 		tempo = newTempo;
 		flats = new int[8];
 		sharps = new int[8];
@@ -102,7 +106,7 @@ public class Signature {
 	 * Only deals with major scales since minor scales can just be converted to the appropriate major scale
 	 * @param newKey is a key signature enum value converted to its name
 	 */
-	public void setKeySignature(KeySignature newKey) {
+	public void setKeySignature(EnumKeySignature newKey) {
 		keySignature = newKey;
 
 		/*
@@ -186,7 +190,7 @@ public class Signature {
 	 * Gets the key signature for this signature
 	 * @return keySignature is the key signature enum
 	 */
-	public KeySignature getKeySignature() {
+	public EnumKeySignature getKeySignature() {
 		return keySignature;
 	}
 

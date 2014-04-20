@@ -1,6 +1,6 @@
-package MusicSheet;
+package MusicUtil;
 
-public enum KeySignature {
+public enum EnumKeySignature {
 	C_MAJOR,
 	//Sharp keys
 	G_MAJOR,

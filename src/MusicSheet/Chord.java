@@ -2,6 +2,9 @@ package MusicSheet;
 
 import java.util.ArrayList;
 
+import MusicUtil.NoteName;
+import MusicUtil.NoteType;
+
 public class Chord {
 	private ArrayList<Note> noteList;
 	
