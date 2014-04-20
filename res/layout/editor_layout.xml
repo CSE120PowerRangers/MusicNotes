@@ -38,7 +38,7 @@
                 android:id="@+id/forwardMeasure"
                 android:layout_width="35dp"
                 android:layout_height="fill_parent"
-                android:onClick="forward_measure"
+                android:onClick="nextMeasure"
                 android:layout_above="@+id/measureLayout"
                 android:layout_toLeftOf="@+id/notesToolBar"
                 android:src="@drawable/measureforward" />

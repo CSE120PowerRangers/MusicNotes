@@ -26,7 +26,7 @@ public class MidiPlayer {
 			String stringPath = context.getFilesDir().getAbsolutePath() + "/"
 					+ FileMaker.TEST_FILENAME;
 			Uri filePath = Uri.parse(Uri.encode(stringPath));
-
+			System.out.println(stringPath);
 			//mPlayer = new MediaPlayer();
 			//mPlayer.setDataSource(context, filePath);
 			//mPlayer.prepareAsync();

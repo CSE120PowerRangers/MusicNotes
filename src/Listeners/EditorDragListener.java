@@ -61,13 +61,13 @@ public class EditorDragListener implements OnDragListener {
 			/*noteView.setBackgroundResource(R.drawable.background);
 			noteView.setImageResource(R.drawable.fillednotespace);
 			noteView.setScaleType(ScaleType.CENTER_INSIDE);*/
-
+			//System.out.println("Started dragging");
 			myDelete = DeleteFlag.FIRST;
 			return true;
 
 		case DragEvent.ACTION_DRAG_ENTERED:
+			System.out.println("Entered a new view");
 			Note searchNote = NoteToScreen.findNote(chordSel, notePos);
-
 			if(searchNote == null ) {
 				noteView.setBackgroundResource(R.drawable.background);
 				noteView.setImageResource(R.drawable.fillednotespace);
@@ -82,6 +82,7 @@ public class EditorDragListener implements OnDragListener {
 			return true;
 
 		case DragEvent.ACTION_DRAG_EXITED:
+			System.out.println("Exiting this view");
 			if(myDelete != DeleteFlag.NODELETE) {
 				noteView.setBackgroundResource(R.drawable.nobackground);
 				noteView.setImageResource(0);
@@ -90,6 +91,7 @@ public class EditorDragListener implements OnDragListener {
 			return true;
 
 		case DragEvent.ACTION_DROP:
+			System.out.println("Dropping note");
 			noteView.setBackgroundResource(R.drawable.nobackground);
 			NoteToScreen.addNote(chordSel, notePos);
 			myDelete = DeleteFlag.NODELETE;
