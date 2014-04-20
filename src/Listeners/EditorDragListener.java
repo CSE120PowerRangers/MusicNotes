@@ -59,7 +59,6 @@ public class EditorDragListener implements OnDragListener {
 			if(noteView == chordParent.getChildAt(notes))
 			{
 				notesPos = notes;
-				System.out.println(notesPos);
 				break;
 			}
 		}

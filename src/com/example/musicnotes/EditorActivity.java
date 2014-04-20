@@ -41,7 +41,7 @@ public class EditorActivity extends Activity{
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
-	
+
 	private final Melody melody = new Melody();
 
 	@Override
@@ -173,7 +173,7 @@ public class EditorActivity extends Activity{
 	public void updateMeasures(int start)
 	{
 		RelativeLayout measureLayout = (RelativeLayout) findViewById(R.id.measureLayout);
-		System.err.println(measureLayout.getId());
+
 
 		RelativeLayout selChord;
 
@@ -196,7 +196,7 @@ public class EditorActivity extends Activity{
 		}
 
 		RelativeLayout noteLayout = (RelativeLayout) findViewById(R.id.NoteLayout);
-		System.err.println(noteLayout.getId());
+
 		//Add Listener and Draw Notes
 		for(int chords = 0; chords < noteLayout.getChildCount(); chords++)
 		{
@@ -239,8 +239,8 @@ public class EditorActivity extends Activity{
 	public void playButtonTouch(View v)
 	{
 		context = getApplicationContext();
-		
-		
+
+
 		if(context != null && sheet != null) {
 			player = new MidiPlayer(sheet, context);
 			player.play();
@@ -249,10 +249,44 @@ public class EditorActivity extends Activity{
 
 	public void forward_measure(View v){
 		//**** If null, create a new measure****
+		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1)
+		{
+			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
+			currentMeasure++;
+			
+			measureArray = new String[sheet.getStaff(0).getSignature(0).getSize()];
+			for(int i = 0; i < sheet.getStaff(0).getSignature(0).getSize(); i++)
+			{
+				measureArray[i] = "" +i;
+			}
 
+			// Insert Options into Spinners
+			ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
+			adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			measureSpinner.setAdapter(adapterMeasure);
 
-		//**** Increment the current Measure by one. ****
-		currentMeasure++;
+			measureSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+					currentMeasure = position;
+					updateMeasures(currentMeasure);
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> parentView) {
+
+				}
+
+			});
+			
+		}
+		else
+		{
+			//**** Increment the current Measure by one. ****
+			currentMeasure++;
+			
+		}
+		measureSpinner.setSelection(currentMeasure);
 		updateMeasures(currentMeasure);
 	}
 }
