@@ -38,7 +38,7 @@ public class Melody {
 		measure1.addChord(0, new Chord(E4Q));
 		measure1.addChord(2, new Chord(D4Q));
 		measure1.addChord(4, new Chord(C4Q));
-		measure1.addChord(8, new Chord(D4Q));
+		measure1.addChord(6, new Chord(D4Q));
 		
 		measure2.addChord(0, new Chord(E4Q));
 		measure2.addChord(2, new Chord(E4Q));

@@ -14,6 +14,10 @@ import android.content.*;
 public class MidiPlayer {
 	private MediaPlayer mPlayer;
 		
+	public MidiPlayer(Sheet s, Context context){
+		initSheet(s, context);
+	}
+	
 	public void initSheet(Sheet s, Context context) {
 		// Create internal file for sheet
 		FileMaker.writeSheetToMidi(s, context);
@@ -23,13 +27,16 @@ public class MidiPlayer {
 					+ FileMaker.TEST_FILENAME;
 			Uri filePath = Uri.parse(Uri.encode(stringPath));
 
-			mPlayer = new MediaPlayer();
-			mPlayer.setDataSource(context, filePath);
-			mPlayer.prepareAsync();
+			//mPlayer = new MediaPlayer();
+			//mPlayer.setDataSource(context, filePath);
+			//mPlayer.prepareAsync();
+			mPlayer = MediaPlayer.create(context, filePath);
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
 	}
+
+
 
 	public boolean isPlaying() {
 		return mPlayer.isPlaying();

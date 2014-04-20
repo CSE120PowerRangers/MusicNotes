@@ -1,10 +1,12 @@
 package com.example.musicnotes;
 
 import MusicSheet.*;
+import Player.Melody;
 import Player.MidiPlayer;
 import Player.Player;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,10 +29,13 @@ public class EditorActivity extends Activity{
 
 	Sheet sheet;
 	Spinner spinner;
-	MidiPlayer player;
+	public static MidiPlayer player;
+	public Context context;
 	enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	int currentMeasure;
+	
+	private final Melody melody = new Melody();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -437,9 +442,13 @@ public class EditorActivity extends Activity{
 	
 	public void playButtonTouch(View v)
 	{
-		player.initSheet(sheet, getApplicationContext());
-		player.play();
+		context = getApplicationContext();
 		
+		
+		if(context != null && melody.music != null) {
+			player = new MidiPlayer(melody.music, context);
+			player.play();
+		}
 	}
 	
 	public void forward_measure(View v){
