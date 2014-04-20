@@ -20,7 +20,7 @@ public class MidiPlayer {
 	
 	public void initSheet(Sheet s, Context context) {
 		// Create internal file for sheet
-		FileMaker.writeSheetToMidi(s, context);
+		FileMaker.writeSheetToMidiInternal(s, context);
 		
 		try {
 			String stringPath = context.getFilesDir().getAbsolutePath() + "/"
