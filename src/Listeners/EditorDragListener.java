@@ -17,6 +17,7 @@ import MusicSheet.Sheet;
 import MusicUtil.NoteTool;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 
@@ -39,8 +40,8 @@ public class EditorDragListener implements OnDragListener {
 	public boolean onDrag(View v, DragEvent event) {
 		ImageView noteView = (ImageView)v;
 		// Get the chord and measure views that the note is located in
-		RelativeLayout chordParent = (RelativeLayout)noteView.getParent();
-		RelativeLayout measureParent = (RelativeLayout) chordParent.getParent();
+		LinearLayout chordParent = (LinearLayout)noteView.getParent();
+		LinearLayout measureParent = (LinearLayout) chordParent.getParent();
 		int chordsPos = -1, notePos = -1;
 
 		// Get the chord position within the measure
