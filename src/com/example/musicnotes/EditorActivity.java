@@ -254,21 +254,22 @@ public class EditorActivity extends Activity{
 			}
 		}
 
-		/*TextView myText = (TextView) findViewById(R.id.currentMeasure);
-		myText.setText(currentMeasure);*/
 	}
 	
 	public void initializeView()
 	{
 
 		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
+		topToolbar.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenHeight/10));
 		for(int i = 0; i < topToolbar.getChildCount(); i++)
 		{
 			topToolbar.getChildAt(i).setLayoutParams(new LinearLayout.LayoutParams(screenWidth/topToolbar.getChildCount(),LayoutParams.MATCH_PARENT));
 		}
 		
-		//measureSpinner.setLayoutParams(new LayoutParams(screenWidth/20,screenHeight/5));
-		//LinearLayout measureLayout = (LinearLayout)findViewById(R.id.measureLayout);
+		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
+		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams(screenWidth/10,(int)((9.0/10.0)*screenHeight));
+		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+		sidePanel.setLayoutParams(sidePanelParams);
 		
 	}
 	
@@ -342,7 +343,6 @@ public class EditorActivity extends Activity{
 
 	public void setTool(NoteTool newTool)
 	{
-		System.out.println("HEY YOU ADDED A TOOL");
 		currentTool = newTool;
 	}
 	public void updateTools()
