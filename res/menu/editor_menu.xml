@@ -7,4 +7,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/mainMenu_name"
         />
+    <item 
+        android:id="@+id/save"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom"
+        android:title="@+string/save"
+        />
 </menu>

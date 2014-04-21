@@ -22,7 +22,7 @@
           
           
       </string-array>
-
+	<string name="save">Save</string>
     <string name="hello_world">Hello world!</string>
     <string name="new_sheet">New Sheet</string>
 
