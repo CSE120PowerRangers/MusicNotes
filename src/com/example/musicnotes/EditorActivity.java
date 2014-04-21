@@ -39,6 +39,7 @@ public class EditorActivity extends Activity{
 	NoteTool currentTool;
 	int currentMeasure;
 	int screenWidth, screenHeight;
+	int measureWidth, measureHeight, chordWidth, chordHeight, noteWidth, noteHeight;
 
 	private final Melody melody = new Melody();
 
@@ -50,9 +51,17 @@ public class EditorActivity extends Activity{
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		
+		// Get Screen Size
 		screenWidth = size.x;
 		screenHeight = size.y;
+		// Calculate Measure Size
+		measureWidth = (int)(screenWidth*(9.0/10.0));
+		measureHeight = (int)(screenHeight*(9.0/10.0));
+		// Calculate Chord and Note
+		chordWidth = (int)(measureWidth/8.0);
+		chordHeight = measureHeight;
+		noteWidth = chordWidth;
+		noteHeight = (int)(chordHeight/16.0);
 		initializeView();
 		sheet = new Sheet();
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.fillednotespace);
@@ -190,32 +199,17 @@ public class EditorActivity extends Activity{
 
 	public void updateMeasures(int start)
 	{
-		RelativeLayout measureLayout = (RelativeLayout) findViewById(R.id.measureLayout);
-
-
-		RelativeLayout selChord;
+	
+		LinearLayout selChord;
 
 
 
-		//**Drawing the measure
-		for(int chords = 0; chords < measureLayout.getChildCount(); chords++) {
-			ImageView selNote;
-			selChord = (RelativeLayout)measureLayout.getChildAt(chords);
-			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
-				selNote = (ImageView) selChord.getChildAt(notes);
-				if(notes >= 3 && notes <=11 && notes%2 == 1) {
-					selNote.setBackgroundResource(R.drawable.line);
-					selNote.setScaleType(ScaleType.FIT_XY);
-				}
-			}
-		}
-
-		RelativeLayout noteLayout = (RelativeLayout) findViewById(R.id.NoteLayout);
+		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
 
 		//Add Listener and Draw Notes
 		for(int chords = 0; chords < noteLayout.getChildCount(); chords++) {
 			ImageView selNote;
-			selChord = (RelativeLayout)noteLayout.getChildAt(chords);
+			selChord = (LinearLayout)noteLayout.getChildAt(chords);
 			Chord c = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords);
 
 			for(int notes = 0; notes < selChord.getChildCount(); notes++) {
@@ -226,7 +220,7 @@ public class EditorActivity extends Activity{
 
 				EditorDragListener dragListener = new EditorDragListener(sheet, currentMeasure, currentTool);
 				selNote.setOnDragListener(dragListener);
-
+				selNote.setScaleType(ScaleType.CENTER_INSIDE);
 				if(c != null) {
 					Note searchNote = NoteToScreen.findNote(sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chords), notes);
 					if(searchNote != null) {
@@ -270,8 +264,67 @@ public class EditorActivity extends Activity{
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams(screenWidth/10,(int)((9.0/10.0)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
 		sidePanel.setLayoutParams(sidePanelParams);
+
+		// Add Measure Lines
+		LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
 		
+		RelativeLayout.LayoutParams measureParams = new RelativeLayout.LayoutParams(measureWidth,measureHeight);
+		System.out.println("measure params " + measureParams.height + ", " + measureParams.width);
+		
+		measureParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+		measureParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
+		measureLayout.setOrientation(LinearLayout.HORIZONTAL);
+		measureLayout.setLayoutParams(measureParams);
+
+		for(int chords = 0; chords < 8; chords++)
+		{
+			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
+			LinearLayout chordLayout = new LinearLayout(this);
+			chordLayout.setOrientation(LinearLayout.VERTICAL);
+			chordLayout.setLayoutParams(chordParams);
+			for(int notes = 0; notes < 16; notes++)
+			{
+				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth,noteHeight);
+				ImageView noteView = new ImageView(this);
+				noteView.setLayoutParams(noteParams);
+				if(notes >= 3 && notes <=11 && notes%2 == 1) {
+					noteView.setImageResource(R.drawable.line);
+					noteView.setScaleType(ScaleType.FIT_XY);
+				}
+				chordLayout.addView(noteView);
+			}
+			measureLayout.addView(chordLayout);
+		}
+
+		// Add Note Holders
+		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
+		RelativeLayout.LayoutParams noteLayoutParams = new RelativeLayout.LayoutParams(measureWidth,measureHeight);
+		
+		noteLayoutParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+		noteLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
+		noteLayout.setOrientation(LinearLayout.HORIZONTAL);
+		noteLayout.setLayoutParams(noteLayoutParams);
+		
+		System.out.println(noteLayout.getHeight() + ", " + noteLayout.getWidth());
+		for(int chords = 0; chords < 8; chords++)
+		{
+			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
+			LinearLayout chordLayout = new LinearLayout(this);
+			chordLayout.setLayoutParams(chordParams);
+			chordLayout.setOrientation(LinearLayout.VERTICAL);
+			for(int notes = 0; notes < 16; notes++)
+			{
+				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth, noteHeight);
+				ImageView noteView = new ImageView(this);
+				noteView.setLayoutParams(noteParams);
+				chordLayout.addView(noteView);
+			}
+			noteLayout.addView(chordLayout);	
+		}
 	}
+
+	
+	
 	
 	public void playButtonTouch(View v) {
 		context = getApplicationContext();
