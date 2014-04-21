@@ -37,7 +37,7 @@ public class EditorActivity extends Activity{
 	public static enum EditorVal{NOTES, RESTS, ACCIDENTALS};
 	EditorVal currentVal;
 	NoteTool currentTool;
-	int currentMeasure;
+	int currentMeasure, numNotes;
 	int screenWidth, screenHeight;
 	int measureWidth, measureHeight, chordWidth, chordHeight, noteWidth, noteHeight;
 
@@ -51,9 +51,10 @@ public class EditorActivity extends Activity{
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
+		numNotes = 15;
 		// Get Screen Size
 		screenWidth = size.x;
-		screenHeight = size.y;
+		screenHeight = (int)(size.y * 0.90);
 		// Calculate Measure Size
 		measureWidth = (int)(screenWidth*(9.0/10.0));
 		measureHeight = (int)(screenHeight*(9.0/10.0));
@@ -62,6 +63,8 @@ public class EditorActivity extends Activity{
 		chordHeight = measureHeight;
 		noteWidth = chordWidth;
 		noteHeight = (int)(chordHeight/16.0);
+		System.out.println("Screen Height = " + screenHeight);
+		System.out.println("Note Height = " + noteHeight);
 		initializeView();
 		sheet = new Sheet();
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.fillednotespace);
@@ -282,7 +285,7 @@ public class EditorActivity extends Activity{
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setOrientation(LinearLayout.VERTICAL);
 			chordLayout.setLayoutParams(chordParams);
-			for(int notes = 0; notes < 16; notes++)
+			for(int notes = 0; notes < numNotes; notes++)
 			{
 				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth,noteHeight);
 				ImageView noteView = new ImageView(this);
@@ -312,7 +315,7 @@ public class EditorActivity extends Activity{
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setLayoutParams(chordParams);
 			chordLayout.setOrientation(LinearLayout.VERTICAL);
-			for(int notes = 0; notes < 16; notes++)
+			for(int notes = 0; notes < numNotes; notes++)
 			{
 				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth, noteHeight);
 				ImageView noteView = new ImageView(this);
