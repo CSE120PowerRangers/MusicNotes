@@ -22,6 +22,6 @@ public class ToolButtonListener implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		currentActivity.setTool(myTool);
-		currentActivity.updateTools();
+		currentActivity.updateMeasures(currentActivity.getCurrentMeasure());
 	}
 }
