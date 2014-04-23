@@ -292,9 +292,10 @@ public class EditorActivity extends Activity{
 	public void playButtonTouch(View v) {
 		context = getApplicationContext();
 
-		if(context != null && sheet != null) {
+		if(context != null && sheet != null ) {
 			player = new MidiPlayer(sheet, context);
-			player.play();
+
+				player.play();
 		}
 	}
 
