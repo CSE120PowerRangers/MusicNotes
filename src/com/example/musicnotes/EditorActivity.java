@@ -55,9 +55,9 @@ public class EditorActivity extends Activity{
 		// Create Activity Objects
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
-
+		
+		//Static Values
 		numNotes = 15;
-		numChords = 8;
 		percentageTop = 0.15f;
 		percentageSide = 0.15f;
 		
@@ -76,6 +76,7 @@ public class EditorActivity extends Activity{
 		// Load in sheet and initialize values and tools
 		sheet = new Sheet();
 		currentMeasure = currentStaff = currentSignature = 0;
+		numChords = sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 		
 		//Initialize Measure Spinner
 		updateMeasureSpinner();
