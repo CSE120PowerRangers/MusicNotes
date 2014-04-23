@@ -166,7 +166,7 @@ public class FileMaker {
 					denom = EnumTimeSignature.getDenom(t);
 					beatsPerQN = denom / 4;
 
-					divisionsPerQN = numChords / denom;
+					divisionsPerQN = numChords / denom; //Should be divisionType / 4?
 
 					// Finally calculate the tick timestamp
 					tick = (MidiFile.DEFAULT_RESOLUTION * (beatsPerQN * num) * measureIndex)
