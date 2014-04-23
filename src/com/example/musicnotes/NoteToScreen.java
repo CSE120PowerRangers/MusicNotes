@@ -164,4 +164,35 @@ public class NoteToScreen {
 			break;
 		}
 	}
+	public static NoteTool notetoTool(Note myNote)
+	{
+		Note selectedNote = myNote;
+		int resourceID = 0;
+		if(selectedNote != null)
+		{
+			NoteType selectedType = selectedNote.getType();
+
+			switch(selectedType)
+			{
+			case EIGHTH_NOTE:
+				resourceID = R.drawable.eigthnote;
+				break;
+			case QUARTER_NOTE:
+				resourceID = R.drawable.quarternote;
+				break;
+			case HALF_NOTE:
+				resourceID = R.drawable.halfnotes;
+				break;
+			case WHOLE_NOTE:
+				resourceID = R.drawable.wholenote;
+				break;
+			}
+			return new NoteTool(myNote.getType(), resourceID);
+		}
+		else
+		{
+			return null;
+		}
+		
+	}
 }

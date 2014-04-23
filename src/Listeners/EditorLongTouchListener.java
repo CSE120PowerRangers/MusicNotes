@@ -4,33 +4,29 @@ import com.example.musicnotes.EditorActivity;
 import com.example.musicnotes.NoteToScreen;
 import com.example.musicnotes.R;
 
-import MusicSheet.Chord;
-import MusicSheet.Sheet;
+import MusicSheet.Note;
 import MusicUtil.NoteTool;
+import MusicUtil.NoteType;
 import android.content.ClipData;
 import android.content.Context;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ImageView.ScaleType;
 
-public class EditorTouchListener implements OnClickListener {
-
+public class EditorLongTouchListener implements OnLongClickListener {
 
 	EditorActivity myActivity;
-	
-	public EditorTouchListener(Context myActivity) {
+
+	public EditorLongTouchListener(Context myActivity)
+	{
 		this.myActivity = (EditorActivity) myActivity;
 	}
 
-
 	@Override
-	public void onClick(View v) {
+	public boolean onLongClick(View v) {
 		ImageView noteView = (ImageView)v;
 		// Get the chord and measure views that the note is located in
 		LinearLayout chordParent = (LinearLayout)noteView.getParent();
@@ -52,14 +48,20 @@ public class EditorTouchListener implements OnClickListener {
 				break;
 			}
 		}
-
-		// Get the selected chord and add a new chord
-		myActivity.getCurrentMeasure().addChord(chordsPos);
-		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
-
-		noteView.setImageResource(myActivity.getCurrentTool().getID());
-		noteView.setScaleType(ScaleType.CENTER_INSIDE);
-		NoteToScreen.addNote(chordSel, notePos, myActivity.getCurrentTool());
+		
+		// Create a new tool from the old note
+			
+			myActivity.setHeldTool(NoteToScreen.notetoTool(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos)));
+			
+			// Start the Drag
+			ClipData data = ClipData.newPlainText("", "");
+			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+			v.startDrag(data, shadowBuilder, v, 0);
+			
+			// Delete the note
+			NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+			noteView.setImageResource(0);
+			
+			return true;
 	}
-
 }
