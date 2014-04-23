@@ -76,6 +76,10 @@ public class EditorDragListener implements OnDragListener {
 				return true;
 
 			case DragEvent.ACTION_DROP:
+				if(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+				{
+					NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+				}
 				noteView.setImageResource(heldTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
 				NoteToScreen.addNote(chordSel, notePos, heldTool);

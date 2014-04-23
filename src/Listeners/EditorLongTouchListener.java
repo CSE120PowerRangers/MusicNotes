@@ -50,29 +50,8 @@ public class EditorLongTouchListener implements OnLongClickListener {
 		}
 		
 		// Create a new tool from the old note
-		Note selectedNote = NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
-		if(selectedNote != null)
-		{
-			NoteType selectedType = selectedNote.getType();
-			int resourceID = 0;
-			switch(selectedType)
-			{
-			case EIGHTH_NOTE:
-				resourceID = R.drawable.eigthnote;
-				break;
-			case QUARTER_NOTE:
-				resourceID = R.drawable.quarternote;
-				break;
-			case HALF_NOTE:
-				resourceID = R.drawable.halfnotes;
-				break;
-			case WHOLE_NOTE:
-				resourceID = R.drawable.wholenote;
-				break;
-			}
-			myActivity.setHeldTool(new NoteTool(selectedType, resourceID));
 			
-	
+			myActivity.setHeldTool(NoteToScreen.notetoTool(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos)));
 			
 			// Start the Drag
 			ClipData data = ClipData.newPlainText("", "");
@@ -84,8 +63,5 @@ public class EditorLongTouchListener implements OnLongClickListener {
 			noteView.setImageResource(0);
 			
 			return true;
-		}
-		return false;
-
 	}
 }

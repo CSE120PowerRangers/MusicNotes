@@ -180,26 +180,13 @@ public class EditorActivity extends Activity{
 				//selNote.setScaleType(ScaleType.FIT_XY);
 				if(c != null) {
 					Note searchNote = NoteToScreen.findNote(c, notes);
-					if(searchNote != null) {
-						switch(searchNote.getType())
-						{
-						case EIGHTH_NOTE:
-							selNote.setImageResource(R.drawable.eigthnote);
-							break;
-						case QUARTER_NOTE:
-							selNote.setImageResource(R.drawable.quarternote);
-							break;
-						case HALF_NOTE:
-							selNote.setImageResource(R.drawable.halfnotes);
-							break;
-						case WHOLE_NOTE:
-							selNote.setImageResource(R.drawable.wholenote);
-							break;
-						default:
-							selNote.setImageResource(0);
-							break;
-						}
-					} else {
+					NoteTool searchNoteTool = NoteToScreen.notetoTool(searchNote);
+					if(searchNoteTool != null)
+					{
+					selNote.setImageResource(searchNoteTool.getID());
+					}
+					else
+					{
 						selNote.setImageResource(0);
 					}
 				} else {
