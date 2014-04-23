@@ -103,6 +103,17 @@ public class ToolBar {
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
 		myFamily.add(button);
 		
+		//Eraser 
+		//Whole Note
+		button = new ImageButton(myActivity);
+		myTool = new NoteTool(NoteType.NOTANOTE,0);
+		button.setImageResource(R.drawable.eraserbutton);
+		button.setScaleType(ScaleType.FIT_XY);
+		myListener = new ToolButtonListener(myActivity, myTool, 4);
+		button.setOnClickListener(myListener);
+		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
+		myFamily.add(button);
+		
 		// Add Family
 		myFamilies.add(myFamily);
 	}

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    public void gotoEditor(View v)
+    public void newSheet(View v)
     {
     	Intent intent = new Intent(this, EditorActivity.class);
     	startActivity(intent);

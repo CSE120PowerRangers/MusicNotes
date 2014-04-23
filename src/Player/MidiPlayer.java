@@ -1,9 +1,13 @@
 package Player;
 
+
+import java.io.File;
+
 import File.FileMaker;
 import MusicSheet.*;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Environment;
 import android.content.*;
 
 /*
@@ -21,17 +25,13 @@ public class MidiPlayer {
 	public void initSheet(Sheet s, Context context) {
 		// Create internal file for sheet
 		FileMaker.writeSheetToMidiInternal(s, context);
-		
-		try {
-			String stringPath = context.getFilesDir().getAbsolutePath() + "/"
-					+ FileMaker.TEST_FILENAME;
-			Uri filePath = Uri.parse(Uri.encode(stringPath));
-			System.out.println(stringPath);
+		try{
+			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/" + s.getFileName());
+			//File path = new File(stringPath);
 			//mPlayer = new MediaPlayer();
 			//mPlayer.setDataSource(context, filePath);
 			//mPlayer.prepareAsync();
 			
-			System.out.println(stringPath);
 			System.out.println(filePath);
 			mPlayer = MediaPlayer.create(context, filePath);
 		} catch (Exception ex) {

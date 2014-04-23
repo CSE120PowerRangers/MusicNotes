@@ -7,6 +7,7 @@ import com.example.musicnotes.R;
 import MusicSheet.Chord;
 import MusicSheet.Sheet;
 import MusicUtil.NoteTool;
+import MusicUtil.NoteType;
 import android.content.ClipData;
 import android.content.Context;
 import android.view.DragEvent;
@@ -23,7 +24,7 @@ public class EditorTouchListener implements OnClickListener {
 
 
 	EditorActivity myActivity;
-	
+
 	public EditorTouchListener(Context myActivity) {
 		this.myActivity = (EditorActivity) myActivity;
 	}
@@ -56,14 +57,21 @@ public class EditorTouchListener implements OnClickListener {
 		// Get the selected chord and add a new chord
 		myActivity.getCurrentMeasure().addChord(chordsPos);
 		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
-
-		noteView.setImageResource(myActivity.getCurrentTool().getID());
-		noteView.setScaleType(ScaleType.CENTER_INSIDE);
-		if(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+		if(myActivity.getCurrentTool().getType() == NoteType.NOTANOTE)
 		{
 			NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+			noteView.setImageResource(0);
 		}
-		NoteToScreen.addNote(chordSel, notePos, myActivity.getCurrentTool());
+		else
+		{
+			noteView.setImageResource(myActivity.getCurrentTool().getID());
+			noteView.setScaleType(ScaleType.CENTER_INSIDE);
+			if(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+			{
+				NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+			}
+			NoteToScreen.addNote(chordSel, notePos, myActivity.getCurrentTool());
+		}
 	}
 
 }

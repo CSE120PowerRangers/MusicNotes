@@ -61,13 +61,14 @@ public class EditorLongTouchListener implements OnLongClickListener {
 			// Vibrate on long click if there's a note to pick up
 			System.out.println("Found a note");
 			vib.vibrate(75);
-			NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
-			noteView.setImageResource(0);
+		
 			
 			// Start the Drag
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 			v.startDrag(data, shadowBuilder, v, 0);
+			NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+			noteView.setImageResource(0);
 		}
 
 		return true;

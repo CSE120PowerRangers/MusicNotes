@@ -55,7 +55,7 @@ public class EditorActivity extends Activity{
 		// Create Activity Objects
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
-		
+
 		//Static Values
 		numNotes = 15;
 		percentageTop = 0.15f;
@@ -180,16 +180,19 @@ public class EditorActivity extends Activity{
 				//selNote.setScaleType(ScaleType.FIT_XY);
 				if(c != null) {
 					Note searchNote = NoteToScreen.findNote(c, notes);
+
 					NoteTool searchNoteTool = NoteToScreen.notetoTool(searchNote);
 					if(searchNoteTool != null)
 					{
-					selNote.setImageResource(searchNoteTool.getID());
+						selNote.setImageResource(searchNoteTool.getID());
 					}
 					else
 					{
 						selNote.setImageResource(0);
 					}
-				} else {
+
+				} 
+				else {
 					selNote.setImageResource(0);
 				}
 			}
@@ -225,12 +228,13 @@ public class EditorActivity extends Activity{
 
 		// Measure Navigation Buttons
 		ImageView backMeasure = (ImageView)findViewById(R.id.backwardMeasure);
-		backMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/30.0f) ,LayoutParams.MATCH_PARENT));
+		backMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/25.0f) ,LayoutParams.MATCH_PARENT));
 		backMeasure.setScaleType(ScaleType.FIT_XY);
+		backMeasure.setPadding(5, 0, 5, 0);
 		ImageView forwardMeasure = (ImageView)findViewById(R.id.forwardMeasure);
-		forwardMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/30.0f) ,LayoutParams.MATCH_PARENT));
+		forwardMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/25.0f) ,LayoutParams.MATCH_PARENT));
 		forwardMeasure.setScaleType(ScaleType.FIT_XY);
-
+		forwardMeasure.setPadding(5, 0, 5, 0);
 		//Side Panel
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
@@ -294,7 +298,7 @@ public class EditorActivity extends Activity{
 
 
 		if(context != null && sheet != null) {
-			player.initSheet(sheet, context);
+			player.initSheet(sheet, this);
 			player.play();
 		}
 	}
@@ -354,7 +358,7 @@ public class EditorActivity extends Activity{
 	{
 		return heldTool;
 	}
-	
+
 	public void setHeldTool(NoteTool heldTool)
 	{
 		this.heldTool = heldTool;
@@ -369,7 +373,6 @@ public class EditorActivity extends Activity{
 		measureArray = new String[sheet.getStaff(currentStaff).getSignature(currentSignature).getSize()];
 		for(int i = 0; i < sheet.getStaff(currentStaff).getSignature(currentSignature).getSize(); i++) {
 			measureArray[i] = "" +(i+1);
-
 		}
 		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
 		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

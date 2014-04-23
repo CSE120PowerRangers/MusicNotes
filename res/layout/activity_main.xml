@@ -21,7 +21,7 @@
        android:layout_width="match_parent" 
        android:layout_height="50dp"
        android:text="@string/new_sheet"
-       android:onClick="gotoEditor" />
+       android:onClick="newSheet" />
    
  
 </LinearLayout>

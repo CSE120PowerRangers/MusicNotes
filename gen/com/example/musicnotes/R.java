@@ -37,26 +37,28 @@ public final class R {
         public static final int csignature=0x7f020001;
         public static final int eighthnotebutton=0x7f020002;
         public static final int eigthnote=0x7f020003;
-        public static final int fillednote=0x7f020004;
-        public static final int fillednoteline=0x7f020005;
-        public static final int fillednotenote=0x7f020006;
-        public static final int fillednotespace=0x7f020007;
-        public static final int four=0x7f020008;
-        public static final int halfnote=0x7f020009;
-        public static final int halfnotebutton=0x7f02000a;
-        public static final int halfnotes=0x7f02000b;
-        public static final int ic_launcher=0x7f02000c;
-        public static final int line=0x7f02000d;
-        public static final int measurebackground=0x7f02000e;
-        public static final int measurebackward=0x7f02000f;
-        public static final int measureforward=0x7f020010;
-        public static final int musicnotesicon=0x7f020011;
-        public static final int nobackground=0x7f020012;
-        public static final int quarternote=0x7f020013;
-        public static final int quarternotebutton=0x7f020014;
-        public static final int treble=0x7f020015;
-        public static final int wholenote=0x7f020016;
-        public static final int wholenotebutton=0x7f020017;
+        public static final int eraser=0x7f020004;
+        public static final int eraserbutton=0x7f020005;
+        public static final int fillednote=0x7f020006;
+        public static final int fillednoteline=0x7f020007;
+        public static final int fillednotenote=0x7f020008;
+        public static final int fillednotespace=0x7f020009;
+        public static final int four=0x7f02000a;
+        public static final int halfnote=0x7f02000b;
+        public static final int halfnotebutton=0x7f02000c;
+        public static final int halfnotes=0x7f02000d;
+        public static final int ic_launcher=0x7f02000e;
+        public static final int line=0x7f02000f;
+        public static final int measurebackground=0x7f020010;
+        public static final int measurebackward=0x7f020011;
+        public static final int measureforward=0x7f020012;
+        public static final int musicnotesicon=0x7f020013;
+        public static final int nobackground=0x7f020014;
+        public static final int quarternote=0x7f020015;
+        public static final int quarternotebutton=0x7f020016;
+        public static final int treble=0x7f020017;
+        public static final int wholenote=0x7f020018;
+        public static final int wholenotebutton=0x7f020019;
     }
     public static final class id {
         public static final int backwardMeasure=0x7f090004;
@@ -66,13 +68,15 @@ public final class R {
         public static final int keySignatureLayout=0x7f09000a;
         public static final int keysignaturemeasure=0x7f09000c;
         public static final int leftPanel=0x7f090009;
-        public static final int main_menu=0x7f090012;
+        public static final int main_menu=0x7f090014;
         public static final int measureLayout=0x7f090010;
         public static final int newSheet=0x7f090001;
+        public static final int newname=0x7f090013;
+        public static final int newsheetinfo=0x7f090012;
         public static final int noteLayout=0x7f090011;
         public static final int notesToolBar=0x7f090007;
         public static final int playButton=0x7f090003;
-        public static final int save=0x7f090013;
+        public static final int save=0x7f090015;
         public static final int staffclef=0x7f09000b;
         public static final int timeSignatureLayout=0x7f09000d;
         public static final int timesigbot=0x7f09000f;
@@ -83,6 +87,7 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int editor_layout=0x7f030001;
+        public static final int newsheet_layout=0x7f030002;
     }
     public static final class menu {
         public static final int editor_menu=0x7f080000;
@@ -96,7 +101,9 @@ public final class R {
         public static final int editor_name=0x7f050005;
         public static final int hello_world=0x7f050009;
         public static final int mainMenu_name=0x7f050006;
+        public static final int namehint=0x7f05000c;
         public static final int new_sheet=0x7f05000a;
+        public static final int newsheetinstructions=0x7f05000b;
         public static final int save=0x7f050008;
         public static final int timesigtop_file_path=0x7f050007;
         public static final int title_activity_main=0x7f050004;

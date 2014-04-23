@@ -4,12 +4,12 @@ import java.util.ArrayList;
 public class Sheet {
 	private String name;
 	private ArrayList<Staff> staffs;
-	
+
 	/**
 	 * The sheet constructor creates a new sheet and automatically generates a default staff
 	 */
 	public Sheet() {
-		name = "";
+		name = "Default";
 		staffs = new ArrayList<Staff>();
 		staffs.add(new Staff());
 	}
@@ -88,5 +88,10 @@ public class Sheet {
 	 */
 	public int getStaffSize() {
 		return staffs.size();
+	}
+
+	public String getFileName()
+	{
+		return (name+".mid");
 	}
 }

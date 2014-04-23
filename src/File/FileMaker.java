@@ -12,6 +12,7 @@ import MusicSheet.*;
 import MusicUtil.*;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 
 import com.leff.midi.*;
 import com.leff.midi.event.*;
@@ -445,9 +446,9 @@ public class FileMaker {
 	public static void writeSheetToMidiInternal(Sheet s, Context c) {
 		MidiFile midi = sheetToMidi(s);
 
-		String path = c.getFilesDir().toString();
-
-		File output = new File(path, FileMaker.TEST_FILENAME);
+		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes");
+		path.mkdirs();
+		File output = new File(path, s.getFileName());
 		try {
 			midi.writeToFile(output);
 		} catch (IOException e) {

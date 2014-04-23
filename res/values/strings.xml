@@ -26,5 +26,7 @@
 	<string name="save">Save</string>
     <string name="hello_world">Hello world!</string>
     <string name="new_sheet">New Sheet</string>
+    <string name="newsheetinstructions">Please Enter Name For New Sheet</string>
+    <string name="namehint">Sheet Name</string>
 
 </resources>
