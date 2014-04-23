@@ -63,9 +63,14 @@ public class EditorActivity extends Activity{
 		
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
-		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.fillednotespace);
+		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
 		currentFamily = ToolFamily.NOTES;
 		updateToolBar();
+		
+		// Load in sheet and initialize values and tools
+		sheet = new Sheet();
+		currentMeasure = currentStaff = currentSignature = 0;
+		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 		
 		// Calculate Screen Size
 		calcScreenSize();
@@ -73,10 +78,7 @@ public class EditorActivity extends Activity{
 		// Initialize View
 		initializeView();
 
-		// Load in sheet and initialize values and tools
-		sheet = new Sheet();
-		currentMeasure = currentStaff = currentSignature = 0;
-		numChords = sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
+
 		
 		//Initialize Measure Spinner
 		updateMeasureSpinner();
