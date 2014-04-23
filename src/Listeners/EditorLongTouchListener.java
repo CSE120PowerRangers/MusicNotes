@@ -55,7 +55,7 @@ public class EditorLongTouchListener implements OnLongClickListener {
 			myActivity.setHeldTool(NoteToScreen.notetoTool(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos)));
 			 Vibrator vib = (Vibrator) myActivity.getSystemService(Context.VIBRATOR_SERVICE);
 			 // Vibrate for 500 milliseconds
-			 vib.vibrate(500);
+			 vib.vibrate(75);
 			// Start the Drag
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
