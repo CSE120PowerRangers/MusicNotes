@@ -64,7 +64,7 @@ public class ToolBar {
 		//Eight Note
 		button = new ImageButton(myActivity);
 		myTool = new NoteTool(NoteType.EIGHTH_NOTE,R.drawable.eigthnote);
-		button.setImageResource(R.drawable.eigthnote);
+		button.setImageResource(R.drawable.eighthnotebutton);
 		button.setScaleType(ScaleType.FIT_XY);
 		myListener = new ToolButtonListener(myActivity, myTool, 0);
 		button.setOnClickListener(myListener);
@@ -74,7 +74,7 @@ public class ToolBar {
 		//Quarter Note
 		button = new ImageButton(myActivity);
 		myTool = new NoteTool(NoteType.QUARTER_NOTE,R.drawable.quarternote);
-		button.setImageResource(R.drawable.quarternote);
+		button.setImageResource(R.drawable.quarternotebutton);
 		button.setScaleType(ScaleType.FIT_XY);
 
 		myListener = new ToolButtonListener(myActivity, myTool, 1);
@@ -85,7 +85,7 @@ public class ToolBar {
 		//Half Note
 		button = new ImageButton(myActivity);
 		myTool = new NoteTool(NoteType.HALF_NOTE,R.drawable.halfnotes);
-		button.setImageResource(R.drawable.halfnotes);
+		button.setImageResource(R.drawable.halfnotebutton);
 		button.setScaleType(ScaleType.FIT_XY);
 
 		myListener = new ToolButtonListener(myActivity, myTool, 2);
@@ -96,7 +96,7 @@ public class ToolBar {
 		//Whole Note
 		button = new ImageButton(myActivity);
 		myTool = new NoteTool(NoteType.WHOLE_NOTE,R.drawable.wholenote);
-		button.setImageResource(R.drawable.wholenote);
+		button.setImageResource(R.drawable.wholenotebutton);
 		button.setScaleType(ScaleType.FIT_XY);
 		myListener = new ToolButtonListener(myActivity, myTool, 3);
 		button.setOnClickListener(myListener);
