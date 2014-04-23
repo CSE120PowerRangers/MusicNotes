@@ -12,16 +12,24 @@ public class ToolButtonListener implements OnClickListener {
 
 	EditorActivity currentActivity;
 	NoteTool myTool;
-	
-	public ToolButtonListener(EditorActivity currentActivity, NoteTool currentTool)
+	int myID;
+	public ToolButtonListener(EditorActivity currentActivity, NoteTool currentTool, int ID)
 	{
 		this.currentActivity = currentActivity;
 		this.myTool = currentTool;
+		myID = ID;
 	}
 	
 	@Override
 	public void onClick(View v) {
 		currentActivity.setTool(myTool);
-		currentActivity.updateTools();
+		currentActivity.setActiveTool(myID);
+		currentActivity.updateToolBar();
+		currentActivity.updateMeasures(currentActivity.getCurrentMeasure());
+	}
+	
+	public int getID()
+	{
+		return myID;
 	}
 }

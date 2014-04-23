@@ -13,7 +13,7 @@ import MusicUtil.NoteName;
  */
 
 public class Signature {
-	private int tempo; //Beats per minute
+	private int tempo, numerator, denominator; //Beats per minute
 	private EnumTimeSignature timeSignature;
 	private EnumKeySignature keySignature;
 	private int[] flats;
@@ -30,6 +30,31 @@ public class Signature {
 		keySignature = EnumKeySignature.C_MAJOR;
 		flats = new int[8];
 		sharps = new int[8];
+		
+		/*
+		 * Every signature has a different time signature, so the measures inside the signature
+		 * need to readjust how many divisions it has in accordance to the time signature of the
+		 * signature that the measure resides in. This is only modified once a signature is made
+		 * so it shouldn't cause problems with measures that already exist.
+		 * 
+		 * In addition, the denominator of the time signature cannot be larger than the division type
+		 * that we currently support. This causes issues with the calculations and doesn't give us
+		 * whole numbers
+		 */
+		
+		numerator = EnumTimeSignature.getNumerator(timeSignature);
+		denominator = EnumTimeSignature.getDenom(timeSignature);
+
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+			//Not allowed. Reset to default time signature 4/4
+			timeSignature = EnumTimeSignature.FOUR_FOUR;
+			numerator = 4;
+			denominator = 4;
+		}
+
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		Measure.setDivisionNumber(numDivs);
+		
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
 		measures.add(new Measure());
@@ -49,6 +74,20 @@ public class Signature {
 
 		setKeySignature(keySig);
 		setTimeSignature(timeSig);
+		
+		numerator = EnumTimeSignature.getNumerator(timeSignature);
+		denominator = EnumTimeSignature.getDenom(timeSignature);
+
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+			//Not allowed. Reset to default time signature 4/4
+			timeSignature = EnumTimeSignature.FOUR_FOUR;
+			numerator = 4;
+			denominator = 4;
+		}
+		
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		Measure.setDivisionNumber(numDivs);
+		
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
 	}

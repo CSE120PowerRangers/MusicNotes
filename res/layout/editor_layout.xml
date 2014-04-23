@@ -120,7 +120,7 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/topToolbar"
         android:layout_toRightOf="@+id/leftPanel"
-        android:background="@drawable/background"
+        android:background="@drawable/measurebackground"
         android:orientation="horizontal" >
 
       
