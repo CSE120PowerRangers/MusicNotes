@@ -123,7 +123,7 @@ public class FileMaker {
 
 	private static MidiTrack insertChordEvents(MidiTrack track, Sheet s,
 			int staffIndex, int signatureIndex, int measureIndex) {
-		int numChords = Measure.getSize();
+		int numChords = s.getStaff(staffIndex).getSignature(signatureIndex).getMeasure(measureIndex).getSize();
 		Chord currentChord;
 		Note currentNote;
 		EnumTimeSignature t;
@@ -330,7 +330,7 @@ public class FileMaker {
 		ticksPerMeasure = MidiFile.DEFAULT_RESOLUTION * QNPerMeasure;
 		measurePos = (int) lastTickValue / ticksPerMeasure;
 
-		ticksPerDiv = ticksPerMeasure / Measure.getSize();
+		ticksPerDiv = ticksPerMeasure / s.getStaff(staffPos).getSignature(signaturePos).getMeasure(0).getSize();
 		tickDiff = lastTickValue - (measurePos * ticksPerMeasure);
 
 		return (int) tickDiff / ticksPerDiv;
