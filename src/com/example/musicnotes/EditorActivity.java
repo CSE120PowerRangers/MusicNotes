@@ -30,7 +30,7 @@ import android.widget.ImageView.ScaleType;
 public class EditorActivity extends Activity{
 
 	// Activity Objects
-	public static MidiPlayer player;
+	private final MidiPlayer player = new MidiPlayer();
 	private final Melody melody = new Melody();
 	public Context context;
 	int screenWidth, screenHeight;
@@ -292,10 +292,10 @@ public class EditorActivity extends Activity{
 	public void playButtonTouch(View v) {
 		context = getApplicationContext();
 
-		if(context != null && sheet != null ) {
-			player = new MidiPlayer(sheet, context);
 
-				player.play();
+		if(context != null && sheet != null) {
+			player.initSheet(sheet, context);
+			player.play();
 		}
 	}
 

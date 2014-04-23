@@ -13,9 +13,9 @@ import android.content.*;
  */
 public class MidiPlayer {
 	private MediaPlayer mPlayer;
-		
-	public MidiPlayer(Sheet s, Context context){
-		initSheet(s, context);
+	
+	public MidiPlayer(){
+		mPlayer = null;
 	}
 	
 	public void initSheet(Sheet s, Context context) {
