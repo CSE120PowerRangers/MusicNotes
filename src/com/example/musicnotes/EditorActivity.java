@@ -346,7 +346,7 @@ public class EditorActivity extends Activity{
 	public void saveFile(View v) {
 		context = getApplicationContext();
 		String filename = "TESTFILE.mid";
-		FileMaker.writeSheetToMidiExternal(sheet, context, filename);
+		FileMaker.writeSheetToMidi(sheet, context, filename);
 	}
 
 	public void nextMeasure(View v){

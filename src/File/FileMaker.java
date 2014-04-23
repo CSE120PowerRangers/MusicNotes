@@ -2,12 +2,16 @@ package File;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 import MusicSheet.*;
 import MusicUtil.*;
 import android.content.Context;
+import android.net.Uri;
 
 import com.leff.midi.*;
 import com.leff.midi.event.*;
@@ -200,25 +204,28 @@ public class FileMaker {
 		ArrayList<MidiTrack> tracks = midi.getTracks();
 
 		// Decode the tempo mapping track
-		MidiEvent[] currentEvents = (MidiEvent[]) tracks.get(0).getEvents()
-				.toArray();
+		TreeSet<MidiEvent> currentEvents = tracks.get(0).getEvents();
+		Iterator<MidiEvent> it = currentEvents.iterator();
+		MidiEvent currentEvent = it.next();
 
-		for (int i = 0; i < currentEvents.length; i++) {
+		while (it.hasNext()) {
 			// Either the time signature event
-			if (currentEvents[i].getClass() == TimeSignature.class) {
-				num = ((TimeSignature) currentEvents[i]).getNumerator();
-				den = ((TimeSignature) currentEvents[i]).getDenominatorValue();
+			if (currentEvent.getClass() == TimeSignature.class) {
+				num = ((TimeSignature) currentEvent).getNumerator();
+				den = ((TimeSignature) currentEvent).getDenominatorValue();
+		        den = (int) Math.pow(2, den);
 
 				timeSig = EnumTimeSignature.getTimeSig(num, den);
 			}
 			// Or the tempo event
-			else if (currentEvents[i].getClass() == Tempo.class) {
-				tempo = (int) ((Tempo) currentEvents[i]).getBpm();
+			else if (currentEvent.getClass() == Tempo.class) {
+				tempo = (int) ((Tempo) currentEvent).getBpm();
 			}
 			// Or something we probably shouldn't care about.
 			else {
 
 			}
+			currentEvent = it.next();
 		}
 
 		// Create the sheet
@@ -232,9 +239,12 @@ public class FileMaker {
 		}
 
 		// Start deciphering the note on events
-		for (int i = 1; i < numStaffs; i++) {
+		for (int i = 0; i < numStaffs; i++) {
 			// Set the current track events
-			currentEvents = (MidiEvent[]) tracks.get(i).getEvents().toArray();
+			currentEvents = tracks.get(i+1).getEvents();
+			
+			it = currentEvents.iterator();
+			currentEvent = it.next();
 
 			/*
 			 * Decipher the current event, Notes should come in pairs of NoteOn
@@ -243,24 +253,31 @@ public class FileMaker {
 			 */
 			long lastTickValue = 0;
 			Chord currentChord = new Chord();
-			for (int j = 0; j < currentEvents.length; j += 2) {
-				if (currentEvents[j].getClass() == NoteOn.class) {
+			
+			while (it.hasNext()) {
+				if (currentEvent.getClass() == NoteOn.class) {
 					// Construct the note based on event data
-					Note n = getNoteFromEvents(currentEvents, j);
+					NoteOn noteStart = (NoteOn) currentEvent;
+					// Every NoteOn event comes in pairs -- One to start, one to end
+					NoteOn noteEnd = (NoteOn) it.next();
+					
+					Note n = getNoteFromEvents(noteStart, noteEnd);
 
 					// Determine if the note was valid
 					if (n.getType() != NoteType.NOTANOTE) {
 						// Determine if this belongs in a new chord or not
-						if (currentEvents[j].getTick() == lastTickValue) {
+						if (currentEvent.getTick() == lastTickValue) {
 							currentChord.addNote(n.getName(), n.getType(),
 									n.getOctave());
 						} else {
 							// Determine the position of the old chord
-							int staffPos = i - 1;
+							int staffPos = i;
 							int signaturePos = 0; // Determine this crap later.
 													// Lazy.
-							int measurePos = findMeasurePos(sheet, staffPos, signaturePos, lastTickValue);
-							int chordPos = findChordPos(sheet, staffPos, signaturePos, lastTickValue);
+							int measurePos = findMeasurePos(sheet, staffPos,
+									signaturePos, lastTickValue);
+							int chordPos = findChordPos(sheet, staffPos,
+									signaturePos, lastTickValue);
 
 							// Add the old chord to the sheet, create a new
 							// chord.
@@ -273,7 +290,7 @@ public class FileMaker {
 									n.getOctave());
 
 							// Update the new tick value
-							lastTickValue = currentEvents[j].getTick();
+							lastTickValue = currentEvent.getTick();
 						}
 
 					}
@@ -289,65 +306,63 @@ public class FileMaker {
 		// Determine the ticks per measure division
 		EnumTimeSignature t;
 		int num, den, QNPerMeasure, ticksPerMeasure;
-		
-		t = s.getStaff(staffPos).getSignature(signaturePos).getTimeSignature(); 
+
+		t = s.getStaff(staffPos).getSignature(signaturePos).getTimeSignature();
 		num = EnumTimeSignature.getNumerator(t);
 		den = EnumTimeSignature.getDenom(t);
 		QNPerMeasure = (den / 4) * num;
 		ticksPerMeasure = MidiFile.DEFAULT_RESOLUTION * QNPerMeasure;
-		
+
 		return (int) lastTickValue / ticksPerMeasure;
 	}
 
-	private static int findChordPos(Sheet s, int staffPos, int signaturePos, long lastTickValue) {
+	private static int findChordPos(Sheet s, int staffPos, int signaturePos,
+			long lastTickValue) {
 		EnumTimeSignature t;
 		int num, den, QNPerMeasure, ticksPerMeasure, ticksPerDiv, measurePos;
 		long tickDiff;
-		
+
 		t = s.getStaff(staffPos).getSignature(signaturePos).getTimeSignature();
-		
+
 		num = EnumTimeSignature.getNumerator(t);
 		den = EnumTimeSignature.getDenom(t);
 		QNPerMeasure = (den / 4) * num;
 		ticksPerMeasure = MidiFile.DEFAULT_RESOLUTION * QNPerMeasure;
 		measurePos = (int) lastTickValue / ticksPerMeasure;
-		
+
 		ticksPerDiv = ticksPerMeasure / Measure.getSize();
 		tickDiff = lastTickValue - (measurePos * ticksPerMeasure);
-		
+
 		return (int) tickDiff / ticksPerDiv;
 	}
 
 	private static Sheet insertChord(Sheet sheet, Chord currentChord,
 			int staffPos, int signaturePos, int measurePos, int chordPos) {
 		Sheet newSheet = new Sheet(sheet);
-		
-		newSheet.getStaff(staffPos).getSignature(signaturePos).getMeasure(measurePos).addChord(chordPos, currentChord);
-		
+
+		newSheet.getStaff(staffPos).getSignature(signaturePos)
+				.getMeasure(measurePos).addChord(chordPos, currentChord);
+
 		return newSheet;
 	}
 
-	private static Note getNoteFromEvents(MidiEvent[] currentEvents, int j) {
+	private static Note getNoteFromEvents(NoteOn noteStart, NoteOn noteEnd) {
+
 		Note n = new Note(NoteName.C, NoteType.NOTANOTE, 0);
-		if (j < currentEvents.length - 1) {
-			NoteOn noteStart = (NoteOn) currentEvents[j];
-			NoteOn noteEnd = (NoteOn) currentEvents[j + 1];
 
-			// Determine if these two notes are related by checking their pitch
-			// and channel
-			if (noteStart.getChannel() == noteEnd.getChannel()
-					&& noteStart.getNoteValue() == noteEnd.getNoteValue()
-					&& noteStart.getVelocity() != 0
-					&& noteEnd.getVelocity() == 0) {
-				// Same note, determine pitch and duration
-				NoteName name = getNoteNameFromMidiValue(noteStart
-						.getNoteValue());
-				NoteType duration = getNoteTypeFromMidiDelta(noteStart, noteEnd);
+		// Determine if these two notes are related by checking their pitch
+		// and channel
+		if (noteStart.getChannel() == noteEnd.getChannel()
+				&& noteStart.getNoteValue() == noteEnd.getNoteValue()
+				&& noteStart.getVelocity() != 0 && noteEnd.getVelocity() == 0) {
+			
+			// Same note, determine pitch and duration
+			NoteName name = getNoteNameFromMidiValue(noteStart.getNoteValue());
+			NoteType duration = getNoteTypeFromMidiDelta(noteStart, noteEnd);
 
-				int octave = getOctaveFromMidiValue(noteStart.getNoteValue());
+			int octave = getOctaveFromMidiValue(noteStart.getNoteValue());
 
-				n = new Note(name, duration, octave);
-			}
+			n = new Note(name, duration, octave);
 		}
 		return n;
 	}
@@ -439,11 +454,11 @@ public class FileMaker {
 			System.err.println(e);
 		}
 	}
-	
-	public static void writeSheetToMidiExternal(Sheet s, Context c, String filename) {
+
+	public static void writeSheetToMidi(Sheet s, Context c, String filename) {
 		MidiFile midi = sheetToMidi(s);
 
-		String path = c.getExternalFilesDir(null).toString();
+		String path = c.getFilesDir().toString();
 
 		File output = new File(path, filename);
 		try {
@@ -451,6 +466,27 @@ public class FileMaker {
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+	}
+
+	public static Sheet loadMidi(Context context) {
+		String stringPath = context.getFilesDir().getAbsolutePath() + "/"
+				+ FileMaker.TEST_FILENAME;
+
+		File o = new File(stringPath);
+		MidiFile midi;
+		Sheet newSheet = new Sheet();
+
+		try {
+			midi = new MidiFile(o);
+			newSheet = midiToSheet(midi);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newSheet;
 	}
 
 	private static MidiFile testSampleFile() {
