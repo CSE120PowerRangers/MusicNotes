@@ -30,7 +30,7 @@ import android.widget.ImageView.ScaleType;
 public class EditorActivity extends Activity{
 
 	// Activity Objects
-	public static MidiPlayer player;
+	private final MidiPlayer player = new MidiPlayer();
 	private final Melody melody = new Melody();
 	public Context context;
 	int screenWidth, screenHeight;
@@ -293,7 +293,7 @@ public class EditorActivity extends Activity{
 		context = getApplicationContext();
 
 		if(context != null && sheet != null) {
-			player = new MidiPlayer(sheet, context);
+			player.initSheet(sheet, context);
 			player.play();
 		}
 	}
