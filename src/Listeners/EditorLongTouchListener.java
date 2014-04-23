@@ -9,6 +9,7 @@ import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
 import android.content.ClipData;
 import android.content.Context;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
@@ -52,7 +53,9 @@ public class EditorLongTouchListener implements OnLongClickListener {
 		// Create a new tool from the old note
 			
 			myActivity.setHeldTool(NoteToScreen.notetoTool(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos)));
-			
+			 Vibrator vib = (Vibrator) myActivity.getSystemService(Context.VIBRATOR_SERVICE);
+			 // Vibrate for 500 milliseconds
+			 vib.vibrate(500);
 			// Start the Drag
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
