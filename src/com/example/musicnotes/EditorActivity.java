@@ -47,7 +47,7 @@ public class EditorActivity extends Activity{
 	Sheet sheet;
 	ToolFamily currentFamily;
 	NoteTool currentTool;
-	int currentMeasure, currentStaff, currentSignature;
+	int currentMeasure, currentStaff, currentSignature, activeTool;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,23 +55,24 @@ public class EditorActivity extends Activity{
 		// Create Activity Objects
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
-		
+
 		//Static Values
 		numNotes = 15;
 		percentageTop = 0.15f;
-		percentageSide = 0.15f;
-		
+		percentageSide = 0.10f;
+
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
+		activeTool = 0;
 		currentFamily = ToolFamily.NOTES;
 		updateToolBar();
-		
+
 		// Load in sheet and initialize values and tools
 		sheet = new Sheet();
 		currentMeasure = currentStaff = currentSignature = 0;
 		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
-		
+
 		// Calculate Screen Size
 		calcScreenSize();
 
@@ -79,7 +80,7 @@ public class EditorActivity extends Activity{
 		initializeView();
 
 
-		
+
 		//Initialize Measure Spinner
 		updateMeasureSpinner();
 
@@ -131,7 +132,17 @@ public class EditorActivity extends Activity{
 
 		for(int i = 0; i < toolbarButtons.size(); i++) {
 			toolbar.addView(toolbarButtons.get(i));
+			if(i == activeTool)
+			{
+				toolbarButtons.get(i).setBackgroundResource(R.drawable.background);
+			}
+			else
+			{
+				toolbarButtons.get(i).setBackgroundResource(0);
+			}
 		}
+
+
 
 	}
 
@@ -173,7 +184,7 @@ public class EditorActivity extends Activity{
 							selNote.setImageResource(R.drawable.four);
 							break;
 						case QUARTER_NOTE:
-							selNote.setImageResource(R.drawable.fillednotespace);
+							selNote.setImageResource(R.drawable.fillednote);
 							break;
 						case HALF_NOTE:
 							selNote.setImageResource(R.drawable.halfnote);
@@ -220,17 +231,18 @@ public class EditorActivity extends Activity{
 		//Top Panel
 		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
 		topToolbar.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,(int)(screenHeight*percentageTop)));
-		
+
+		// Measure Navigation Buttons
 		ImageView backMeasure = (ImageView)findViewById(R.id.backwardMeasure);
 		backMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/30.0f) ,LayoutParams.MATCH_PARENT));
 		backMeasure.setScaleType(ScaleType.FIT_XY);
 		ImageView forwardMeasure = (ImageView)findViewById(R.id.forwardMeasure);
 		forwardMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/30.0f) ,LayoutParams.MATCH_PARENT));
 		forwardMeasure.setScaleType(ScaleType.FIT_XY);
-		
+
 		//Side Panel
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
-		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams(screenWidth/10,(int)(percentageSide*screenHeight));
+		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
 		sidePanel.setLayoutParams(sidePanelParams);
 
@@ -312,7 +324,7 @@ public class EditorActivity extends Activity{
 			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
 			currentMeasure++;
 			updateMeasureSpinner();
-			
+
 		} else {
 			//**** Increment the current Measure by one. ****
 			currentMeasure++;
@@ -334,7 +346,7 @@ public class EditorActivity extends Activity{
 	{
 		currentTool = newTool;
 	}
-	
+
 	public void setToolFamily(ToolFamily newFamily)
 	{
 		currentFamily = newFamily;
@@ -344,7 +356,7 @@ public class EditorActivity extends Activity{
 	{
 		return currentMeasure;
 	}
-	
+
 	public void setCurrentMeasure(int measure)
 	{
 		currentMeasure = measure;
@@ -353,16 +365,20 @@ public class EditorActivity extends Activity{
 	private void updateMeasureSpinner()
 	{
 		//Initialize Measure Spinner
-				measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
+		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 
-				measureArray = new String[sheet.getStaff(currentStaff).getSignature(currentSignature).getSize()];
-				for(int i = 0; i < sheet.getStaff(currentStaff).getSignature(currentSignature).getSize(); i++) {
-					measureArray[i] = "" +(i+1);
+		measureArray = new String[sheet.getStaff(currentStaff).getSignature(currentSignature).getSize()];
+		for(int i = 0; i < sheet.getStaff(currentStaff).getSignature(currentSignature).getSize(); i++) {
+			measureArray[i] = "" +(i+1);
 
-				}
-				ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
-				adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				measureSpinner.setAdapter(adapterMeasure);
-				measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
+		}
+		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
+		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		measureSpinner.setAdapter(adapterMeasure);
+		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
+	}
+	public void setActiveTool(int tool)
+	{
+		activeTool = tool;
 	}
 }

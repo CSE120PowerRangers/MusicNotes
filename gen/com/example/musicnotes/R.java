@@ -43,11 +43,12 @@ public final class R {
         public static final int halfnote=0x7f020007;
         public static final int ic_launcher=0x7f020008;
         public static final int line=0x7f020009;
-        public static final int measurebackward=0x7f02000a;
-        public static final int measureforward=0x7f02000b;
-        public static final int musicnotesicon=0x7f02000c;
-        public static final int nobackground=0x7f02000d;
-        public static final int treble=0x7f02000e;
+        public static final int measurebackground=0x7f02000a;
+        public static final int measurebackward=0x7f02000b;
+        public static final int measureforward=0x7f02000c;
+        public static final int musicnotesicon=0x7f02000d;
+        public static final int nobackground=0x7f02000e;
+        public static final int treble=0x7f02000f;
     }
     public static final class id {
         public static final int backwardMeasure=0x7f090004;
