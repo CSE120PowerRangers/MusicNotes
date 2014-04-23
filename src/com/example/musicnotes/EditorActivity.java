@@ -63,7 +63,7 @@ public class EditorActivity extends Activity{
 
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
-		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.four);
+		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.eigthnote);
 		activeTool = 0;
 		currentFamily = ToolFamily.NOTES;
 		updateToolBar();
@@ -174,23 +174,24 @@ public class EditorActivity extends Activity{
 				selNote.setOnDragListener(dragListener);
 
 				//Draw Notes according to sheet
-				selNote.setScaleType(ScaleType.CENTER_INSIDE);
+				//selNote.setScaleType(ScaleType.FIT_XY);
 				if(c != null) {
 					Note searchNote = NoteToScreen.findNote(c, notes);
 					if(searchNote != null) {
 						switch(searchNote.getType())
 						{
 						case EIGHTH_NOTE:
-							selNote.setImageResource(R.drawable.four);
+							selNote.setImageResource(R.drawable.eigthnote);
 							break;
 						case QUARTER_NOTE:
-							selNote.setImageResource(R.drawable.fillednote);
+							selNote.setImageResource(R.drawable.quarternote);
 							break;
 						case HALF_NOTE:
-							selNote.setImageResource(R.drawable.halfnote);
+							selNote.setImageResource(R.drawable.halfnotes);
 							break;
 						case WHOLE_NOTE:
-							selNote.setImageResource(R.drawable.treble);
+							selNote.setImageResource(R.drawable.wholenote);
+							break;
 						default:
 							selNote.setImageResource(0);
 							break;
