@@ -5,11 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-<<<<<<< HEAD
-        android:minSdkVersion="11"
-=======
         android:minSdkVersion="13"
->>>>>>> 573ff2af43d74bc2bc092f7e047e0fd5efbc675f
         android:targetSdkVersion="18" />
 
     <application
