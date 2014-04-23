@@ -8,6 +8,7 @@ import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
 
+import com.example.musicnotes.EditorActivity;
 import com.example.musicnotes.NoteToScreen;
 import com.example.musicnotes.R;
 
@@ -15,6 +16,7 @@ import MusicSheet.Chord;
 import MusicSheet.Note;
 import MusicSheet.Sheet;
 import MusicUtil.NoteTool;
+import MusicUtil.NoteType;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -25,15 +27,11 @@ public class EditorDragListener implements OnDragListener {
 
 
 	int currentMeasure;
-	Sheet sheet;
-	NoteTool currentTool;
-	enum DeleteFlag {FIRST, DELETE, NODELETE};
-	DeleteFlag myDelete;
-	public EditorDragListener(Sheet sheet, int currentMeasure, NoteTool currentTool) {
-		this.currentMeasure =currentMeasure;
-		this.sheet = sheet;
-		this.currentTool = currentTool;
-		myDelete = DeleteFlag.NODELETE;
+	EditorActivity myActivity;
+	NoteTool heldTool;
+
+	public EditorDragListener(Context myActivity) {
+		this.myActivity = (EditorActivity)myActivity;
 	}
 
 	@Override
@@ -59,50 +57,30 @@ public class EditorDragListener implements OnDragListener {
 				break;
 			}
 		}
-
 		// Get the selected chord and add a new chord
-		sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).addChord(chordsPos);
-		Chord chordSel = sheet.getStaff(0).getSignature(0).getMeasure(currentMeasure).getChord(chordsPos);
+		myActivity.getCurrentMeasure().addChord(chordsPos);
+		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
 
-		switch(event.getAction()) {
-		case DragEvent.ACTION_DRAG_STARTED:
-			/*noteView.setBackgroundResource(R.drawable.background);
-			noteView.setImageResource(R.drawable.fillednotespace);
-			noteView.setScaleType(ScaleType.CENTER_INSIDE);*/
-			//System.out.println("Started dragging");
-			myDelete = DeleteFlag.FIRST;
-			return true;
+		heldTool = myActivity.getHeldTool();
+		if(heldTool!= null)
 
-		case DragEvent.ACTION_DRAG_ENTERED:
-			System.out.println("Entered a new view");
-			Note searchNote = NoteToScreen.findNote(chordSel, notePos);
-			if(searchNote == null ) {
-				noteView.setImageResource(currentTool.getID());
+		{
+			switch(event.getAction()) {
+			case DragEvent.ACTION_DRAG_STARTED:
+				return true;
+
+			case DragEvent.ACTION_DRAG_ENTERED:	
+				return true;
+
+			case DragEvent.ACTION_DRAG_EXITED:
+				return true;
+
+			case DragEvent.ACTION_DROP:
+				noteView.setImageResource(heldTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
-				myDelete = DeleteFlag.DELETE;
-			} else if(searchNote != null && myDelete == DeleteFlag.FIRST) {
-				myDelete = DeleteFlag.DELETE;
-			} else {
-				myDelete = DeleteFlag.NODELETE;
-
+				NoteToScreen.addNote(chordSel, notePos, heldTool);
+				return true;
 			}
-			return true;
-
-		case DragEvent.ACTION_DRAG_EXITED:
-			System.out.println("Exiting this view");
-			if(myDelete != DeleteFlag.NODELETE) {
-				noteView.setImageResource(0);
-				NoteToScreen.deleteNote(chordSel, notePos);
-			}
-			return true;
-
-		case DragEvent.ACTION_DROP:
-			noteView.setImageResource(currentTool.getID());
-			noteView.setScaleType(ScaleType.CENTER_INSIDE);
-			NoteToScreen.addNote(chordSel, notePos, currentTool);
-			myDelete = DeleteFlag.NODELETE;
-			return true;
-
 		}
 
 		return false;

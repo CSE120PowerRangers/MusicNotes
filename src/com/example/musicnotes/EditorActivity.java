@@ -46,7 +46,7 @@ public class EditorActivity extends Activity{
 	// Editor Values
 	Sheet sheet;
 	ToolFamily currentFamily;
-	NoteTool currentTool;
+	NoteTool currentTool, heldTool;
 	int currentMeasure, currentStaff, currentSignature, activeTool;
 
 	@Override
@@ -55,12 +55,12 @@ public class EditorActivity extends Activity{
 		// Create Activity Objects
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
-
+		
 		//Static Values
 		numNotes = 15;
 		percentageTop = 0.15f;
 		percentageSide = 0.10f;
-
+		heldTool = null;
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.eigthnote);
@@ -95,7 +95,7 @@ public class EditorActivity extends Activity{
 	@Override
 	public void onStart() {
 		super.onStart();
-		updateMeasures(currentMeasure);
+		updateMeasures(getCurrentMeasure());
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class EditorActivity extends Activity{
 
 	}
 
-	public void updateMeasures(int start)
+	public void updateMeasures(Measure currentMeasure)
 	{
 
 		LinearLayout selChord;
@@ -154,6 +154,7 @@ public class EditorActivity extends Activity{
 		Chord c;
 		EditorTouchListener touchListener;
 		EditorDragListener dragListener;
+		EditorLongTouchListener longTouchListener;
 		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
 
 		//Add Listener and Draw Notes
@@ -161,16 +162,18 @@ public class EditorActivity extends Activity{
 
 			// Get chord layout and chord in sheet
 			selChord = (LinearLayout)noteLayout.getChildAt(chords);
-			c = sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getChord(chords);
+			c = currentMeasure.getChord(chords);
 
 			for(int notes = 0; notes < numNotes; notes++) {
 				//Find Note ImageView to set
 				selNote = (ImageView) selChord.getChildAt(notes);
 
 				//Set Touch and Drag Listeners
-				touchListener = new EditorTouchListener(sheet, currentMeasure, currentTool);
-				selNote.setOnTouchListener(touchListener);
-				dragListener = new EditorDragListener(sheet, currentMeasure, currentTool);
+				touchListener = new EditorTouchListener(this);
+				selNote.setOnClickListener(touchListener);
+				longTouchListener = new EditorLongTouchListener(this);
+				selNote.setOnLongClickListener(longTouchListener);
+				dragListener = new EditorDragListener(this);
 				selNote.setOnDragListener(dragListener);
 
 				//Draw Notes according to sheet
@@ -331,7 +334,7 @@ public class EditorActivity extends Activity{
 			currentMeasure++;
 		}
 		measureSpinner.setSelection(currentMeasure);
-		updateMeasures(currentMeasure);
+		updateMeasures(getCurrentMeasure());
 	}
 
 	public void previousMeasure(View v){
@@ -339,29 +342,36 @@ public class EditorActivity extends Activity{
 		{
 			currentMeasure--;
 			measureSpinner.setSelection(currentMeasure);
-			updateMeasures(currentMeasure);
+			updateMeasures(getCurrentMeasure());
 		}
 	}
 
-	public void setTool(NoteTool newTool)
+	public NoteTool getCurrentTool()
+	{
+		return currentTool;
+	}
+	public void setCurrentTool(NoteTool newTool)
 	{
 		currentTool = newTool;
 	}
-
+	public void setActiveToolID(int tool)
+	{
+		activeTool = tool;
+	}
 	public void setToolFamily(ToolFamily newFamily)
 	{
 		currentFamily = newFamily;
 	}
-
-	public int getCurrentMeasure()
+	public NoteTool getHeldTool()
 	{
-		return currentMeasure;
+		return heldTool;
+	}
+	
+	public void setHeldTool(NoteTool heldTool)
+	{
+		this.heldTool = heldTool;
 	}
 
-	public void setCurrentMeasure(int measure)
-	{
-		currentMeasure = measure;
-	}
 
 	private void updateMeasureSpinner()
 	{
@@ -378,8 +388,26 @@ public class EditorActivity extends Activity{
 		measureSpinner.setAdapter(adapterMeasure);
 		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
 	}
-	public void setActiveTool(int tool)
+
+	public Sheet getSheet()
 	{
-		activeTool = tool;
+		return sheet;
 	}
+	public Staff getCurrentStaff()
+	{
+		return sheet.getStaff(currentStaff);
+	}
+	public Signature getCurrentSignature()
+	{
+		return getCurrentStaff().getSignature(currentSignature);
+	}
+	public Measure getCurrentMeasure()
+	{
+		return getCurrentSignature().getMeasure(currentMeasure);
+	}
+	public void setCurrentMeasure(int measure)
+	{
+		currentMeasure = measure;
+	}
+
 }

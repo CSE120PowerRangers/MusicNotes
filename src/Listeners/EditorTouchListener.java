@@ -1,46 +1,65 @@
 package Listeners;
 
+import com.example.musicnotes.EditorActivity;
+import com.example.musicnotes.NoteToScreen;
 import com.example.musicnotes.R;
 
+import MusicSheet.Chord;
 import MusicSheet.Sheet;
 import MusicUtil.NoteTool;
 import android.content.ClipData;
+import android.content.Context;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ImageView.ScaleType;
 
-public class EditorTouchListener implements OnTouchListener {
+public class EditorTouchListener implements OnClickListener {
 
-	int currentMeasure;
-	Sheet sheet;
-	NoteTool currentTool;
 
-	public EditorTouchListener(Sheet sheet, int currentMeasure, NoteTool currentTool) {
-		this.currentMeasure =currentMeasure;
-		this.sheet = sheet;
-		this.currentTool = currentTool;
+	EditorActivity myActivity;
+	
+	public EditorTouchListener(Context myActivity) {
+		this.myActivity = (EditorActivity) myActivity;
 	}
 
+
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
+	public void onClick(View v) {
 		ImageView noteView = (ImageView)v;
 		// Get the chord and measure views that the note is located in
+		LinearLayout chordParent = (LinearLayout)noteView.getParent();
+		LinearLayout measureParent = (LinearLayout) chordParent.getParent();
+		int chordsPos = -1, notePos = -1;
 
-		switch(event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			ClipData data = ClipData.newPlainText("", "");
-			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-			v.startDrag(data, shadowBuilder, v, 0);
-			/*
-			updateMeasures(currentMeasure);*/
-			return true;
+		// Get the chord position within the measure
+		for(int chords = 0; chords<measureParent.getChildCount(); chords++) {
+			if(chordParent == measureParent.getChildAt(chords)) {
+				chordsPos = chords;
+				break;
+			}
 		}
 
+		// Get the note position within the chord
+		for(int notes = 0; notes < chordParent.getChildCount(); notes++) {
+			if(noteView == chordParent.getChildAt(notes)) {
+				notePos = notes;
+				break;
+			}
+		}
 
-		return false;
+		// Get the selected chord and add a new chord
+		myActivity.getCurrentMeasure().addChord(chordsPos);
+		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
+
+		noteView.setImageResource(myActivity.getCurrentTool().getID());
+		noteView.setScaleType(ScaleType.CENTER_INSIDE);
+		NoteToScreen.addNote(chordSel, notePos, myActivity.getCurrentTool());
 	}
 
 }
