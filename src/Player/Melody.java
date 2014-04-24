@@ -54,20 +54,20 @@ public class Melody {
 		measure4.addChord(2, new Chord(G4Q));
 		measure4.addChord(4, new Chord(G4H));
 		
-		Signature sig1 = new Signature();
-		
-		sig1.addMeasure(measure1);
-		sig1.addMeasure(measure2);
-		sig1.addMeasure(measure3);
-		sig1.addMeasure(measure4);
-		
 		Staff treble = new Staff();
 		
-		treble.deleteSignature(new Signature());
-		treble.addSignature(sig1);
+		treble.addMeasure(measure1);
+		treble.addMeasure(measure2);
+		treble.addMeasure(measure3);
+		treble.addMeasure(measure4);
+		
+		Signature sig = new Signature();
+		
+		sig.deleteStaff(new Staff());
+		sig.addStaff(treble);
 		
 		this.music = new Sheet();
-		this.music.deleteStaff(0);
-		this.music.addStaff(treble);		
+		this.music.deleteSignature(0);
+		this.music.addSignature(sig);		
 	}
 }

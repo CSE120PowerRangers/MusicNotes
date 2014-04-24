@@ -2,7 +2,6 @@ package com.example.musicnotes;
 
 import java.io.File;
 
-import Listeners.MeasureSpinnerListener;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -13,13 +12,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MainActivity extends Activity{
 

@@ -7,54 +7,61 @@ import MusicUtil.NoteName;
 
 
 public class Staff {
-	private ArrayList<Signature> signatures;
 	private EnumClef clef;
 	private NoteName[] notes;
 	private int octave;
+	private int program; //Midi program number
+	private ArrayList<Measure> measures;
+	
 	/**
-	 * Default constructor creates a staff with a treble clef and a default signature
+	 * Default constructor creates a staff with a treble clef and a default measure
 	 */
 	public Staff() {
 		clef = EnumClef.TREBLE;
 		setOctave();
 		setScale();
-		signatures = new ArrayList<Signature>();
-		signatures.add(new Signature());
+		program = 0;
+		measures = new ArrayList<Measure>();
+		measures.add(new Measure());
 	}
 	
 	/**
-	 * Creates a staff with a given clef and a default signature
+	 * Creates a staff with a given clef and a default measure
 	 * @param clef
 	 */
 	public Staff(EnumClef clef) {
 		this.clef = clef;
 		setOctave();
 		setScale();
-		signatures = new ArrayList<Signature>();
-		signatures.add(new Signature());
+		program = 0;
+		measures = new ArrayList<Measure>();
+		measures.add(new Measure());
 	}
 	
 	/**
-	 * Creates a staff with a given clef and signature
+	 * Creates a staff with a given clef and measure
 	 * @param clef
-	 * @param signature
+	 * @param measure
 	 */
-	public Staff(EnumClef clef, Signature signature) {
+	public Staff(EnumClef clef, Measure measure) {
 		this.clef = clef;
 		setOctave();
 		setScale();
-		signatures = new ArrayList<Signature>();
-		signatures.add(signature);
+		program = 0;
+		measures = new ArrayList<Measure>();
+		measures.add(new Measure(measure));
 	}
 	
 	/**
 	 * Copy constructor for the staff
 	 * @param clef
-	 * @param signature
+	 * @param measure
 	 */
 	public Staff(Staff toCopy) {
 		this.clef = toCopy.clef;
-		this.signatures = new ArrayList<Signature>(toCopy.signatures);
+		this.measures = new ArrayList<Measure>(toCopy.measures);
+		this.program = toCopy.program;
+		this.octave = toCopy.octave;
 	}
 	
 	/**
@@ -66,47 +73,60 @@ public class Staff {
 		setOctave();
 		setScale();
 	}
-	
+
 	/**
-	 * Adds a signature to the staff
-	 * @param newSignature
+	 * Adds a given measure to the end of the list
+	 * @param newMeasure
 	 */
-	public void addSignature(Signature newSignature) {
-		signatures.add(newSignature);
+	public void addMeasure(Measure newMeasure) {
+		measures.add(newMeasure);
+	}
+
+	/**
+	 * Inserts a given measure into the given index
+	 * @param index
+	 * @param newMeasure
+	 */
+	public void addMeasure(int index, Measure newMeasure) {
+		if(index >= 0 && index < measures.size()) {
+			//Force creation of new copy of measure
+			newMeasure = new Measure(newMeasure);
+			measures.add(index, newMeasure);
+		}
+	}
+
+	/**
+	 * Gets the measure from the given index
+	 * @param index
+	 * @return
+	 */
+	public Measure getMeasure(int index) {
+		if(index >= 0 && index < measures.size()) {
+			return measures.get(index);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
-	 * Deletes the given signature from the list
-	 * @param oldSignature
+	 * Deletes a given measure from the list
+	 * @param oldMeasure
 	 */
-	public void deleteSignature(Signature oldSignature) {
-		for(int i = 0; i < signatures.size(); i++) {
-			if(signatures.get(i).equals(oldSignature)) {
-				signatures.remove(i);
+	public void deleteMeasure(Measure oldMeasure) {
+		for(int i = 0; i < measures.size(); i++) {
+			if(measures.get(i).equals(oldMeasure)) {
+				measures.remove(i);
 				break;
 			}
 		}
 	}
-	
+
 	/**
-	 * Returns the signature at the given index
-	 * @param sigNumber
-	 * @return
-	 */
-	public Signature getSignature(int sigNumber) {
-		if(sigNumber < 0 || sigNumber > signatures.size()) {
-			return null;
-		} else {
-			return signatures.get(sigNumber);			
-		}
-	}
-	
-	/**
-	 * Returns the number of signatures in the staff
+	 * Returns the number of measures in the staff
 	 * @return
 	 */
 	public int getSize() {
-		return signatures.size();
+		return measures.size();
 	}
 	
 	/**

@@ -1,6 +1,5 @@
 package com.example.musicnotes;
 
-import android.text.GetChars;
 import MusicSheet.*;
 import MusicUtil.NoteName;
 import MusicUtil.NoteTool;
