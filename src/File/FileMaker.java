@@ -456,18 +456,6 @@ public class FileMaker {
 		}
 	}
 
-	public static void writeSheetToMidi(Sheet s, Context c, String filename) {
-		MidiFile midi = sheetToMidi(s);
-
-		String path = c.getFilesDir().toString();
-
-		File output = new File(path, filename);
-		try {
-			midi.writeToFile(output);
-		} catch (IOException e) {
-			System.err.println(e);
-		}
-	}
 
 	public static Sheet loadMidi(Context context) {
 		String stringPath = context.getFilesDir().getAbsolutePath() + "/"

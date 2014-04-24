@@ -70,6 +70,8 @@ public class EditorActivity extends Activity{
 
 		// Load in sheet and initialize values and tools
 		sheet = new Sheet();
+		Intent mainIntent = getIntent();
+		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
 		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 
@@ -303,14 +305,11 @@ public class EditorActivity extends Activity{
 	}
 
 	public void loadFile(View v) {
-		context = getApplicationContext();
 
 	}
 
 	public void saveFile() {
-		context = getApplicationContext();
-		String filename = "TESTFILE.mid";
-		FileMaker.writeSheetToMidi(sheet, context, filename);
+		FileMaker.writeSheetToMidiInternal(sheet, this);
 	}
 
 	public void nextMeasure(View v){
