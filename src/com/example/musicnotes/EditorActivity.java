@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import File.FileMaker;
 import Listeners.*;
 import MusicSheet.*;
+import MusicUtil.EnumClef;
 import MusicUtil.EnumKeySignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
@@ -38,8 +39,8 @@ public class EditorActivity extends Activity{
 	float percentageTop, percentageSide;
 	ToolBar tools;
 	// Layout Objects
-	Spinner familySpinner, measureSpinner;
-	String[] measureArray;
+	Spinner familySpinner, measureSpinner, staffSpinner;
+	String[] measureArray, staffArray;
 	public static enum ToolFamily{NOTES, RESTS, ACCIDENTALS, PLAYBACK};
 	int measureWidth, measureHeight, chordWidth, chordHeight, noteWidth, noteHeight;
 	int numChords, numNotes;
@@ -74,7 +75,7 @@ public class EditorActivity extends Activity{
 		Intent mainIntent = getIntent();
 		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
-		sheet.getStaff(currentStaff).getSignature(currentSignature).setKeySignature(EnumKeySignature.E_MAJOR);
+		sheet.getStaff(currentStaff).getSignature(currentSignature).setKeySignature(EnumKeySignature.EFLAT_MAJOR);
 		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 
 		// Calculate Screen Size
@@ -87,7 +88,7 @@ public class EditorActivity extends Activity{
 
 		//Initialize Measure Spinner
 		updateMeasureSpinner();
-
+		updateStaffSpinner();
 		// Initialize Tool Family Spinner
 		familySpinner = (Spinner) findViewById(R.id.toolbarSpinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.toolbarSpinnerArray, android.R.layout.simple_spinner_item);
@@ -316,8 +317,8 @@ public class EditorActivity extends Activity{
 
 	public void nextMeasure(View v){
 		//**** If null, create a new measure****
-		if(currentMeasure == sheet.getStaff(0).getSignature(0).getSize() - 1) {
-			sheet.getStaff(0).getSignature(0).addMeasure(new Measure());
+		if(currentMeasure == sheet.getStaff(currentStaff).getSignature(currentSignature).getSize() - 1) {
+			sheet.getStaff(currentStaff).getSignature(currentSignature).addMeasure(new Measure());
 			currentMeasure++;
 			updateMeasureSpinner();
 
@@ -329,6 +330,7 @@ public class EditorActivity extends Activity{
 		updateMeasures(getCurrentMeasure());
 	}
 
+
 	public void previousMeasure(View v){
 		if(currentMeasure > 0)
 		{
@@ -337,7 +339,32 @@ public class EditorActivity extends Activity{
 			updateMeasures(getCurrentMeasure());
 		}
 	}
-
+	
+	public void nextStaff(View v)
+	{
+		if(currentStaff == sheet.getStaffSize()-1)
+		{
+			sheet.addStaff(new Staff());
+			currentStaff++;
+			updateStaffSpinner();
+		}
+		else
+		{
+			currentStaff++;
+		}
+		staffSpinner.setSelection(currentStaff);
+		updateMeasures(getCurrentMeasure());
+	}
+	
+	public void previousStaff(View v)
+	{
+		if(currentStaff>0)
+		{
+			currentStaff--;
+			staffSpinner.setSelection(currentStaff);
+			updateMeasures(getCurrentMeasure());
+		}
+	}
 	public NoteTool getCurrentTool()
 	{
 		return currentTool;
@@ -380,6 +407,19 @@ public class EditorActivity extends Activity{
 		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
 	}
 
+	public void updateStaffSpinner()
+	{
+		staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
+		staffArray = new String[sheet.getStaffSize()];
+		for(int i = 0; i < sheet.getStaffSize(); i++)
+		{
+			staffArray[i] = "" + (i+1);
+		}
+		ArrayAdapter<String> adapterStaff = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,staffArray);
+		adapterStaff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		staffSpinner.setAdapter(adapterStaff);
+		staffSpinner.setOnItemSelectedListener(new StaffSpinnerListener(this));
+	}
 	public Sheet getSheet()
 	{
 		return sheet;
@@ -387,6 +427,10 @@ public class EditorActivity extends Activity{
 	public Staff getCurrentStaff()
 	{
 		return sheet.getStaff(currentStaff);
+	}
+	public void setCurrentStaff(int newStaff)
+	{
+		currentStaff = newStaff;
 	}
 	public Signature getCurrentSignature()
 	{
@@ -400,5 +444,25 @@ public class EditorActivity extends Activity{
 	{
 		currentMeasure = measure;
 	}
+	public void changeStaff(View v)
+	{
+		ImageView touchedStaff = (ImageView)findViewById(R.id.staffclef);
+		switch(sheet.getStaff(currentStaff).getClef())
+		{
+		case TREBLE:
+			touchedStaff.setImageResource(R.drawable.tenor);
+			sheet.getStaff(currentStaff).setClef(EnumClef.TENOR);
+			break;
+		case TENOR:
+			touchedStaff.setImageResource(R.drawable.bass);
+			sheet.getStaff(currentStaff).setClef(EnumClef.BASS);
+			break;
+		case BASS:
+			touchedStaff.setImageResource(R.drawable.treble);
+			sheet.getStaff(currentStaff).setClef(EnumClef.TREBLE);
+			break;
+		}
+	}
+
 
 }

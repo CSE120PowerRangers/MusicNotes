@@ -10,7 +10,8 @@ package com.example.musicnotes;
 public final class R {
     public static final class array {
         public static final int currentMeasureArray=0x7f060001;
-        public static final int listofSheetsArray=0x7f060002;
+        public static final int currentStaffArray=0x7f060002;
+        public static final int listofSheetsArray=0x7f060003;
         public static final int toolbarSpinnerArray=0x7f060000;
     }
     public static final class attr {
@@ -35,31 +36,33 @@ public final class R {
     }
     public static final class drawable {
         public static final int background=0x7f020000;
-        public static final int csignature=0x7f020001;
-        public static final int eighthnotebutton=0x7f020002;
-        public static final int eigthnote=0x7f020003;
-        public static final int eraser=0x7f020004;
-        public static final int eraserbutton=0x7f020005;
-        public static final int fillednote=0x7f020006;
-        public static final int fillednoteline=0x7f020007;
-        public static final int fillednotenote=0x7f020008;
-        public static final int fillednotespace=0x7f020009;
-        public static final int four=0x7f02000a;
-        public static final int halfnote=0x7f02000b;
-        public static final int halfnotebutton=0x7f02000c;
-        public static final int halfnotes=0x7f02000d;
-        public static final int ic_launcher=0x7f02000e;
-        public static final int line=0x7f02000f;
-        public static final int measurebackground=0x7f020010;
-        public static final int measurebackward=0x7f020011;
-        public static final int measureforward=0x7f020012;
-        public static final int musicnotesicon=0x7f020013;
-        public static final int nobackground=0x7f020014;
-        public static final int quarternote=0x7f020015;
-        public static final int quarternotebutton=0x7f020016;
-        public static final int treble=0x7f020017;
-        public static final int wholenote=0x7f020018;
-        public static final int wholenotebutton=0x7f020019;
+        public static final int bass=0x7f020001;
+        public static final int csignature=0x7f020002;
+        public static final int eighthnotebutton=0x7f020003;
+        public static final int eigthnote=0x7f020004;
+        public static final int eraser=0x7f020005;
+        public static final int eraserbutton=0x7f020006;
+        public static final int fillednote=0x7f020007;
+        public static final int fillednoteline=0x7f020008;
+        public static final int fillednotenote=0x7f020009;
+        public static final int fillednotespace=0x7f02000a;
+        public static final int four=0x7f02000b;
+        public static final int halfnote=0x7f02000c;
+        public static final int halfnotebutton=0x7f02000d;
+        public static final int halfnotes=0x7f02000e;
+        public static final int ic_launcher=0x7f02000f;
+        public static final int line=0x7f020010;
+        public static final int measurebackground=0x7f020011;
+        public static final int measurebackward=0x7f020012;
+        public static final int measureforward=0x7f020013;
+        public static final int musicnotesicon=0x7f020014;
+        public static final int nobackground=0x7f020015;
+        public static final int quarternote=0x7f020016;
+        public static final int quarternotebutton=0x7f020017;
+        public static final int tenor=0x7f020018;
+        public static final int treble=0x7f020019;
+        public static final int wholenote=0x7f02001a;
+        public static final int wholenotebutton=0x7f02001b;
     }
     public static final class id {
         public static final int backwardMeasure=0x7f090005;
@@ -69,15 +72,18 @@ public final class R {
         public static final int leftPanel=0x7f09000a;
         public static final int listofSheets=0x7f090002;
         public static final int listofSheetsView=0x7f090001;
-        public static final int main_menu=0x7f090014;
-        public static final int measureLayout=0x7f090010;
+        public static final int main_menu=0x7f090017;
+        public static final int measureLayout=0x7f090013;
         public static final int newSheet=0x7f090000;
-        public static final int newname=0x7f090013;
-        public static final int newsheetinfo=0x7f090012;
-        public static final int noteLayout=0x7f090011;
+        public static final int newname=0x7f090016;
+        public static final int newsheetinfo=0x7f090015;
+        public static final int nextStaff=0x7f090012;
+        public static final int noteLayout=0x7f090014;
         public static final int notesToolBar=0x7f090008;
         public static final int playButton=0x7f090004;
-        public static final int save=0x7f090015;
+        public static final int previousStaff=0x7f090010;
+        public static final int save=0x7f090018;
+        public static final int staffSpinner=0x7f090011;
         public static final int staffclef=0x7f09000f;
         public static final int timeSignatureLayout=0x7f09000c;
         public static final int timesigbot=0x7f09000e;

@@ -22,7 +22,9 @@
       <string-array name = "currentMeasureArray">
           
       </string-array>
-      
+      <string-array name = "currentStaffArray">
+          
+      </string-array>
       <string-array name = "listofSheetsArray">
           
       </string-array>
