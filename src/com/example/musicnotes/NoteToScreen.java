@@ -1,7 +1,7 @@
 package com.example.musicnotes;
 
-import MusicSheet.Chord;
-import MusicSheet.Note;
+import android.text.GetChars;
+import MusicSheet.*;
 import MusicUtil.NoteName;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
@@ -9,161 +9,71 @@ import MusicUtil.NoteType;
 public class NoteToScreen {
 
 
-	public static Note findNote(Chord chordSel, int notePos)
+	public static Note findNote(EditorActivity myActivity, Chord chordSel, int notePos)
 	{
 		Note searchNote = null;
-		switch(notePos)
+		Staff currentStaff = myActivity.getCurrentStaff();
+		NoteName[] currentScale = currentStaff.getScale();
+		currentScale = convertScale(myActivity, currentScale);
+		
+		if(notePos <= 6)
 		{
-		case 0:
-			searchNote = chordSel.getNote(NoteName.B, 5);
-			break;
-		case 1:
-			searchNote = chordSel.getNote(NoteName.A, 5);
-			break;
-		case 2:
-			searchNote = chordSel.getNote(NoteName.G, 5);
-			break;
-		case 3:
-			searchNote = chordSel.getNote(NoteName.F, 5);
-			break;
-		case 4:
-			searchNote = chordSel.getNote(NoteName.E, 5);
-			break;
-		case 5:
-			searchNote = chordSel.getNote(NoteName.D, 5);
-			break;
-		case 6:
-			searchNote = chordSel.getNote(NoteName.C, 5);
-			break;
-		case 7:
-			searchNote = chordSel.getNote(NoteName.B, 4);
-			break;
-		case 8:
-			searchNote = chordSel.getNote(NoteName.A, 4);
-			break;
-		case 9:
-			searchNote = chordSel.getNote(NoteName.G, 4);
-			break;
-		case 10:
-			searchNote = chordSel.getNote(NoteName.F, 4);
-			break;
-		case 11:
-			searchNote = chordSel.getNote(NoteName.E, 4);
-			break;
-		case 12:
-			searchNote = chordSel.getNote(NoteName.D, 4);
-			break;
-		case 13:
-			searchNote = chordSel.getNote(NoteName.C, 4);
-			break;
-		case 14:
-			searchNote = chordSel.getNote(NoteName.B, 3);
-			break;
+			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave()+1);
+		}
+		else if(notePos == 14)
+		{
+			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave()-1);
+		}
+		else
+		{
+			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave());
 		}
 		return searchNote;
 	}
 
-	public static void addNote(Chord chordSel, int notePos, NoteTool noteTool) {
-		switch(notePos)
+	public static void addNote(EditorActivity myActivity, Chord chordSel, int notePos, NoteTool noteTool) {
+		
+		Staff currentStaff = myActivity.getCurrentStaff();
+		Signature currentSignature = myActivity.getCurrentSignature();
+		Measure currentMeasure = myActivity.getCurrentMeasure();
+		NoteName[] currentScale = currentStaff.getScale();
+		currentScale = convertScale(myActivity, currentScale);
+		
+		if(notePos <= 6)
 		{
-		case 0:
-			chordSel.addNote(NoteName.B, noteTool.getType(), 5);
-			break;
-		case 1:
-			chordSel.addNote(NoteName.A, noteTool.getType(), 5);
-			break;
-		case 2:
-			chordSel.addNote(NoteName.G, noteTool.getType(), 5);
-			break;
-		case 3:
-			chordSel.addNote(NoteName.F, noteTool.getType(), 5);
-			break;
-		case 4:
-			chordSel.addNote(NoteName.E, noteTool.getType(), 5);
-			break;
-		case 5:
-			chordSel.addNote(NoteName.D, noteTool.getType(), 5);
-			break;
-		case 6:
-			chordSel.addNote(NoteName.C, noteTool.getType(), 5);
-			break;
-		case 7:
-			chordSel.addNote(NoteName.B,noteTool.getType(), 4);
-			break;
-		case 8:
-			chordSel.addNote(NoteName.A, noteTool.getType(), 4);
-			break;
-		case 9:
-			chordSel.addNote(NoteName.G,noteTool.getType(), 4);
-			break;
-		case 10:
-			chordSel.addNote(NoteName.F, noteTool.getType(), 4);
-			break;
-		case 11:
-			chordSel.addNote(NoteName.E, noteTool.getType(), 4);
-			break;
-		case 12:
-			chordSel.addNote(NoteName.D, noteTool.getType(), 4);
-			break;
-		case 13:
-			chordSel.addNote(NoteName.C, noteTool.getType(), 4);
-			break;
-		case 14:
-			chordSel.addNote(NoteName.B, noteTool.getType(), 3);
-			break;
-		}	
-	}
-
-	public static void deleteNote(Chord chordSel, int notePos) {
-		switch(notePos)
+			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave()+1);
+		}
+		else if(notePos == 14)
 		{
-		case 0:
-			chordSel.deleteNote(NoteName.B, 5);
-			break;
-		case 1:
-			chordSel.deleteNote(NoteName.A, 5);
-			break;
-		case 2:
-			chordSel.deleteNote(NoteName.G, 5);
-			break;
-		case 3:
-			chordSel.deleteNote(NoteName.F, 5);
-			break;
-		case 4:
-			chordSel.deleteNote(NoteName.E, 5);
-			break;
-		case 5:
-			chordSel.deleteNote(NoteName.D, 5);
-			break;
-		case 6:
-			chordSel.deleteNote(NoteName.C, 5);
-			break;
-		case 7:
-			chordSel.deleteNote(NoteName.B, 4);
-			break;
-		case 8:
-			chordSel.deleteNote(NoteName.A, 4);
-			break;
-		case 9:
-			chordSel.deleteNote(NoteName.G, 4);
-			break;
-		case 10:
-			chordSel.deleteNote(NoteName.F, 4);
-			break;
-		case 11:
-			chordSel.deleteNote(NoteName.E, 4);
-			break;
-		case 12:
-			chordSel.deleteNote(NoteName.D, 4);
-			break;
-		case 13:
-			chordSel.deleteNote(NoteName.C, 4);
-			break;
-		case 14:
-			chordSel.deleteNote(NoteName.B, 3);
-			break;
+			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave()-1);
+		}
+		else
+		{
+			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave());
 		}
 	}
+
+	public static void deleteNote(EditorActivity myActivity, Chord chordSel, int notePos) {
+	
+		Staff currentStaff = myActivity.getCurrentStaff();
+		NoteName[] currentScale = currentStaff.getScale();
+		currentScale = convertScale(myActivity, currentScale);
+		
+		if(notePos <= 6)
+		{
+			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave()+1);
+		}
+		else if(notePos == 14)
+		{
+			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave()-1);
+		}
+		else
+		{
+			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave());
+		}
+	}
+	
+	
 	public static NoteTool notetoTool(Note myNote)
 	{
 		Note selectedNote = myNote;
@@ -194,5 +104,71 @@ public class NoteToScreen {
 			return null;
 		}
 		
+	}
+	
+	public static NoteName[] convertScale(EditorActivity myActivity, NoteName[] oldScale)
+	{
+		NoteName[] newScale = oldScale;
+		for(int i = 0; i < newScale.length; i++)
+		{
+			if(myActivity.getCurrentSignature().getSharp(newScale[i].ordinal()))
+			{
+				switch(newScale[i])
+				{
+				case A:
+					newScale[i] = NoteName.ASHARP;
+					break;
+				case B:
+					newScale[i] = NoteName.BSHARP;
+					break;
+				case C:
+					newScale[i] = NoteName.CSHARP;
+					break;
+				case D:
+					newScale[i] = NoteName.DSHARP;
+					break;
+				case E:
+					newScale[i] = NoteName.ESHARP;
+					break;
+				case F:
+					newScale[i] = NoteName.FSHARP;
+					break;
+				case G:
+					newScale[i] = NoteName.GSHARP;
+					break;
+					
+				}
+			}
+			else if(myActivity.getCurrentSignature().getFlat(newScale[i].ordinal()))
+			{
+				switch(newScale[i])
+				{
+				case A:
+					newScale[i] = NoteName.AFLAT;
+					break;
+				case B:
+					newScale[i] = NoteName.BFLAT;
+					break;
+				case C:
+					newScale[i] = NoteName.CFLAT;
+					break;
+				case D:
+					newScale[i] = NoteName.DFLAT;
+					break;
+				case E:
+					newScale[i] = NoteName.EFLAT;
+					break;
+				case F:
+					newScale[i] = NoteName.FFLAT;
+					break;
+				case G:
+					newScale[i] = NoteName.GFLAT;
+					break;
+					
+				}
+			}
+		}
+		
+		return newScale;
 	}
 }

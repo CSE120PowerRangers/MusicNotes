@@ -28,15 +28,18 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		LinearLayout fileSpinner = (LinearLayout) findViewById(R.id.listofSheets);
 		File musicNotesFile = new File(Environment.getExternalStorageDirectory().toString() + "/MusicNotes");
 		String[] fileArray = musicNotesFile.list();
-		for(int i = 0; i < fileArray.length; i++)
+		if(fileArray!=null)
 		{
-			Button myFile = new Button(this);
-			myFile.setText(fileArray[i]);
-			fileSpinner.addView(myFile);
+			for(int i = 0; i < fileArray.length; i++)
+			{
+				Button myFile = new Button(this);
+				myFile.setText(fileArray[i]);
+				fileSpinner.addView(myFile);
+			}
 		}
 	}
 
@@ -51,45 +54,45 @@ public class MainActivity extends Activity{
 	public void newSheet(View v)
 	{
 		showDialog();
-		
+
 	}
 
 
 	private void showDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	   	 LayoutInflater inflater = this.getLayoutInflater();
+		LayoutInflater inflater = this.getLayoutInflater();
 
-	   	    // Inflate and set the layout for the dialog
-	   	    // Pass null as the parent view because its going in the dialog layout
-	   	    builder.setView(inflater.inflate(R.layout.newsheet_layout, null))
-	   	    // Add action buttons
-	   	           .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-	   	               @Override
-	   	               public void onClick(DialogInterface dialog, int id) {
-	   	            	   Dialog d = (Dialog) dialog;
-	   	                   EditText textView = (EditText)d.findViewById(R.id.newname);
-	   	            	   sheetName = textView.getText().toString();
-	   	            	   sheetName = sheetName.trim();
-	   	            	   
-	   	            	   if(sheetName.isEmpty())
-	   	            	   {
-	   	            		   sheetName = "Default";
-	   	            	   }
-	   	            	   System.out.println(sheetName);
-	   	            	   startActivity();
-	   	               }
-	   	           })
-	   	           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	   	               public void onClick(DialogInterface dialog, int id) {
-	   	                   dialog.cancel();
-	   	               }
-	   	           });      
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		builder.setView(inflater.inflate(R.layout.newsheet_layout, null))
+		// Add action buttons
+		.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Dialog d = (Dialog) dialog;
+				EditText textView = (EditText)d.findViewById(R.id.newname);
+				sheetName = textView.getText().toString();
+				sheetName = sheetName.trim();
 
-	    	AlertDialog myAlert = builder.create();
-	    	myAlert.show();
+				if(sheetName.isEmpty())
+				{
+					sheetName = "Default";
+				}
+				System.out.println(sheetName);
+				startActivity();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
 	}
-	
+
 	private void startActivity()
 	{
 		Intent intent = new Intent(this, EditorActivity.class);

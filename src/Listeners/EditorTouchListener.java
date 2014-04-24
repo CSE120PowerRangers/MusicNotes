@@ -59,18 +59,18 @@ public class EditorTouchListener implements OnClickListener {
 		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
 		if(myActivity.getCurrentTool().getType() == NoteType.NOTANOTE)
 		{
-			NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+			NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
 			noteView.setImageResource(0);
 		}
 		else
 		{
 			noteView.setImageResource(myActivity.getCurrentTool().getID());
 			noteView.setScaleType(ScaleType.CENTER_INSIDE);
-			if(NoteToScreen.findNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+			if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
 			{
-				NoteToScreen.deleteNote(myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+				NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
 			}
-			NoteToScreen.addNote(chordSel, notePos, myActivity.getCurrentTool());
+			NoteToScreen.addNote(myActivity, chordSel, notePos, myActivity.getCurrentTool());
 		}
 	}
 

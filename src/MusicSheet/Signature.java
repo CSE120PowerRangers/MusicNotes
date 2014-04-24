@@ -18,6 +18,7 @@ public class Signature {
 	private EnumKeySignature keySignature;
 	private int[] flats;
 	private int[] sharps;
+	private NoteName[] notes;
 	private ArrayList<Measure> measures;
 
 	/**
@@ -28,8 +29,8 @@ public class Signature {
 		tempo = 120;
 		timeSignature = EnumTimeSignature.FOUR_FOUR;
 		keySignature = EnumKeySignature.C_MAJOR;
-		flats = new int[8];
-		sharps = new int[8];
+		flats = new int[21];
+		sharps = new int[21];
 		
 		/*
 		 * Every signature has a different time signature, so the measures inside the signature
@@ -208,6 +209,34 @@ public class Signature {
 	}
 
 	/**
+	 * Checks to see if note should be a sharp
+	 * @param noteOrdinal Call NoteName.(A-E).ordinal()
+	 * @return
+	 */
+	public boolean getSharp(int noteOrdinal)
+	{
+		if(sharps[noteOrdinal] == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks to see if note should be a sharp
+	 * @param noteOrdinal Call NoteName.(A-E).ordinal()
+	 * @return
+	 */
+	public boolean getFlat(int noteOrdinal)
+	{
+		if(flats[noteOrdinal] == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Sets the time signature for this signature
 	 * @param newTime is a TimeSignature enum value
 	 */
@@ -269,4 +298,5 @@ public class Signature {
 	public int getSize() {
 		return measures.size();
 	}
+
 }

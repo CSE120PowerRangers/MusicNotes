@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import File.FileMaker;
 import Listeners.*;
 import MusicSheet.*;
+import MusicUtil.EnumKeySignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
 import Player.Melody;
@@ -73,6 +74,7 @@ public class EditorActivity extends Activity{
 		Intent mainIntent = getIntent();
 		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
+		sheet.getStaff(currentStaff).getSignature(currentSignature).setKeySignature(EnumKeySignature.E_MAJOR);
 		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 
 		// Calculate Screen Size
@@ -181,7 +183,7 @@ public class EditorActivity extends Activity{
 				//Draw Notes according to sheet
 				//selNote.setScaleType(ScaleType.FIT_XY);
 				if(c != null) {
-					Note searchNote = NoteToScreen.findNote(c, notes);
+					Note searchNote = NoteToScreen.findNote(this, c, notes);
 
 					NoteTool searchNoteTool = NoteToScreen.notetoTool(searchNote);
 					if(searchNoteTool != null)
