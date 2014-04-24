@@ -70,6 +70,13 @@ public class MainActivity extends Activity{
 	   	            	   Dialog d = (Dialog) dialog;
 	   	                   EditText textView = (EditText)d.findViewById(R.id.newname);
 	   	            	   sheetName = textView.getText().toString();
+	   	            	   sheetName = sheetName.trim();
+	   	            	   
+	   	            	   if(sheetName.isEmpty())
+	   	            	   {
+	   	            		   sheetName = "Default";
+	   	            	   }
+	   	            	   System.out.println(sheetName);
 	   	            	   startActivity();
 	   	               }
 	   	           })
