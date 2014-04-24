@@ -206,7 +206,7 @@ public class EditorActivity extends Activity{
 		Point size = new Point();
 		display.getSize(size);
 		screenWidth = size.x;
-		screenHeight = (int)(size.y * 0.90);
+		screenHeight = (int)(size.y * 0.85);
 
 		// Calculate Measure Size
 		measureWidth = (int)(screenWidth*(1.0f-percentageSide));
@@ -248,7 +248,6 @@ public class EditorActivity extends Activity{
 		measureParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
 		measureLayout.setOrientation(LinearLayout.HORIZONTAL);
 		measureLayout.setLayoutParams(measureParams);
-
 		for(int chords = 0; chords < numChords; chords++)
 		{
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
