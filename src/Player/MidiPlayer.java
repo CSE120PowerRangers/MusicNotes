@@ -17,27 +17,29 @@ import android.content.*;
  */
 public class MidiPlayer {
 	private MediaPlayer mPlayer;
-	
+
 	public MidiPlayer(){
 		mPlayer = null;
 	}
-	
+
 	public void initSheet(Sheet s, Context context) {
 		// Create internal file for sheet
 		FileMaker.writeSheetToMidiInternal(s, context);
+
 		try{
 			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/" + s.getFileName());
 			//File path = new File(stringPath);
 			//mPlayer = new MediaPlayer();
 			//mPlayer.setDataSource(context, filePath);
 			//mPlayer.prepareAsync();
-			
+
 			System.out.println(filePath);
 			mPlayer = MediaPlayer.create(context, filePath);
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
 	}
+
 
 
 
@@ -69,10 +71,10 @@ public class MidiPlayer {
 		if(this.isPlaying()) {
 			mPlayer.stop();
 		}
-		
+
 		mPlayer.reset();
 	}
-	
+
 	public void initSampleTest(Context context) {
 		// Create the test file
 		// TODO Make sure file isn't already there

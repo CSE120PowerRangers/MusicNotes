@@ -50,7 +50,7 @@ public class FileMaker {
 			int numerator = EnumTimeSignature.getNumerator(sheetTS);
 			int denominator = EnumTimeSignature.getDenom(sheetTS);
 			int meter = midiClocks / denominator; // Midi clocks per metronome
-													// click
+			// click
 
 			ts.setTimeSignature(numerator, denominator, meter,
 					TimeSignature.DEFAULT_DIVISION);
@@ -195,7 +195,7 @@ public class FileMaker {
 	public static Sheet midiToSheet(MidiFile midi) {
 
 		int numStaffs = midi.getTrackCount() - 1; // 1 staff per track - 1 for
-													// the tempo mapping track
+		// the tempo mapping track
 
 		// Signature information
 		EnumTimeSignature timeSig = EnumTimeSignature.FOUR_FOUR;
@@ -214,7 +214,7 @@ public class FileMaker {
 			if (currentEvent.getClass() == TimeSignature.class) {
 				num = ((TimeSignature) currentEvent).getNumerator();
 				den = ((TimeSignature) currentEvent).getDenominatorValue();
-		        den = (int) Math.pow(2, den);
+				den = (int) Math.pow(2, den);
 
 				timeSig = EnumTimeSignature.getTimeSig(num, den);
 			}
@@ -243,7 +243,7 @@ public class FileMaker {
 		for (int i = 0; i < numStaffs; i++) {
 			// Set the current track events
 			currentEvents = tracks.get(i+1).getEvents();
-			
+
 			it = currentEvents.iterator();
 			currentEvent = it.next();
 
@@ -254,14 +254,14 @@ public class FileMaker {
 			 */
 			long lastTickValue = 0;
 			Chord currentChord = new Chord();
-			
+
 			while (it.hasNext()) {
 				if (currentEvent.getClass() == NoteOn.class) {
 					// Construct the note based on event data
 					NoteOn noteStart = (NoteOn) currentEvent;
 					// Every NoteOn event comes in pairs -- One to start, one to end
 					NoteOn noteEnd = (NoteOn) it.next();
-					
+
 					Note n = getNoteFromEvents(noteStart, noteEnd);
 
 					// Determine if the note was valid
@@ -274,7 +274,7 @@ public class FileMaker {
 							// Determine the position of the old chord
 							int staffPos = i;
 							int signaturePos = 0; // Determine this crap later.
-													// Lazy.
+							// Lazy.
 							int measurePos = findMeasurePos(sheet, staffPos,
 									signaturePos, lastTickValue);
 							int chordPos = findChordPos(sheet, staffPos,
@@ -342,7 +342,7 @@ public class FileMaker {
 		Sheet newSheet = new Sheet(sheet);
 
 		newSheet.getStaff(staffPos).getSignature(signaturePos)
-				.getMeasure(measurePos).addChord(chordPos, currentChord);
+		.getMeasure(measurePos).addChord(chordPos, currentChord);
 
 		return newSheet;
 	}
@@ -356,7 +356,7 @@ public class FileMaker {
 		if (noteStart.getChannel() == noteEnd.getChannel()
 				&& noteStart.getNoteValue() == noteEnd.getNoteValue()
 				&& noteStart.getVelocity() != 0 && noteEnd.getVelocity() == 0) {
-			
+
 			// Same note, determine pitch and duration
 			NoteName name = getNoteNameFromMidiValue(noteStart.getNoteValue());
 			NoteType duration = getNoteTypeFromMidiDelta(noteStart, noteEnd);
@@ -454,20 +454,10 @@ public class FileMaker {
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+
+
 	}
 
-	public static void writeSheetToMidi(Sheet s, Context c, String filename) {
-		MidiFile midi = sheetToMidi(s);
-
-		String path = c.getFilesDir().toString();
-
-		File output = new File(path, filename);
-		try {
-			midi.writeToFile(output);
-		} catch (IOException e) {
-			System.err.println(e);
-		}
-	}
 
 	public static Sheet loadMidi(Context context) {
 		String stringPath = context.getFilesDir().getAbsolutePath() + "/"
