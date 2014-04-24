@@ -2,15 +2,10 @@ package Listeners;
 
 import com.example.musicnotes.EditorActivity;
 import com.example.musicnotes.NoteToScreen;
-import com.example.musicnotes.R;
 
-import MusicSheet.Note;
-import MusicUtil.NoteTool;
-import MusicUtil.NoteType;
 import android.content.ClipData;
 import android.content.Context;
 import android.os.Vibrator;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnLongClickListener;

@@ -2,20 +2,12 @@ package Listeners;
 
 import com.example.musicnotes.EditorActivity;
 import com.example.musicnotes.NoteToScreen;
-import com.example.musicnotes.R;
 
 import MusicSheet.Chord;
-import MusicSheet.Sheet;
-import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
-import android.content.ClipData;
 import android.content.Context;
-import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ImageView.ScaleType;

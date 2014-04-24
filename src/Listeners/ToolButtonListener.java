@@ -2,8 +2,6 @@ package Listeners;
 import com.example.musicnotes.EditorActivity;
 
 import MusicUtil.NoteTool;
-import MusicUtil.NoteType;
-import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 

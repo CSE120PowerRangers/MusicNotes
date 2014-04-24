@@ -14,7 +14,7 @@ public class NoteToScreen {
 		Staff currentStaff = myActivity.getCurrentStaff();
 		NoteName[] currentScale = currentStaff.getScale();
 		currentScale = convertScale(myActivity, currentScale);
-		
+
 		if(notePos <= 6)
 		{
 			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave()+1);
@@ -31,13 +31,11 @@ public class NoteToScreen {
 	}
 
 	public static void addNote(EditorActivity myActivity, Chord chordSel, int notePos, NoteTool noteTool) {
-		
+
 		Staff currentStaff = myActivity.getCurrentStaff();
-		Signature currentSignature = myActivity.getCurrentSignature();
-		Measure currentMeasure = myActivity.getCurrentMeasure();
 		NoteName[] currentScale = currentStaff.getScale();
 		currentScale = convertScale(myActivity, currentScale);
-		
+
 		if(notePos <= 6)
 		{
 			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave()+1);
@@ -53,11 +51,11 @@ public class NoteToScreen {
 	}
 
 	public static void deleteNote(EditorActivity myActivity, Chord chordSel, int notePos) {
-	
+
 		Staff currentStaff = myActivity.getCurrentStaff();
 		NoteName[] currentScale = currentStaff.getScale();
 		currentScale = convertScale(myActivity, currentScale);
-		
+
 		if(notePos <= 6)
 		{
 			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave()+1);
@@ -71,8 +69,8 @@ public class NoteToScreen {
 			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave());
 		}
 	}
-	
-	
+
+
 	public static NoteTool notetoTool(Note myNote)
 	{
 		Note selectedNote = myNote;
@@ -95,6 +93,9 @@ public class NoteToScreen {
 			case WHOLE_NOTE:
 				resourceID = R.drawable.wholenote;
 				break;
+			default:
+				resourceID = R.drawable.eigthnote;
+				break;
 			}
 			return new NoteTool(myNote.getType(), resourceID);
 		}
@@ -102,9 +103,9 @@ public class NoteToScreen {
 		{
 			return null;
 		}
-		
+
 	}
-	
+
 	public static NoteName[] convertScale(EditorActivity myActivity, NoteName[] oldScale)
 	{
 		NoteName[] newScale = oldScale;
@@ -135,7 +136,9 @@ public class NoteToScreen {
 				case G:
 					newScale[i] = NoteName.GSHARP;
 					break;
-					
+				default:
+					newScale[i] = null;
+					break;
 				}
 			}
 			else if(myActivity.getCurrentSignature().getFlat(newScale[i].ordinal()))
@@ -163,11 +166,13 @@ public class NoteToScreen {
 				case G:
 					newScale[i] = NoteName.GFLAT;
 					break;
-					
+				default:
+					newScale[i] = null;
+					break;
 				}
 			}
 		}
-		
+
 		return newScale;
 	}
 }
