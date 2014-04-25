@@ -11,7 +11,6 @@ import java.util.TreeSet;
 import MusicSheet.*;
 import MusicUtil.*;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Environment;
 
 import com.leff.midi.*;
@@ -41,8 +40,7 @@ public class FileMaker {
 			// Start with time events
 			// Time Signature
 			TimeSignature ts = new TimeSignature();
-			EnumTimeSignature sheetTS = s.get(0).get(0)
-					.timeSignature();
+			EnumTimeSignature sheetTS = s.get(0).timeSignature();
 
 			// MIDI Clocks per whole note (constant for now I think)
 			// TODO Verify the relationship is for whole note not measure
@@ -57,7 +55,7 @@ public class FileMaker {
 
 			// Tempo
 			Tempo t = new Tempo();
-			int sheetT = s.get(0).get(0).tempo();
+			int sheetT = s.get(0).tempo();
 
 			t.setBpm(sheetT);
 
@@ -78,13 +76,13 @@ public class FileMaker {
 	}
 
 	private static ArrayList<MidiTrack> createNoteTracks(Sheet s) {
-		int numStaffs = s.getStaffSize();
+		int numSignatures = s.size();
 
 		ArrayList<MidiTrack> noteTracks = new ArrayList<MidiTrack>();
 		MidiTrack newTrack;
 
-		// Create 1 track per staff
-		for (int i = 0; i < numStaffs; i++) {
+		// Create 1 track per signature
+		for (int i = 0; i < numSignatures; i++) {
 			newTrack = createSingleTrack(s, i);
 			// On each track iterate through the all signatures and create
 			// the tracks
@@ -96,12 +94,12 @@ public class FileMaker {
 	}
 
 	private static MidiTrack createSingleTrack(Sheet s, int staffIndex) {
-		int numSignatures = s.get(staffIndex).size();
+		int numStaffs = s.get(staffIndex).size();
 
 		MidiTrack noteTrack = new MidiTrack();
 
-		// For all signatures that belong to the track
-		for (int i = 0; i < numSignatures; i++) {
+		// For all staffs that belong to the track
+		for (int i = 0; i < numStaffs; i++) {
 			// Insert note events to the track
 			noteTrack = insertMeasureEvents(noteTrack, s, staffIndex, i);
 		}
@@ -111,8 +109,7 @@ public class FileMaker {
 
 	private static MidiTrack insertMeasureEvents(MidiTrack track, Sheet s,
 			int staffIndex, int signatureIndex) {
-		int numMeasures = s.get(staffIndex).get(signatureIndex)
-				.size();
+		int numMeasures = s.get(staffIndex).get(signatureIndex).size();
 
 		// For all measures in the signature
 		for (int i = 0; i < numMeasures; i++) {
@@ -164,8 +161,7 @@ public class FileMaker {
 
 					// TODO Will probably break when using time signatures that
 					// don't have even beats per quarter note
-					t = s.get(staffIndex).get(signatureIndex)
-							.timeSignature();
+					t = s.get(staffIndex).timeSignature();
 
 					num = EnumTimeSignature.getNumerator(t);
 					denom = EnumTimeSignature.getDenom(t);
@@ -234,9 +230,9 @@ public class FileMaker {
 
 		// Insert signature events.
 		for (int i = 0; i < numStaffs; i++) {
-			sheet.get(i).get(0).setKeySignature(keySig);
-			sheet.get(i).get(0).setTempo(tempo);
-			sheet.get(i).get(0).setTimeSignature(timeSig);
+			sheet.get(i).setKeySignature(keySig);
+			sheet.get(i).setTempo(tempo);
+			sheet.get(i).setTimeSignature(timeSig);
 		}
 
 		// Start deciphering the note on events
@@ -265,10 +261,10 @@ public class FileMaker {
 					Note n = getNoteFromEvents(noteStart, noteEnd);
 
 					// Determine if the note was valid
-					if (n.getType() != NoteType.NOTANOTE) {
+					if (n.type() != NoteType.NOTANOTE) {
 						// Determine if this belongs in a new chord or not
 						if (currentEvent.getTick() == lastTickValue) {
-							currentChord.add(n.name(), n.getType(),
+							currentChord.add(n.name(), n.type(),
 									n.octave());
 						} else {
 							// Determine the position of the old chord
@@ -287,7 +283,7 @@ public class FileMaker {
 
 							// Create a new chord, and insert the note
 							currentChord = new Chord();
-							currentChord.add(n.name(), n.getType(),
+							currentChord.add(n.name(), n.type(),
 									n.octave());
 
 							// Update the new tick value
@@ -308,7 +304,7 @@ public class FileMaker {
 		EnumTimeSignature t;
 		int num, den, QNPerMeasure, ticksPerMeasure;
 
-		t = s.get(staffPos).get(signaturePos).timeSignature();
+		t = s.get(staffPos).timeSignature();
 		num = EnumTimeSignature.getNumerator(t);
 		den = EnumTimeSignature.getDenom(t);
 		QNPerMeasure = (den / 4) * num;
@@ -323,7 +319,7 @@ public class FileMaker {
 		int num, den, QNPerMeasure, ticksPerMeasure, ticksPerDiv, measurePos;
 		long tickDiff;
 
-		t = s.get(staffPos).get(signaturePos).timeSignature();
+		t = s.get(staffPos).timeSignature();
 
 		num = EnumTimeSignature.getNumerator(t);
 		den = EnumTimeSignature.getDenom(t);
