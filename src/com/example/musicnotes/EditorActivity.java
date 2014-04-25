@@ -206,7 +206,6 @@ public class EditorActivity extends Activity{
 
 	public void initializeView()
 	{
-
 		//Top Panel
 		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
 		topToolbar.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,(int)(screenHeight*percentageTop)));
@@ -284,7 +283,7 @@ public class EditorActivity extends Activity{
 		context = getApplicationContext();
 
 
-		if(context != null && sheet != null) {
+		if(context != null && sheet != null && !player.isPlaying()) {
 			player.initSheet(sheet, this);
 			player.play();
 		}
