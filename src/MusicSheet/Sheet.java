@@ -37,7 +37,7 @@ public class Sheet {
 	 * Adds a Signature to the sheet
 	 * @param newSignature
 	 */
-	public void addSignature(Signature newSignature) {
+	public void add(Signature newSignature) {
 		signatures.add(newSignature);
 	}
 	
@@ -45,7 +45,7 @@ public class Sheet {
 	 * Deletes a given Signature by index lookup
 	 * @param index
 	 */
-	public void deleteSignature(int index) {
+	public void delete(int index) {
 		signatures.remove(index);
 	}
 	
@@ -53,7 +53,7 @@ public class Sheet {
 	 * Deletes a given Signature by object lookup
 	 * @param toDelete
 	 */
-	public void deleteSignature(Signature toDelete) {
+	public void delete(Signature toDelete) {
 		signatures.remove(toDelete);
 	}
 	
@@ -69,7 +69,7 @@ public class Sheet {
 	 * Get the name of a sheet
 	 * @return
 	 */
-	public String getName() { 
+	public String name() { 
 		return name;
 	}
 	
@@ -78,7 +78,7 @@ public class Sheet {
 	 * @param index
 	 * @return
 	 */
-	public Signature getSignature(int index) {
+	public Signature get(int index) {
 		return signatures.get(index);
 	}
 	
@@ -86,7 +86,7 @@ public class Sheet {
 	 * Gets the number of Signatures in the sheet
 	 * @return 
 	 */
-	public int getSignatureSize() {
+	public int size() {
 		return signatures.size();
 	}
 

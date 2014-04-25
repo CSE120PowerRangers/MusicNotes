@@ -50,8 +50,8 @@ public class EditorDragListener implements OnDragListener {
 			}
 		}
 		// Get the selected chord and add a new chord
-		myActivity.getCurrentMeasure().addChord(chordsPos);
-		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
+		myActivity.getCurrentMeasure().add(chordsPos);
+		Chord chordSel = myActivity.getCurrentMeasure().get(chordsPos);
 
 		heldTool = myActivity.getHeldTool();
 		if(heldTool!= null)
@@ -68,9 +68,9 @@ public class EditorDragListener implements OnDragListener {
 				return true;
 
 			case DragEvent.ACTION_DROP:
-				if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+				if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos) != null)
 				{
-					NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+					NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos);
 				}
 				noteView.setImageResource(heldTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);

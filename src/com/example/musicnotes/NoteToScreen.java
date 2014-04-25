@@ -12,20 +12,20 @@ public class NoteToScreen {
 	{
 		Note searchNote = null;
 		Staff currentStaff = myActivity.getCurrentStaff();
-		NoteName[] currentScale = currentStaff.getScale();
+		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
 
 		if(notePos <= 6)
 		{
-			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave()+1);
+			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()+1);
 		}
 		else if(notePos == 14)
 		{
-			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave()-1);
+			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()-1);
 		}
 		else
 		{
-			searchNote = chordSel.getNote(currentScale[notePos], currentStaff.getOctave());
+			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave());
 		}
 		return searchNote;
 	}
@@ -33,40 +33,40 @@ public class NoteToScreen {
 	public static void addNote(EditorActivity myActivity, Chord chordSel, int notePos, NoteTool noteTool) {
 
 		Staff currentStaff = myActivity.getCurrentStaff();
-		NoteName[] currentScale = currentStaff.getScale();
+		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
 
 		if(notePos <= 6)
 		{
-			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave()+1);
+			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
 		}
 		else if(notePos == 14)
 		{
-			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave()-1);
+			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
 		}
 		else
 		{
-			chordSel.addNote(currentScale[notePos], noteTool.getType(), currentStaff.getOctave());
+			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
 		}
 	}
 
 	public static void deleteNote(EditorActivity myActivity, Chord chordSel, int notePos) {
 
 		Staff currentStaff = myActivity.getCurrentStaff();
-		NoteName[] currentScale = currentStaff.getScale();
+		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
 
 		if(notePos <= 6)
 		{
-			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave()+1);
+			chordSel.delete(currentScale[notePos], currentStaff.octave()+1);
 		}
 		else if(notePos == 14)
 		{
-			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave()-1);
+			chordSel.delete(currentScale[notePos], currentStaff.octave()-1);
 		}
 		else
 		{
-			chordSel.deleteNote(currentScale[notePos], currentStaff.getOctave());
+			chordSel.delete(currentScale[notePos], currentStaff.octave());
 		}
 	}
 
@@ -77,7 +77,7 @@ public class NoteToScreen {
 		int resourceID = 0;
 		if(selectedNote != null)
 		{
-			NoteType selectedType = selectedNote.getType();
+			NoteType selectedType = selectedNote.type();
 
 			switch(selectedType)
 			{
@@ -97,7 +97,7 @@ public class NoteToScreen {
 				resourceID = R.drawable.eigthnote;
 				break;
 			}
-			return new NoteTool(myNote.getType(), resourceID);
+			return new NoteTool(myNote.type(), resourceID);
 		}
 		else
 		{

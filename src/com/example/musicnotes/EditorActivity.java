@@ -9,7 +9,7 @@ import MusicUtil.EnumClef;
 import MusicUtil.EnumKeySignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
-import Player.Melody;
+//import Player.Melody;
 import Player.MidiPlayer;
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +28,7 @@ public class EditorActivity extends Activity{
 
 	// Activity Objects
 	private final MidiPlayer player = new MidiPlayer();
-	private final Melody melody = new Melody();
+	//private final Melody melody = new Melody();
 	public Context context;
 	int screenWidth, screenHeight;
 	float percentageTop, percentageSide;
@@ -70,7 +70,7 @@ public class EditorActivity extends Activity{
 		Intent mainIntent = getIntent();
 		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
-		sheet.getStaff(currentStaff).getSignature(currentSignature).setKeySignature(EnumKeySignature.EFLAT_MAJOR);
+		sheet.get(currentSignature).setKeySignature(EnumKeySignature.EFLAT_MAJOR);
 		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
 
 		// Calculate Screen Size
@@ -162,7 +162,7 @@ public class EditorActivity extends Activity{
 
 			// Get chord layout and chord in sheet
 			selChord = (LinearLayout)noteLayout.getChildAt(chords);
-			c = currentMeasure.getChord(chords);
+			c = currentMeasure.get(chords);
 
 			for(int notes = 0; notes < numNotes; notes++) {
 				//Find Note ImageView to set
@@ -312,8 +312,8 @@ public class EditorActivity extends Activity{
 
 	public void nextMeasure(View v){
 		//**** If null, create a new measure****
-		if(currentMeasure == sheet.getStaff(currentStaff).getSignature(currentSignature).getSize() - 1) {
-			sheet.getStaff(currentStaff).getSignature(currentSignature).addMeasure(new Measure());
+		if(currentMeasure == sheet.get(currentSignature).get(currentStaff).size() - 1) {
+			sheet.get(currentSignature).get(currentStaff).add(new Measure());
 			currentMeasure++;
 			updateMeasureSpinner();
 
@@ -337,9 +337,9 @@ public class EditorActivity extends Activity{
 	
 	public void nextStaff(View v)
 	{
-		if(currentStaff == sheet.getStaffSize()-1)
+		if(currentStaff == sheet.get(currentSignature).size()-1)
 		{
-			sheet.addStaff(new Staff());
+			sheet.get(currentSignature).add(new Staff());
 			currentStaff++;
 			updateStaffSpinner();
 		}
@@ -392,8 +392,8 @@ public class EditorActivity extends Activity{
 		//Initialize Measure Spinner
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 
-		measureArray = new String[sheet.getStaff(currentStaff).getSignature(currentSignature).getSize()];
-		for(int i = 0; i < sheet.getStaff(currentStaff).getSignature(currentSignature).getSize(); i++) {
+		measureArray = new String[sheet.get(currentSignature).get(currentStaff).size()];
+		for(int i = 0; i < sheet.get(currentSignature).get(currentStaff).size(); i++) {
 			measureArray[i] = "" +(i+1);
 		}
 		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
@@ -405,8 +405,8 @@ public class EditorActivity extends Activity{
 	public void updateStaffSpinner()
 	{
 		staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
-		staffArray = new String[sheet.getStaffSize()];
-		for(int i = 0; i < sheet.getStaffSize(); i++)
+		staffArray = new String[sheet.get(currentSignature).size()];
+		for(int i = 0; i < sheet.get(currentSignature).size(); i++)
 		{
 			staffArray[i] = "" + (i+1);
 		}
@@ -421,7 +421,7 @@ public class EditorActivity extends Activity{
 	}
 	public Staff getCurrentStaff()
 	{
-		return sheet.getStaff(currentStaff);
+		return sheet.get(currentSignature).get(currentStaff);
 	}
 	public void setCurrentStaff(int newStaff)
 	{
@@ -429,11 +429,11 @@ public class EditorActivity extends Activity{
 	}
 	public Signature getCurrentSignature()
 	{
-		return getCurrentStaff().getSignature(currentSignature);
+		return sheet.get(currentSignature);
 	}
 	public Measure getCurrentMeasure()
 	{
-		return getCurrentSignature().getMeasure(currentMeasure);
+		return getCurrentStaff().get(currentMeasure);
 	}
 	public void setCurrentMeasure(int measure)
 	{
@@ -442,19 +442,19 @@ public class EditorActivity extends Activity{
 	public void changeStaff(View v)
 	{
 		ImageView touchedStaff = (ImageView)findViewById(R.id.staffclef);
-		switch(sheet.getStaff(currentStaff).getClef())
+		switch(sheet.get(currentSignature).get(currentStaff).clef())
 		{
 		case TREBLE:
 			touchedStaff.setImageResource(R.drawable.tenor);
-			sheet.getStaff(currentStaff).setClef(EnumClef.TENOR);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TENOR);
 			break;
 		case TENOR:
 			touchedStaff.setImageResource(R.drawable.bass);
-			sheet.getStaff(currentStaff).setClef(EnumClef.BASS);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.BASS);
 			break;
 		case BASS:
 			touchedStaff.setImageResource(R.drawable.treble);
-			sheet.getStaff(currentStaff).setClef(EnumClef.TREBLE);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TREBLE);
 			break;
 		}
 	}

@@ -45,14 +45,14 @@ public class Signature {
 		numerator = EnumTimeSignature.getNumerator(timeSignature);
 		denominator = EnumTimeSignature.getDenom(timeSignature);
 
-		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.divisionType()) {
 			//Not allowed. Reset to default time signature 4/4
 			timeSignature = EnumTimeSignature.FOUR_FOUR;
 			numerator = 4;
 			denominator = 4;
 		}
 
-		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
 		Measure.setDivisionNumber(numDivs);
 
 		staffs = new ArrayList<Staff>();
@@ -77,14 +77,14 @@ public class Signature {
 		numerator = EnumTimeSignature.getNumerator(timeSignature);
 		denominator = EnumTimeSignature.getDenom(timeSignature);
 
-		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.divisionType()) {
 			//Not allowed. Reset to default time signature 4/4
 			timeSignature = EnumTimeSignature.FOUR_FOUR;
 			numerator = 4;
 			denominator = 4;
 		}
 		
-		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
 		Measure.setDivisionNumber(numDivs);
 		
 		staffs = new ArrayList<Staff>();
@@ -109,7 +109,7 @@ public class Signature {
 	 * Adds a staff to the signature
 	 * @param newSignature
 	 */
-	public void addStaff(Staff newStaff) {
+	public void add(Staff newStaff) {
 		staffs.add(newStaff);
 	}
 	
@@ -117,7 +117,7 @@ public class Signature {
 	 * Deletes the given staff from the list
 	 * @param oldStaff
 	 */
-	public void deleteStaff(Staff oldStaff) {
+	public void delete(Staff oldStaff) {
 		for(int i = 0; i < staffs.size(); i++) {
 			if(staffs.get(i).equals(oldStaff)) {
 				staffs.remove(i);
@@ -131,7 +131,7 @@ public class Signature {
 	 * @param sigNumber
 	 * @return
 	 */
-	public Staff getStaff(int sigNumber) {
+	public Staff get(int sigNumber) {
 		if(sigNumber < 0 || sigNumber > staffs.size()) {
 			return null;
 		} else {
@@ -143,7 +143,7 @@ public class Signature {
 	 * Returns the number of staffs in the staff
 	 * @return
 	 */
-	public int getSize() {
+	public int size() {
 		return staffs.size();
 	}
 
@@ -266,7 +266,7 @@ public class Signature {
 	 * Gets the key signature for this signature
 	 * @return keySignature is the key signature enum
 	 */
-	public EnumKeySignature getKeySignature() {
+	public EnumKeySignature keySignature() {
 		return keySignature;
 	}
 
@@ -274,7 +274,7 @@ public class Signature {
 	 * Gets the time signature for this signature
 	 * @return timeSignature is the time signature enum
 	 */
-	public EnumTimeSignature getTimeSignature() {
+	public EnumTimeSignature timeSignature() {
 		return timeSignature;
 	}
 
@@ -282,7 +282,7 @@ public class Signature {
 	 * Gets the tempo for this signature
 	 * @return tempo is the beats per minute (bpm) of this signature
 	 */
-	public int getTempo() {
+	public int tempo() {
 		return tempo;
 	}
 }

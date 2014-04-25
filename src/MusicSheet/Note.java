@@ -75,7 +75,7 @@ public class Note {
 	 * Retrieves the name of the note
 	 * @return name
 	 */
-	public NoteName getName() {
+	public NoteName name() {
 		return name;
 	}
 	
@@ -83,7 +83,7 @@ public class Note {
 	 * Retrieves the duration/type of the note
 	 * @return type
 	 */
-	public NoteType getType() {
+	public NoteType type() {
 		return type;
 	}
 	
@@ -91,7 +91,7 @@ public class Note {
 	 * Retrieves the octave of the note
 	 * @return octave
 	 */
-	public int getOctave() {
+	public int octave() {
 		return octave;
 	}
 	
@@ -194,7 +194,7 @@ public class Note {
 		}
 		
 		// Examine note name and octave
-		return (this.getName() == ((Note) obj).getName() && this.getOctave() == ((Note) obj).getOctave());
+		return (this.name() == ((Note) obj).name() && this.octave() == ((Note) obj).octave());
 	}
 
 	public int getMidiPitch() {
@@ -276,7 +276,7 @@ public class Note {
 		int modifier = 0;
 		
 		// Duration should be calculated as PPQ * (modifier / 8)
-		switch(this.getType()){
+		switch(this.type()){
 		case EIGHTH_NOTE:
 			modifier = 4;
 			break;

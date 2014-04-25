@@ -78,7 +78,7 @@ public class Staff {
 	 * Adds a given measure to the end of the list
 	 * @param newMeasure
 	 */
-	public void addMeasure(Measure newMeasure) {
+	public void add(Measure newMeasure) {
 		measures.add(newMeasure);
 	}
 
@@ -87,7 +87,7 @@ public class Staff {
 	 * @param index
 	 * @param newMeasure
 	 */
-	public void addMeasure(int index, Measure newMeasure) {
+	public void add(int index, Measure newMeasure) {
 		if(index >= 0 && index < measures.size()) {
 			//Force creation of new copy of measure
 			newMeasure = new Measure(newMeasure);
@@ -100,7 +100,7 @@ public class Staff {
 	 * @param index
 	 * @return
 	 */
-	public Measure getMeasure(int index) {
+	public Measure get(int index) {
 		if(index >= 0 && index < measures.size()) {
 			return measures.get(index);
 		} else {
@@ -112,7 +112,7 @@ public class Staff {
 	 * Deletes a given measure from the list
 	 * @param oldMeasure
 	 */
-	public void deleteMeasure(Measure oldMeasure) {
+	public void delete(Measure oldMeasure) {
 		for(int i = 0; i < measures.size(); i++) {
 			if(measures.get(i).equals(oldMeasure)) {
 				measures.remove(i);
@@ -125,7 +125,7 @@ public class Staff {
 	 * Returns the number of measures in the staff
 	 * @return
 	 */
-	public int getSize() {
+	public int size() {
 		return measures.size();
 	}
 	
@@ -133,14 +133,14 @@ public class Staff {
 	 * Returns the clef of the staff
 	 * @return
 	 */
-	public EnumClef getClef() {
+	public EnumClef clef() {
 		return clef;
 	}
 	
 	/**
 	 * Returns the octave
 	 */
-	public int getOctave()
+	public int octave()
 	{
 		return octave;
 	}
@@ -164,7 +164,7 @@ public class Staff {
 		}
 	}
 	
-	public NoteName[] getScale()
+	public NoteName[] scale()
 	{
 		return notes;
 	}

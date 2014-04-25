@@ -1,13 +1,5 @@
 package MusicSheet;
 
-/**TODO:
- * May or may not be a good idea? Revisit
- * Write static methods to allow signature to configure the measure properties
- * i.e. allow signature to change numDivisions or divisionType according to the time signature stuff
- * @author robert
- *
- */
-
 public class Measure {
 	private static int numDivisions = 8; //Default number of eighth notes in a measure in a 4/4 time signature. Subject to change
 	private static int divisionType = 8; //Minimum supported division type. Currently only supporting down to eighth notes.
@@ -40,7 +32,7 @@ public class Measure {
 	 * Adds a chord to the measure at the specified division. 
 	 * @param startPoint falls between 0 and numDivisions, zero inclusive.
 	 */
-	public void addChord(int startPoint) {
+	public void add(int startPoint) {
 		if(startPoint < 0 || startPoint >= numDivisions) {
 			return;
 		}
@@ -60,7 +52,7 @@ public class Measure {
 	 * @param startPoint
 	 * @param newChord
 	 */
-	public void addChord(int startPoint, Chord newChord) {
+	public void add(int startPoint, Chord newChord) {
 		if(startPoint < 0 || startPoint >= numDivisions) {
 			return;
 		}
@@ -77,7 +69,7 @@ public class Measure {
 	 * @param startPoint falls between 0 and numDivisions, zero inclusive.
 	 * Specifies which chord to get rid of
 	 */
-	public void deleteChord(int startPoint) {
+	public void delete(int startPoint) {
 		if(startPoint < 0 || startPoint >= numDivisions) {
 			return;
 		}
@@ -91,7 +83,7 @@ public class Measure {
 	 * @param targetPoint falls between 0 and numDivisions, zero inclusive. Details which division on the measure to look at
 	 * @return target chord on the specified division
 	 */
-	public Chord getChord(int targetPoint) {
+	public Chord get(int targetPoint) {
 		if(targetPoint < 0 || targetPoint >= numDivisions || chordList[targetPoint] == null) {
 			//Chord doesn't exist here
 			return null;
@@ -103,11 +95,11 @@ public class Measure {
 	 * Returns the number of chords that are in the measure
 	 * @return
 	 */
-	public int getSize() {
+	public int size() {
 		return numDivisions;
 	}
 	
-	public static int getDivisionType() {
+	public static int divisionType() {
 		return divisionType;
 	}
 	
