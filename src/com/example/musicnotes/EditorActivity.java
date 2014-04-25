@@ -244,6 +244,7 @@ public class EditorActivity extends Activity{
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+
 		sidePanel.setLayoutParams(sidePanelParams);
 
 		// Add Measure Lines
