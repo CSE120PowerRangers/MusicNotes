@@ -9,16 +9,12 @@ import MusicUtil.EnumClef;
 import MusicUtil.EnumKeySignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
-import Player.Melody;
+//import Player.Melody;
 import Player.MidiPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Point;
-import android.graphics.Path.FillType;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -26,14 +22,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView.ScaleType;
 
 public class EditorActivity extends Activity{
 
 	// Activity Objects
 	private final MidiPlayer player = new MidiPlayer();
-	private final Melody melody = new Melody();
+	//private final Melody melody = new Melody();
 	public Context context;
 	int screenWidth, screenHeight;
 	float percentageTop, percentageSide;
@@ -53,7 +48,6 @@ public class EditorActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		// Create Activity Objects
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_layout);
@@ -63,6 +57,7 @@ public class EditorActivity extends Activity{
 		percentageTop = 0.15f;
 		percentageSide = 0.10f;
 		heldTool = null;
+
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
 		currentTool = new NoteTool(NoteType.EIGHTH_NOTE, R.drawable.eigthnote);
@@ -75,20 +70,14 @@ public class EditorActivity extends Activity{
 		Intent mainIntent = getIntent();
 		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
-		sheet.getStaff(currentStaff).getSignature(currentSignature).setKeySignature(EnumKeySignature.EFLAT_MAJOR);
-		numChords = 8;//sheet.getStaff(currentStaff).getSignature(currentSignature).getMeasure(currentMeasure).getSize();
+		sheet.get(currentSignature).setKeySignature(EnumKeySignature.E_MAJOR);
+		numChords = 8;
 
-		// Calculate Screen Size
 		calcScreenSize();
-
-		// Initialize View
 		initializeView();
-
-
-
-		//Initialize Measure Spinner
 		updateMeasureSpinner();
 		updateStaffSpinner();
+
 		// Initialize Tool Family Spinner
 		familySpinner = (Spinner) findViewById(R.id.toolbarSpinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.toolbarSpinnerArray, android.R.layout.simple_spinner_item);
@@ -137,12 +126,9 @@ public class EditorActivity extends Activity{
 
 		for(int i = 0; i < toolbarButtons.size(); i++) {
 			toolbar.addView(toolbarButtons.get(i));
-			if(i == activeTool)
-			{
+			if(i == activeTool) {
 				toolbarButtons.get(i).setBackgroundResource(R.drawable.background);
-			}
-			else
-			{
+			} else {
 				toolbarButtons.get(i).setBackgroundResource(0);
 			}
 		}
@@ -151,9 +137,7 @@ public class EditorActivity extends Activity{
 
 	}
 
-	public void updateMeasures(Measure currentMeasure)
-	{
-
+	public void updateMeasures(Measure currentMeasure) {
 		LinearLayout selChord;
 		ImageView selNote;
 		Chord c;
@@ -167,7 +151,7 @@ public class EditorActivity extends Activity{
 
 			// Get chord layout and chord in sheet
 			selChord = (LinearLayout)noteLayout.getChildAt(chords);
-			c = currentMeasure.getChord(chords);
+			c = currentMeasure.get(chords);
 
 			for(int notes = 0; notes < numNotes; notes++) {
 				//Find Note ImageView to set
@@ -175,9 +159,9 @@ public class EditorActivity extends Activity{
 
 				//Set Touch and Drag Listeners
 				touchListener = new EditorTouchListener(this);
-				selNote.setOnClickListener(touchListener);
-				longTouchListener = new EditorLongTouchListener(this);
-				selNote.setOnLongClickListener(longTouchListener);
+				selNote.setOnTouchListener(touchListener);
+				//longTouchListener = new EditorLongTouchListener(this);
+				//selNote.setOnLongClickListener(longTouchListener);
 				dragListener = new EditorDragListener(this);
 				selNote.setOnDragListener(dragListener);
 
@@ -187,17 +171,13 @@ public class EditorActivity extends Activity{
 					Note searchNote = NoteToScreen.findNote(this, c, notes);
 
 					NoteTool searchNoteTool = NoteToScreen.notetoTool(searchNote);
-					if(searchNoteTool != null)
-					{
+					if(searchNoteTool != null) {
 						selNote.setImageResource(searchNoteTool.getID());
-					}
-					else
-					{
+					} else {
 						selNote.setImageResource(0);
 					}
 
-				} 
-				else {
+				} else {
 					selNote.setImageResource(0);
 				}
 			}
@@ -226,7 +206,6 @@ public class EditorActivity extends Activity{
 
 	public void initializeView()
 	{
-
 		//Top Panel
 		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
 		topToolbar.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,(int)(screenHeight*percentageTop)));
@@ -236,10 +215,12 @@ public class EditorActivity extends Activity{
 		backMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/25.0f) ,LayoutParams.MATCH_PARENT));
 		backMeasure.setScaleType(ScaleType.FIT_XY);
 		backMeasure.setPadding(5, 0, 5, 0);
+
 		ImageView forwardMeasure = (ImageView)findViewById(R.id.forwardMeasure);
 		forwardMeasure.setLayoutParams(new LinearLayout.LayoutParams((int)(screenWidth/25.0f) ,LayoutParams.MATCH_PARENT));
 		forwardMeasure.setScaleType(ScaleType.FIT_XY);
 		forwardMeasure.setPadding(5, 0, 5, 0);
+
 		//Side Panel
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
@@ -254,17 +235,18 @@ public class EditorActivity extends Activity{
 		measureParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
 		measureLayout.setOrientation(LinearLayout.HORIZONTAL);
 		measureLayout.setLayoutParams(measureParams);
-		for(int chords = 0; chords < numChords; chords++)
-		{
+		
+		for(int chords = 0; chords < numChords; chords++) {
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setOrientation(LinearLayout.VERTICAL);
 			chordLayout.setLayoutParams(chordParams);
-			for(int notes = 0; notes < numNotes; notes++)
-			{
+			
+			for(int notes = 0; notes < numNotes; notes++) {
 				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth,noteHeight);
 				ImageView noteView = new ImageView(this);
 				noteView.setLayoutParams(noteParams);
+				
 				if(notes >= 3 && notes <=11 && notes%2 == 1) {
 					noteView.setImageResource(R.drawable.line);
 					noteView.setScaleType(ScaleType.FIT_XY);
@@ -281,14 +263,14 @@ public class EditorActivity extends Activity{
 		noteLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
 		noteLayout.setOrientation(LinearLayout.HORIZONTAL);
 		noteLayout.setLayoutParams(noteLayoutParams);
-		for(int chords = 0; chords < 8; chords++)
-		{
+		
+		for(int chords = 0; chords < 8; chords++) {
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setLayoutParams(chordParams);
 			chordLayout.setOrientation(LinearLayout.VERTICAL);
-			for(int notes = 0; notes < numNotes; notes++)
-			{
+
+			for(int notes = 0; notes < numNotes; notes++) {
 				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth, noteHeight);
 				ImageView noteView = new ImageView(this);
 				noteView.setLayoutParams(noteParams);
@@ -302,7 +284,7 @@ public class EditorActivity extends Activity{
 		context = getApplicationContext();
 
 
-		if(context != null && sheet != null) {
+		if(context != null && sheet != null && !player.isPlaying()) {
 			player.initSheet(sheet, this);
 			player.play();
 		}
@@ -318,8 +300,14 @@ public class EditorActivity extends Activity{
 
 	public void nextMeasure(View v){
 		//**** If null, create a new measure****
-		if(currentMeasure == sheet.getStaff(currentStaff).getSignature(currentSignature).getSize() - 1) {
-			sheet.getStaff(currentStaff).getSignature(currentSignature).addMeasure(new Measure());
+		if(currentMeasure == sheet.get(currentSignature).get(currentStaff).size() - 1) {
+			for(int sigs = 0; sigs < sheet.size(); sigs++)
+			{
+				for(int staves = 0; staves < sheet.get(sigs).size(); staves++)
+				{
+					sheet.get(sigs).get(staves).add(new Measure());
+				}
+			}
 			currentMeasure++;
 			updateMeasureSpinner();
 
@@ -331,136 +319,126 @@ public class EditorActivity extends Activity{
 		updateMeasures(getCurrentMeasure());
 	}
 
-
-	public void previousMeasure(View v){
-		if(currentMeasure > 0)
-		{
+	public void previousMeasure(View v) {
+		if(currentMeasure > 0) {
 			currentMeasure--;
 			measureSpinner.setSelection(currentMeasure);
 			updateMeasures(getCurrentMeasure());
 		}
 	}
 	
-	public void nextStaff(View v)
-	{
-		if(currentStaff == sheet.getStaffSize()-1)
-		{
-			sheet.addStaff(new Staff());
+	public void nextStaff(View v) {
+		if(currentStaff == sheet.get(currentSignature).size()-1) {
+			sheet.get(currentSignature).add(new Staff());
 			currentStaff++;
 			updateStaffSpinner();
-		}
-		else
-		{
+		} else {
 			currentStaff++;
 		}
 		staffSpinner.setSelection(currentStaff);
 		updateMeasures(getCurrentMeasure());
 	}
 	
-	public void previousStaff(View v)
-	{
-		if(currentStaff>0)
-		{
+	public void previousStaff(View v) {
+		if(currentStaff>0) {
 			currentStaff--;
 			staffSpinner.setSelection(currentStaff);
 			updateMeasures(getCurrentMeasure());
 		}
 	}
-	public NoteTool getCurrentTool()
-	{
+	
+	public NoteTool getCurrentTool() {
 		return currentTool;
 	}
-	public void setCurrentTool(NoteTool newTool)
-	{
+	
+	public void setCurrentTool(NoteTool newTool) {
 		currentTool = newTool;
 	}
-	public void setActiveToolID(int tool)
-	{
+	
+	public void setActiveToolID(int tool) {
 		activeTool = tool;
 	}
-	public void setToolFamily(ToolFamily newFamily)
-	{
+	
+	public void setToolFamily(ToolFamily newFamily) {
 		currentFamily = newFamily;
 	}
-	public NoteTool getHeldTool()
-	{
+	
+	public NoteTool getHeldTool() {
 		return heldTool;
 	}
 
-	public void setHeldTool(NoteTool heldTool)
-	{
+	public void setHeldTool(NoteTool heldTool) {
 		this.heldTool = heldTool;
 	}
-
 
 	private void updateMeasureSpinner()
 	{
 		//Initialize Measure Spinner
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
-
-		measureArray = new String[sheet.getStaff(currentStaff).getSignature(currentSignature).getSize()];
-		for(int i = 0; i < sheet.getStaff(currentStaff).getSignature(currentSignature).getSize(); i++) {
+		measureArray = new String[sheet.get(currentSignature).get(currentStaff).size()];
+		
+		for(int i = 0; i < sheet.get(currentSignature).get(currentStaff).size(); i++) {
 			measureArray[i] = "" +(i+1);
 		}
+		
 		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
 		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		measureSpinner.setAdapter(adapterMeasure);
 		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
 	}
 
-	public void updateStaffSpinner()
-	{
+	public void updateStaffSpinner() {
 		staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
-		staffArray = new String[sheet.getStaffSize()];
-		for(int i = 0; i < sheet.getStaffSize(); i++)
-		{
+		staffArray = new String[sheet.get(currentSignature).size()];
+		
+		for(int i = 0; i < sheet.get(currentSignature).size(); i++) {
 			staffArray[i] = "" + (i+1);
 		}
+		
 		ArrayAdapter<String> adapterStaff = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,staffArray);
 		adapterStaff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		staffSpinner.setAdapter(adapterStaff);
 		staffSpinner.setOnItemSelectedListener(new StaffSpinnerListener(this));
 	}
-	public Sheet getSheet()
-	{
+	
+	public Sheet getSheet() {
 		return sheet;
 	}
-	public Staff getCurrentStaff()
-	{
-		return sheet.getStaff(currentStaff);
+	
+	public Staff getCurrentStaff() {
+		return sheet.get(currentSignature).get(currentStaff);
 	}
-	public void setCurrentStaff(int newStaff)
-	{
+	
+	public void setCurrentStaff(int newStaff) {
 		currentStaff = newStaff;
 	}
-	public Signature getCurrentSignature()
-	{
-		return getCurrentStaff().getSignature(currentSignature);
+	
+	public Signature getCurrentSignature() {
+		return sheet.get(currentSignature);
 	}
-	public Measure getCurrentMeasure()
-	{
-		return getCurrentSignature().getMeasure(currentMeasure);
+	
+	public Measure getCurrentMeasure() {
+		return getCurrentStaff().get(currentMeasure);
 	}
-	public void setCurrentMeasure(int measure)
-	{
+	
+	public void setCurrentMeasure(int measure) {
 		currentMeasure = measure;
 	}
-	public void changeStaff(View v)
-	{
+	
+	public void changeStaff(View v) {
 		ImageView touchedStaff = (ImageView)findViewById(R.id.staffclef);
-		switch(sheet.getStaff(currentStaff).getClef())
-		{
+		switch(sheet.get(currentSignature).get(currentStaff).clef()) {
 		case TREBLE:
 			touchedStaff.setImageResource(R.drawable.tenor);
-			sheet.getStaff(currentStaff).setClef(EnumClef.TENOR);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TENOR);
 			break;
 		case TENOR:
 			touchedStaff.setImageResource(R.drawable.bass);
-			sheet.getStaff(currentStaff).setClef(EnumClef.BASS);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.BASS);
 			break;
 		case BASS:
 			touchedStaff.setImageResource(R.drawable.treble);
-			sheet.getStaff(currentStaff).setClef(EnumClef.TREBLE);
+			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TREBLE);
 			break;
 		}
 	}

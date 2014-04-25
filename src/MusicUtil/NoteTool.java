@@ -1,7 +1,5 @@
 package MusicUtil;
 
-import com.example.musicnotes.EditorActivity;
-
 public class NoteTool {
 
 	NoteType myType;

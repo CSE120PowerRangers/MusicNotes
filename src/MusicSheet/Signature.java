@@ -18,9 +18,8 @@ public class Signature {
 	private EnumKeySignature keySignature;
 	private int[] flats;
 	private int[] sharps;
-	private NoteName[] notes;
-	private ArrayList<Measure> measures;
-
+	private ArrayList<Staff> staffs;
+	
 	/**
 	 * Signature() is a constructor for a signature which creates a new section with its own time/key signature and tempo
 	 * Creates a default time signature, key signature, and tempo
@@ -46,19 +45,18 @@ public class Signature {
 		numerator = EnumTimeSignature.getNumerator(timeSignature);
 		denominator = EnumTimeSignature.getDenom(timeSignature);
 
-		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.divisionType()) {
 			//Not allowed. Reset to default time signature 4/4
 			timeSignature = EnumTimeSignature.FOUR_FOUR;
 			numerator = 4;
 			denominator = 4;
 		}
 
-		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
 		Measure.setDivisionNumber(numDivs);
-		
-		measures = new ArrayList<Measure>();
-		measures.add(new Measure());
-		measures.add(new Measure());
+
+		staffs = new ArrayList<Staff>();
+		staffs.add(new Staff());
 	}
 
 	/**
@@ -79,18 +77,18 @@ public class Signature {
 		numerator = EnumTimeSignature.getNumerator(timeSignature);
 		denominator = EnumTimeSignature.getDenom(timeSignature);
 
-		if(EnumTimeSignature.getDenom(timeSignature) > Measure.getDivisionType()) {
+		if(EnumTimeSignature.getDenom(timeSignature) > Measure.divisionType()) {
 			//Not allowed. Reset to default time signature 4/4
 			timeSignature = EnumTimeSignature.FOUR_FOUR;
 			numerator = 4;
 			denominator = 4;
 		}
 		
-		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.getDivisionType());
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
 		Measure.setDivisionNumber(numDivs);
 		
-		measures = new ArrayList<Measure>();
-		measures.add(new Measure());
+		staffs = new ArrayList<Staff>();
+		staffs.add(new Staff());
 	}
 
 	/**
@@ -103,43 +101,53 @@ public class Signature {
 		this.keySignature = toCopy.keySignature;
 		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
 		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
-		this.measures = new ArrayList<Measure>(toCopy.measures);
+		this.staffs = new ArrayList<Staff>(toCopy.staffs);
 	}
 
+	
 	/**
-	 * Adds a given measure to the end of the list
-	 * @param newMeasure
+	 * Adds a staff to the signature
+	 * @param newSignature
 	 */
-	public void addMeasure(Measure newMeasure) {
-		measures.add(newMeasure);
+	public void add(Staff newStaff) {
+		staffs.add(newStaff);
 	}
-
+	
 	/**
-	 * Inserts a given measure into the given index
-	 * @param index
-	 * @param newMeasure
+	 * Deletes the given staff from the list
+	 * @param oldStaff
 	 */
-	public void addMeasure(int index, Measure newMeasure) {
-		if(index >= 0 && index < measures.size()) {
-			//Force creation of new copy of measure
-			newMeasure = new Measure(newMeasure);
-			measures.add(index, newMeasure);
-		}
-	}
-
-	/**
-	 * Deletes a given measure from the list
-	 * @param oldMeasure
-	 */
-	public void deleteMeasure(Measure oldMeasure) {
-		for(int i = 0; i < measures.size(); i++) {
-			if(measures.get(i).equals(oldMeasure)) {
-				measures.remove(i);
+	public void delete(Staff oldStaff) {
+		for(int i = 0; i < staffs.size(); i++) {
+			if(staffs.get(i).equals(oldStaff)) {
+				staffs.remove(i);
 				break;
 			}
 		}
 	}
+	
+	/**
+	 * Returns the staff at the given index
+	 * @param sigNumber
+	 * @return
+	 */
+	public Staff get(int sigNumber) {
+		if(sigNumber < 0 || sigNumber > staffs.size()) {
+			return null;
+		} else {
+			return staffs.get(sigNumber);			
+		}
+	}
+	
+	/**
+	 * Returns the number of staffs in the staff
+	 * @return
+	 */
+	public int size() {
+		return staffs.size();
+	}
 
+	
 	/**
 	 * Sets the key signature of this signature
 	 * The key signature determines what flats or sharps are in the signature
@@ -258,7 +266,7 @@ public class Signature {
 	 * Gets the key signature for this signature
 	 * @return keySignature is the key signature enum
 	 */
-	public EnumKeySignature getKeySignature() {
+	public EnumKeySignature keySignature() {
 		return keySignature;
 	}
 
@@ -266,7 +274,7 @@ public class Signature {
 	 * Gets the time signature for this signature
 	 * @return timeSignature is the time signature enum
 	 */
-	public EnumTimeSignature getTimeSignature() {
+	public EnumTimeSignature timeSignature() {
 		return timeSignature;
 	}
 
@@ -274,29 +282,7 @@ public class Signature {
 	 * Gets the tempo for this signature
 	 * @return tempo is the beats per minute (bpm) of this signature
 	 */
-	public int getTempo() {
+	public int tempo() {
 		return tempo;
 	}
-
-	/**
-	 * Gets the measure from the given index
-	 * @param index
-	 * @return
-	 */
-	public Measure getMeasure(int index) {
-		if(index >= 0 && index < measures.size()) {
-			return measures.get(index);
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns the number of measures in the signature
-	 * @return
-	 */
-	public int getSize() {
-		return measures.size();
-	}
-
 }

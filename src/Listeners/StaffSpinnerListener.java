@@ -2,7 +2,6 @@ package Listeners;
 
 import com.example.musicnotes.EditorActivity;
 
-import MusicSheet.Staff;
 import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;

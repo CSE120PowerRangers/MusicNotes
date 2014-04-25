@@ -27,9 +27,9 @@ public class Chord {
 	 * @param octave is the octave of the note
 	 * @return note if found, null if not
 	 */
-	private Note findNote(NoteName name, int octave) {
+	private Note find(NoteName name, int octave) {
 		for(Note n : noteList) {
-			if(n.getName() == name && n.getOctave() == octave) {
+			if(n.name() == name && n.octave() == octave) {
 				return n;
 			}
 		}
@@ -42,8 +42,8 @@ public class Chord {
 	 * @param type is the enumerated type of the note duration
 	 * @param octave is the octave of the note
 	 */
-	public void addNote(NoteName name, NoteType type, int octave) {
-		if(findNote(name, octave) != null) {
+	public void add(NoteName name, NoteType type, int octave) {
+		if(find(name, octave) != null) {
 			//Note already exists with that frequency
 			return;
 		} else if(octave < 0 || octave > 8) {
@@ -61,12 +61,12 @@ public class Chord {
 	 * @param targetName
 	 * @param targetOctave
 	 */
-	public void deleteNote(NoteName targetName, int targetOctave) {
+	public void delete(NoteName targetName, int targetOctave) {
 		if(targetOctave < 0 || targetOctave > 8) {
 			return;
 		}
 		
-		Note targetNote = findNote(targetName, targetOctave);
+		Note targetNote = find(targetName, targetOctave);
 		if(targetNote != null) {
 			noteList.remove(targetNote);
 		}
@@ -77,12 +77,12 @@ public class Chord {
 	 * @param targetOctave is the octave of the note
 	 * @return note with the target frequency or null if it wasn't found
 	 */
-	public Note getNote(NoteName targetName, int targetOctave) {
+	public Note get(NoteName targetName, int targetOctave) {
 		if(targetOctave < 0 || targetOctave > 8) {
 			return null;
 		}
 		
-		return findNote(targetName, targetOctave);
+		return find(targetName, targetOctave);
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class Chord {
 	 * @param index - index in noteList
 	 * @return note at desired index
 	 */
-	public Note getNote(int index) {
+	public Note get(int index) {
 		if(index < 0 || index >= noteList.size()) {
 			return null;
 		} else {			
@@ -101,7 +101,7 @@ public class Chord {
 	/**
 	 * @return number of notes in the chord
 	 */
-	public int getSize() {
+	public int size() {
 		return noteList.size();
 	}
 }

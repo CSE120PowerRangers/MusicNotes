@@ -3,15 +3,15 @@ import java.util.ArrayList;
 
 public class Sheet {
 	private String name;
-	private ArrayList<Staff> staffs;
+	private ArrayList<Signature> signatures;
 
 	/**
-	 * The sheet constructor creates a new sheet and automatically generates a default staff
+	 * The sheet constructor creates a new sheet and automatically generates a default Signature
 	 */
 	public Sheet() {
 		name = "Default";
-		staffs = new ArrayList<Staff>();
-		staffs.add(new Staff());
+		signatures = new ArrayList<Signature>();
+		signatures.add(new Signature());
 	}
 	
 	/**
@@ -20,8 +20,8 @@ public class Sheet {
 	 */
 	public Sheet(String name) {
 		this.name = name;
-		staffs = new ArrayList<Staff>();
-		staffs.add(new Staff());
+		signatures = new ArrayList<Signature>();
+		signatures.add(new Signature());
 	}
 	
 	/**
@@ -30,31 +30,31 @@ public class Sheet {
 	 */
 	public Sheet(Sheet toCopy) {
 		this.name = new String(toCopy.name);
-		this.staffs = new ArrayList<Staff>(toCopy.staffs);
+		this.signatures = new ArrayList<Signature>(toCopy.signatures);
 	}
 	
 	/**
-	 * Adds a staff to the sheet
-	 * @param newStaff
+	 * Adds a Signature to the sheet
+	 * @param newSignature
 	 */
-	public void addStaff(Staff newStaff) {
-		staffs.add(newStaff);
+	public void add(Signature newSignature) {
+		signatures.add(newSignature);
 	}
 	
 	/**
-	 * Deletes a given staff by index lookup
+	 * Deletes a given Signature by index lookup
 	 * @param index
 	 */
-	public void deleteStaff(int index) {
-		staffs.remove(index);
+	public void delete(int index) {
+		signatures.remove(index);
 	}
 	
 	/**
-	 * Deletes a given staff by object lookup
+	 * Deletes a given Signature by object lookup
 	 * @param toDelete
 	 */
-	public void deleteStaff(Staff toDelete) {
-		staffs.remove(toDelete);
+	public void delete(Signature toDelete) {
+		signatures.remove(toDelete);
 	}
 	
 	/**
@@ -69,25 +69,25 @@ public class Sheet {
 	 * Get the name of a sheet
 	 * @return
 	 */
-	public String getName() { 
+	public String name() { 
 		return name;
 	}
 	
 	/**
-	 * Get a staff from the sheet
+	 * Get a Signature from the sheet
 	 * @param index
 	 * @return
 	 */
-	public Staff getStaff(int index) {
-		return staffs.get(index);
+	public Signature get(int index) {
+		return signatures.get(index);
 	}
 	
 	/**
-	 * Gets the number of staffs in the sheet
+	 * Gets the number of Signatures in the sheet
 	 * @return 
 	 */
-	public int getStaffSize() {
-		return staffs.size();
+	public int size() {
+		return signatures.size();
 	}
 
 	public String getFileName()

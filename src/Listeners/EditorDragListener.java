@@ -1,26 +1,18 @@
 package Listeners;
 
 import android.content.*;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
 
 import com.example.musicnotes.EditorActivity;
 import com.example.musicnotes.NoteToScreen;
-import com.example.musicnotes.R;
 
 import MusicSheet.Chord;
-import MusicSheet.Note;
-import MusicSheet.Sheet;
 import MusicUtil.NoteTool;
-import MusicUtil.NoteType;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 
 public class EditorDragListener implements OnDragListener {
@@ -58,8 +50,8 @@ public class EditorDragListener implements OnDragListener {
 			}
 		}
 		// Get the selected chord and add a new chord
-		myActivity.getCurrentMeasure().addChord(chordsPos);
-		Chord chordSel = myActivity.getCurrentMeasure().getChord(chordsPos);
+		myActivity.getCurrentMeasure().add(chordsPos);
+		Chord chordSel = myActivity.getCurrentMeasure().get(chordsPos);
 
 		heldTool = myActivity.getHeldTool();
 		if(heldTool!= null)
@@ -76,9 +68,9 @@ public class EditorDragListener implements OnDragListener {
 				return true;
 
 			case DragEvent.ACTION_DROP:
-				if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos) != null)
+				if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos) != null)
 				{
-					NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().getChord(chordsPos), notePos);
+					NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos);
 				}
 				noteView.setImageResource(heldTool.getID());
 				noteView.setScaleType(ScaleType.CENTER_INSIDE);
