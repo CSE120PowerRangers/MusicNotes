@@ -26,10 +26,6 @@ public class MidiPlayer {
 
 		try{
 			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/" + s.getFileName());
-			//File path = new File(stringPath);
-			//mPlayer = new MediaPlayer();
-			//mPlayer.setDataSource(context, filePath);
-			//mPlayer.prepareAsync();
 
 			System.out.println(filePath);
 			mPlayer = MediaPlayer.create(context, filePath);
@@ -37,9 +33,6 @@ public class MidiPlayer {
 			System.err.println(ex);
 		}
 	}
-
-
-
 
 	public boolean isPlaying() {
 		if(mPlayer == null)
