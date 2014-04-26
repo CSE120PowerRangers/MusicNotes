@@ -1,6 +1,7 @@
 package com.example.musicnotes;
 
 import MusicSheet.*;
+import MusicUtil.EnumClef;
 import MusicUtil.NoteName;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
@@ -14,18 +15,35 @@ public class NoteToScreen {
 		Staff currentStaff = myActivity.getCurrentStaff();
 		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
-
-		if(notePos <= 6)
+		if(currentStaff.clef() == EnumClef.TENOR || currentStaff.clef() == EnumClef.TREBLE)
 		{
-			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()+1);
-		}
-		else if(notePos == 14)
-		{
-			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()-1);
+			if(notePos <= 6)
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()+1);
+			}
+			else if(notePos == 14)
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()-1);
+			}
+			else
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave());
+			}
 		}
 		else
 		{
-			searchNote = chordSel.get(currentScale[notePos], currentStaff.octave());
+			if(notePos<=1)
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()+1);
+			}
+			else if(notePos <= 8)
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave());
+			}
+			else
+			{
+				searchNote = chordSel.get(currentScale[notePos], currentStaff.octave()-1);
+			}
 		}
 		return searchNote;
 	}
@@ -35,18 +53,35 @@ public class NoteToScreen {
 		Staff currentStaff = myActivity.getCurrentStaff();
 		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
-
-		if(notePos <= 6)
+		if(currentStaff.clef() == EnumClef.TENOR || currentStaff.clef() == EnumClef.TREBLE)
 		{
-			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
-		}
-		else if(notePos == 14)
-		{
-			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
+			if(notePos <= 6)
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
+			}
+			else if(notePos == 14)
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
+			}
+			else
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
+			}
 		}
 		else
 		{
-			chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
+			if(notePos<=1)
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
+			}
+			else if(notePos <= 8)
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
+			}
+			else
+			{
+				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
+			}
 		}
 	}
 
@@ -56,17 +91,35 @@ public class NoteToScreen {
 		NoteName[] currentScale = currentStaff.scale();
 		currentScale = convertScale(myActivity, currentScale);
 
-		if(notePos <= 6)
+		if(currentStaff.clef() == EnumClef.TENOR || currentStaff.clef() == EnumClef.TREBLE)
 		{
-			chordSel.delete(currentScale[notePos], currentStaff.octave()+1);
-		}
-		else if(notePos == 14)
-		{
-			chordSel.delete(currentScale[notePos], currentStaff.octave()-1);
+			if(notePos <= 6)
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave()+1);
+			}
+			else if(notePos == 14)
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave()-1);
+			}
+			else
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave());
+			}
 		}
 		else
 		{
-			chordSel.delete(currentScale[notePos], currentStaff.octave());
+			if(notePos<=1)
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave()+1);
+			}
+			else if(notePos <= 8)
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave());
+			}
+			else
+			{
+				chordSel.delete(currentScale[notePos], currentStaff.octave()-1);
+			}
 		}
 	}
 

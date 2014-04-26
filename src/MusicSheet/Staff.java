@@ -94,6 +94,16 @@ public class Staff {
 			measures.add(index, newMeasure);
 		}
 	}
+	
+	/**
+	 * Inserts a given number of measures
+	 * @param numberOfMeasures
+	 */
+	public void add(int numberOfMeasures) {
+		for(int i = 0; i < numberOfMeasures; i++) {
+			measures.add(new Measure());
+		}
+	}
 
 	/**
 	 * Gets the measure from the given index

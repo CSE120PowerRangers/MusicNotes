@@ -408,9 +408,9 @@ public class FileMaker {
 
 	public static void writeSheetToMidiInternal(Sheet s, Context c) {
 		MidiFile midi = sheetToMidi(s);
-
-		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes");
-		path.mkdirs();
+		//File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes");
+		//path.mkdirs();
+		File path = new File(c.getFilesDir().getAbsolutePath()+"/");
 		File output = new File(path, s.getFileName());
 		try {
 			midi.writeToFile(output);

@@ -70,7 +70,7 @@ public class EditorActivity extends Activity{
 		Intent mainIntent = getIntent();
 		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
 		currentMeasure = currentStaff = currentSignature = 0;
-		sheet.get(currentSignature).setKeySignature(EnumKeySignature.EFLAT_MAJOR);
+		sheet.get(currentSignature).setKeySignature(EnumKeySignature.E_MAJOR);
 		numChords = 8;
 
 		calcScreenSize();
@@ -159,9 +159,9 @@ public class EditorActivity extends Activity{
 
 				//Set Touch and Drag Listeners
 				touchListener = new EditorTouchListener(this);
-				selNote.setOnClickListener(touchListener);
-				longTouchListener = new EditorLongTouchListener(this);
-				selNote.setOnLongClickListener(longTouchListener);
+				selNote.setOnTouchListener(touchListener);
+				//longTouchListener = new EditorLongTouchListener(this);
+				//selNote.setOnLongClickListener(longTouchListener);
 				dragListener = new EditorDragListener(this);
 				selNote.setOnDragListener(dragListener);
 
@@ -225,6 +225,7 @@ public class EditorActivity extends Activity{
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+
 		sidePanel.setLayoutParams(sidePanelParams);
 
 		// Add Measure Lines
@@ -300,7 +301,13 @@ public class EditorActivity extends Activity{
 	public void nextMeasure(View v){
 		//**** If null, create a new measure****
 		if(currentMeasure == sheet.get(currentSignature).get(currentStaff).size() - 1) {
-			sheet.get(currentSignature).get(currentStaff).add(new Measure());
+			for(int sigs = 0; sigs < sheet.size(); sigs++)
+			{
+				for(int staves = 0; staves < sheet.get(sigs).size(); staves++)
+				{
+					sheet.get(sigs).get(staves).add(new Measure());
+				}
+			}
 			currentMeasure++;
 			updateMeasureSpinner();
 
