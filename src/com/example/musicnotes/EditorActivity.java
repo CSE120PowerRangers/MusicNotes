@@ -225,8 +225,26 @@ public class EditorActivity extends Activity{
 		LinearLayout sidePanel = (LinearLayout)findViewById(R.id.leftPanel);
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
-
 		sidePanel.setLayoutParams(sidePanelParams);
+	
+		ImageView keySig = (ImageView)findViewById(R.id.keysignaturemeasure);
+		keySig.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		LinearLayout timeSigLayout = (LinearLayout)findViewById(R.id.timeSignatureLayout);
+		timeSigLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		ImageView topTime = (ImageView)findViewById(R.id.timesigtop);
+		topTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/14));
+		//topTime.setScaleType(ScaleType.FIT_XY);
+		ImageView botTime = (ImageView)findViewById(R.id.timesigbot);
+		botTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/14));
+		//botTime.setScaleType(ScaleType.FIT_XY);
+		ImageView staffClef = (ImageView)findViewById(R.id.staffclef);
+		staffClef.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		ImageView previousStaff = (ImageView)findViewById(R.id.previousStaff);
+		previousStaff.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		Spinner staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
+		staffSpinner.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		ImageView nextStaff = (ImageView)findViewById(R.id.nextStaff);
+		nextStaff.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
 
 		// Add Measure Lines
 		LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
