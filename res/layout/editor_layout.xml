@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/top_bar_height"
         android:layout_alignParentTop="true"
+        android:background="@drawable/topbar"
         >
 
         <Button
@@ -58,8 +59,10 @@
         android:layout_height="match_parent"
         android:paddingTop="20dp"
         android:layout_below="@+id/topToolbar"
-        android:orientation="vertical" >
-
+        android:orientation="vertical"
+        android:background="@+drawable/topbar"
+        >
+       
           <ImageView
                 android:id="@+id/keysignaturemeasure"
                 android:layout_width="fill_parent"
@@ -87,40 +90,13 @@
                 android:src="@drawable/four" />
         </LinearLayout>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/staffclef"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:layout_below="@+id/timeSignatureLayout"
                 android:src="@drawable/treble"
-                android:onClick="changeStaff" />
-            <ImageView
-                android:id="@+id/previousStaff"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/measureforward"
-                android:rotation="270" 
-                android:onClick="previousStaff"/>
-                />
-            <Spinner 
-                android:id="@+id/staffSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/staffclef"
-                />
-            <ImageView
-                android:id="@+id/nextStaff"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/measureforward"
-                android:rotation="90" 
-                android:onClick="nextStaff"/>
-                />
-                
+                android:onClick="alertStaff" />             
 
     </LinearLayout>
 
