@@ -444,41 +444,30 @@ public class EditorActivity extends Activity{
 	
 	public void changeStaff(View v) 
 	{
-		
-		/*
-		 * 	measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
-		measureArray = new String[sheet.get(currentSignature).get(currentStaff).size()];
-		
-		for(int i = 0; i < sheet.get(currentSignature).get(currentStaff).size(); i++) {
-			measureArray[i] = "" +(i+1);
-		}
-		
-		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
-		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		measureSpinner.setAdapter(adapterMeasure);
-		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
-		 * 
-		 */
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = this.getLayoutInflater();
-		staffSpinner = (Spinner) LayoutInflater.from(this).inflate(R.layout.changestaff_layout, null).findViewById(R.id.changestaffspinner);
+		LinearLayout staffLayout = (LinearLayout) inflater.inflate(R.layout.changestaff_layout, null);
+		staffSpinner = (Spinner) staffLayout.findViewById(R.id.changestaffspinner);
 		String[] changeStaffArray = new String[sheet.get(currentSignature).size()];
 		for(int i = 0; i < sheet.get(currentSignature).size(); i++) {
 			changeStaffArray[i] = "" +(i+1);
 		}
 		ArrayAdapter<String> adapterStaff = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, changeStaffArray);
+		System.err.println(adapterStaff.getCount());
 		adapterStaff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
 		staffSpinner.setAdapter(adapterStaff);
+		staffSpinner.setOnItemSelectedListener(new StaffSpinnerListener(this));
 		staffSpinner.setSelection(currentStaff);
-
-		builder.setView(inflater.inflate(R.layout.changestaff_layout, null))
+		
+		builder.setView(staffLayout)
 		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				Dialog d = (Dialog) dialog;
+				//setCurrentStaff(staffSpinner.getSelectedItemPosition());
 				dialog.cancel();
-				
-				
 			}
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
