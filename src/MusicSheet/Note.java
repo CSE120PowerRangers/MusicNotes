@@ -17,12 +17,12 @@ public class Note {
 	private NoteName name;
 	private NoteType type;
 	private int octave;
-	
-	
+
+
 	public Note() {
-		
+
 	}
-	
+
 	/**
 	 * Note() is a constructor that creates a note with a given tone, duration, and sample rate
 	 * @param name is an enumerated note name referring to the musical name for the note
@@ -34,7 +34,7 @@ public class Note {
 		this.type = type;
 		this.octave = octave;
 	}
-	
+
 	/**
 	 * A copy constructor for the note class. 
 	 * Since enums are immutable, it's fine to just copy them over 
@@ -46,7 +46,7 @@ public class Note {
 		this.type = toCopy.type;
 		this.octave = toCopy.octave;
 	}
-	
+
 	/**
 	 * Changes the musical name of the note
 	 * @param name
@@ -54,7 +54,7 @@ public class Note {
 	public void setName(NoteName name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * Changes the note duration
 	 * @param type
@@ -62,7 +62,7 @@ public class Note {
 	public void setType(NoteType type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * Changes the octave of the note
 	 * @param octave
@@ -70,7 +70,7 @@ public class Note {
 	public void setOctave(int octave) {
 		this.octave = octave;
 	}
-	
+
 	/**
 	 * Retrieves the name of the note
 	 * @return name
@@ -78,7 +78,7 @@ public class Note {
 	public NoteName name() {
 		return name;
 	}
-	
+
 	/**
 	 * Retrieves the duration/type of the note
 	 * @return type
@@ -86,7 +86,7 @@ public class Note {
 	public NoteType type() {
 		return type;
 	}
-	
+
 	/**
 	 * Retrieves the octave of the note
 	 * @return octave
@@ -94,7 +94,7 @@ public class Note {
 	public int octave() {
 		return octave;
 	}
-	
+
 	/**
 	 * Simple hash could be the number mapping of the actual name
 	 * e.g. C0 == 0, CSHARP0 == 2, C1 == 21, CSHARP1 == 23, ... BSHARP8 == 188
@@ -172,11 +172,11 @@ public class Note {
 			// Should NEVER happen
 			numberName = -1000000;
 			break;
-		
+
 		}
 		return (21 * octave) + numberName;
 	}
-	
+
 	/**
 	 * Simple equals method. Notes are equal if they have both the same name and octave 
 	 * @param obj is the note being compared
@@ -192,7 +192,7 @@ public class Note {
 		if(this.getClass() != obj.getClass()) {
 			return false;
 		}
-		
+
 		// Examine note name and octave
 		return (this.name() == ((Note) obj).name() && this.octave() == ((Note) obj).octave());
 	}
@@ -267,24 +267,30 @@ public class Note {
 			numberName = -1;
 			break;
 		}
-		
+
 		return (12 * this.octave) + numberName;
 	}
 
 	public long getNoteDurationInTicks(int PPQ) {
 		long duration = 0;
 		int modifier = 0;
-		
+
 		// Duration should be calculated as PPQ * (modifier / 8)
 		switch(this.type()){
 		case EIGHTH_NOTE:
 			modifier = 4;
+			break;
+		case DOTTED_EIGHTH_NOTE:
+			modifier = 6;
 			break;
 		case EIGTH_REST:
 			modifier = 4;
 			break;
 		case HALF_NOTE:
 			modifier = 16;
+			break;
+		case DOTTED_HALF_NOTE:
+			modifier = 24;
 			break;
 		case HALF_REST:
 			modifier = 16;
@@ -294,6 +300,9 @@ public class Note {
 			break;
 		case QUARTER_NOTE:
 			modifier = 8;
+			break;
+		case DOTTED_QUARTER_NOTE:
+			modifier = 12;
 			break;
 		case QUARTER_REST:
 			modifier = 8;
@@ -319,9 +328,9 @@ public class Note {
 		default:
 			break;
 		}
-		
+
 		duration = (PPQ * modifier) / 8;
-		
+
 		return duration;
 	}
 }
