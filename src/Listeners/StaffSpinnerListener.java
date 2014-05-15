@@ -20,18 +20,7 @@ public class StaffSpinnerListener implements OnItemSelectedListener {
 	@Override
 	public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 		myActivity.setCurrentStaff(position);
-		switch(myActivity.getCurrentStaff().clef())
-		{
-		case TREBLE:
-			((ImageButton) myActivity.findViewById(R.id.staffclef)).setImageResource(R.drawable.treble);
-			break;
-		case TENOR:
-			((ImageButton) myActivity.findViewById(R.id.staffclef)).setImageResource(R.drawable.tenor);
-			break;
-		case BASS:
-			((ImageButton) myActivity.findViewById(R.id.staffclef)).setImageResource(R.drawable.bass);
-			break;
-		}
+		myActivity.updateStaffButton();
 		myActivity.updateMeasures(myActivity.getCurrentMeasure());
 	}
 
