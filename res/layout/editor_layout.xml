@@ -63,11 +63,12 @@
         android:background="@+drawable/topbar"
         >
        
-          <ImageView
+          <ImageButton
                 android:id="@+id/keysignaturemeasure"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/csignature" />      
+                android:src="@drawable/csignature"
+                android:onClick="alertSignature" />      
 
         <!-- Key Signature Layout -->
 

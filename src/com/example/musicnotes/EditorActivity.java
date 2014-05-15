@@ -90,7 +90,6 @@ public class EditorActivity extends Activity{
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		familySpinner.setAdapter(adapter);
 		familySpinner.setOnItemSelectedListener(new ToolSpinnerListener(this));
-		updateStaffSpinner();
 	}
 
 	@Override
@@ -143,13 +142,7 @@ public class EditorActivity extends Activity{
 
 
 	}
-
-	public void updateStaffSpinner()
-	{
-
-
-
-	}
+	
 	public void updateMeasures(Measure currentMeasure) {
 		LinearLayout selChord;
 		ImageView selNote;
@@ -241,8 +234,9 @@ public class EditorActivity extends Activity{
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
 		sidePanel.setLayoutParams(sidePanelParams);
 
-		ImageView keySig = (ImageView)findViewById(R.id.keysignaturemeasure);
+		ImageButton keySig = (ImageButton)findViewById(R.id.keysignaturemeasure);
 		keySig.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		keySig.setScaleType(ScaleType.FIT_XY);
 		LinearLayout timeSigLayout = (LinearLayout)findViewById(R.id.timeSignatureLayout);
 		timeSigLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
 		ImageView topTime = (ImageView)findViewById(R.id.timesigtop);
@@ -400,6 +394,10 @@ public class EditorActivity extends Activity{
 		return sheet;
 	}
 
+	public void setCurrentSignature(int newSig) {
+		currentSignature = newSig;
+	}
+
 	public Staff getCurrentStaff() {
 		return sheet.get(currentSignature).get(currentStaff);
 	}
@@ -465,8 +463,6 @@ public class EditorActivity extends Activity{
 		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				Dialog d = (Dialog) dialog;
-				//setCurrentStaff(staffSpinner.getSelectedItemPosition());
 				dialog.cancel();
 			}
 		})
@@ -507,10 +503,9 @@ public class EditorActivity extends Activity{
 					staffButton.setImageResource(R.drawable.bass);
 					break;
 				}
-
-				sheet.get(currentSignature).get(sheet.get(currentSignature).size()-1).add(sheet.get(currentSignature).get(currentStaff).size());
-				currentStaff = sheet.get(currentSignature).size() - 1;
-				updateMeasures(sheet.get(currentSignature).get(currentStaff).get(currentMeasure));
+				
+				setCurrentStaff(getCurrentSignature().size()-1);
+				updateMeasures(getCurrentMeasure());
 			}
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -527,8 +522,15 @@ public class EditorActivity extends Activity{
 	{
 		if(getCurrentSignature().size()>1)
 		{
-			currentStaff--;
-	
+			getCurrentSignature().delete(getCurrentStaff());
+			if(currentStaff==0)
+			{
+				
+			}
+			else
+			{
+				currentStaff--;
+			}
 			setCurrentStaff(currentStaff);
 			switch(getCurrentStaff().clef())
 			{
@@ -542,7 +544,125 @@ public class EditorActivity extends Activity{
 				((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.bass);
 				break;
 			}
-			getCurrentSignature().delete(getCurrentStaff());
+			updateMeasures(getCurrentMeasure());
+		}
+	}
+
+	public void alertSignature(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+
+		builder.setView(inflater.inflate(R.layout.signatureoptions_layout, null))
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+	
+	public void addSignature(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+		
+		LinearLayout sigLayout = (LinearLayout) inflater.inflate(R.layout.addsignature_layout, null);
+		Spinner signatureSpinner = (Spinner) sigLayout.findViewById(R.id.keysignaturespinner);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.keySignatures, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		signatureSpinner.setAdapter(adapter);
+		signatureSpinner.setSelection(0);
+
+		builder.setView(sigLayout)
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void deleteSignature(View v)
+	{
+		if(sheet.size()>1)
+		{
+			sheet.delete(getCurrentSignature());
+			if(currentSignature==0)
+			{
+				currentSignature++;
+			}
+			else
+			{
+				currentSignature--;
+			}
+			setCurrentSignature(currentSignature);
+			switch(getCurrentStaff().clef())
+			{
+			case TREBLE:
+			case TENOR:
+				switch(getCurrentSignature().keySignature())
+				{
+				case B_MAJOR:
+					((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tbsignature);
+					break;
+				case E_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.tesignature);
+					break;
+				case A_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.tasignature);
+					break;
+				case D_MAJOR:
+					((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tdsignature);
+					break;
+				case G_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.tgsignature);
+					break;
+				case C_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.csignature);
+					break;	
+				}
+				break;
+			case BASS:	
+				switch(getCurrentSignature().keySignature())
+				{
+				case B_MAJOR:
+					((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.bbsignature);
+					break;
+				case E_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.besignature);
+					break;
+				case A_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.basignature);
+					break;
+				case D_MAJOR:
+					((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.bdsignature);
+					break;
+				case G_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.bgsignature);
+					break;
+				case C_MAJOR:
+					((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.csignature);
+					break;	
+				}
+				break;
+			}
 			updateMeasures(getCurrentMeasure());
 		}
 	}
