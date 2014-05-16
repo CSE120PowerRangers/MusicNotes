@@ -23,7 +23,6 @@ public class Note implements Serializable{
 	private NoteType type;
 	private int octave;
 
-
 	public Note() {
 
 	}
@@ -294,7 +293,19 @@ public class Note implements Serializable{
 			numberName = -1;
 			break;
 		}
+		
+		if(name == NoteName.B && accidental == AccidentalType.SHARP)
+		{
+			return (12 * (this.octave+1)) + numberName;
+		}
+		else if(name == NoteName.C && accidental == AccidentalType.FLAT)
+		{
+			return (12 * (this.octave-1)) + numberName;
+		}
+		else
+		{
 			return (12 * this.octave) + numberName;
+		}
 	}
 
 	public long getNoteDurationInTicks(int PPQ) {
@@ -448,9 +459,9 @@ public class Note implements Serializable{
 		case E:
 			return NoteName.E;
 		case ESHARP:
-			return NoteName.E;
-		case FFLAT:
 			return NoteName.F;
+		case FFLAT:
+			return NoteName.E;
 		case F:
 			return NoteName.F;
 		case FSHARP:
