@@ -272,7 +272,7 @@ public class NoteToScreen {
 					newScale[i] = NoteName.ASHARP;
 					break;
 				case B:
-					newScale[i] = NoteName.BSHARP;
+					newScale[i] = NoteName.C;
 					break;
 				case C:
 					newScale[i] = NoteName.CSHARP;
@@ -281,7 +281,7 @@ public class NoteToScreen {
 					newScale[i] = NoteName.DSHARP;
 					break;
 				case E:
-					newScale[i] = NoteName.ESHARP;
+					newScale[i] = NoteName.F;
 					break;
 				case F:
 					newScale[i] = NoteName.FSHARP;
@@ -305,7 +305,7 @@ public class NoteToScreen {
 					newScale[i] = NoteName.BFLAT;
 					break;
 				case C:
-					newScale[i] = NoteName.CFLAT;
+					newScale[i] = NoteName.B;
 					break;
 				case D:
 					newScale[i] = NoteName.DFLAT;
@@ -314,7 +314,7 @@ public class NoteToScreen {
 					newScale[i] = NoteName.EFLAT;
 					break;
 				case F:
-					newScale[i] = NoteName.FFLAT;
+					newScale[i] = NoteName.E;
 					break;
 				case G:
 					newScale[i] = NoteName.GFLAT;
