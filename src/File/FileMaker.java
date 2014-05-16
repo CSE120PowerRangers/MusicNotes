@@ -97,7 +97,7 @@ public class FileMaker {
 	}
 
 	private static MidiTrack insertMeasureEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex) {
-		int numMeasures = s.get(staffIndex).get(signatureIndex).size();
+		int numMeasures = s.get(signatureIndex).get(staffIndex).size();
 		int signatureLength = 0;
 
 		for (int i = 0; i < numMeasures; i++) {
@@ -125,7 +125,7 @@ public class FileMaker {
 
 		// For all chords in the measure
 		for (int i = 0; i < numChords; i++) {
-			currentChord = s.get(staffIndex).get(signatureIndex).get(measureIndex).get(i);
+			currentChord = s.get(signatureIndex).get(staffIndex).get(measureIndex).get(i);
 			if (currentChord != null) {
 				// If the chord isn't null, insert each note in the chord at the end of the track
 				for (int j = 0; j < currentChord.size(); j++) {
@@ -150,7 +150,7 @@ public class FileMaker {
 
 					// TODO Will probably break when using time signatures that
 					// don't have even beats per quarter note
-					t = s.get(staffIndex).timeSignature();
+					t = s.get(signatureIndex).timeSignature();
 
 					num = EnumTimeSignature.getNumerator(t);
 					denom = EnumTimeSignature.getDenom(t);
