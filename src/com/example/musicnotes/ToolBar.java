@@ -3,8 +3,7 @@ package com.example.musicnotes;
 import java.util.ArrayList;
 
 import Listeners.ToolButtonListener;
-import MusicUtil.NoteTool;
-import MusicUtil.NoteType;
+import MusicUtil.*;
 import android.content.Context;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
@@ -58,7 +57,7 @@ public class ToolBar {
 	{
 		ArrayList<ImageButton> myFamily = new ArrayList<ImageButton>();
 		ImageButton button;
-		NoteTool myTool;
+		Tool myTool;
 		ToolButtonListener myListener;
 		
 		//Eight Note
@@ -106,7 +105,7 @@ public class ToolBar {
 		//Eraser 
 		//Whole Note
 		button = new ImageButton(myActivity);
-		myTool = new NoteTool(NoteType.NOTANOTE,0);
+		myTool = new EraserTool();
 		button.setImageResource(R.drawable.eraserbutton);
 		button.setScaleType(ScaleType.FIT_XY);
 		myListener = new ToolButtonListener(myActivity, myTool, 4);
@@ -147,7 +146,7 @@ public class ToolBar {
 		ToolButtonListener myListener;
 		
 		
-		//Whole Note
+		//Natural Note
 		button = new ImageButton(myActivity);
 		myTool = new NoteTool(NoteType.WHOLE_NOTE,R.drawable.treble);
 		button.setImageResource(R.drawable.treble);
@@ -155,6 +154,33 @@ public class ToolBar {
 		button.setOnClickListener(myListener);
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
 		myFamily.add(button);
+		
+		//Whole Note
+				button = new ImageButton(myActivity);
+				myTool = new NoteTool(NoteType.WHOLE_NOTE,R.drawable.treble);
+				button.setImageResource(R.drawable.treble);
+				myListener = new ToolButtonListener(myActivity, myTool, 0);
+				button.setOnClickListener(myListener);
+				button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
+				myFamily.add(button);
+				
+				//Natural Note
+				button = new ImageButton(myActivity);
+				myTool = new NoteTool(NoteType.WHOLE_NOTE,R.drawable.naturalwholenote);
+				button.setImageResource(R.drawable.natural);
+				myListener = new ToolButtonListener(myActivity, myTool, 0);
+				button.setOnClickListener(myListener);
+				button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
+				myFamily.add(button);	
+				
+				//Whole Note
+				button = new ImageButton(myActivity);
+				myTool = new NoteTool(NoteType.WHOLE_NOTE,R.drawable.treble);
+				button.setImageResource(R.drawable.treble);
+				myListener = new ToolButtonListener(myActivity, myTool, 0);
+				button.setOnClickListener(myListener);
+				button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
+				myFamily.add(button);
 		
 		// Add Family
 		myFamilies.add(myFamily);

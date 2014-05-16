@@ -10,6 +10,7 @@ import MusicUtil.EnumKeySignature;
 import MusicUtil.EnumTimeSignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
+import MusicUtil.Tool;
 //import Player.Melody;
 import Player.MidiPlayer;
 import android.app.Activity;
@@ -55,7 +56,7 @@ public class EditorActivity extends Activity{
 	// Editor Values
 	Sheet sheet;
 	ToolFamily currentFamily;
-	NoteTool currentTool, heldTool;
+	Tool currentTool, heldTool;
 	int currentMeasure, currentStaff, currentSignature, activeTool;
 
 	@Override
@@ -161,7 +162,7 @@ public class EditorActivity extends Activity{
 		Chord c;
 		EditorTouchListener touchListener;
 		EditorDragListener dragListener;
-		EditorLongTouchListener longTouchListener;
+
 		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
 
 		//Add Listener and Draw Notes
@@ -374,11 +375,11 @@ public class EditorActivity extends Activity{
 		}
 	}
 
-	public NoteTool getCurrentTool() {
+	public Tool getCurrentTool() {
 		return currentTool;
 	}
 
-	public void setCurrentTool(NoteTool newTool) {
+	public void setCurrentTool(Tool newTool) {
 		currentTool = newTool;
 	}
 
@@ -390,11 +391,11 @@ public class EditorActivity extends Activity{
 		currentFamily = newFamily;
 	}
 
-	public NoteTool getHeldTool() {
+	public Tool getHeldTool() {
 		return heldTool;
 	}
 
-	public void setHeldTool(NoteTool heldTool) {
+	public void setHeldTool(Tool heldTool) {
 		this.heldTool = heldTool;
 	}
 
