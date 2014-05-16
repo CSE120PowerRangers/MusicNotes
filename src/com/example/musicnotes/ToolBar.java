@@ -162,7 +162,7 @@ public class ToolBar {
 		myTool = new AccidentalTool(AccidentalType.FLAT);
 		button.setImageResource(R.drawable.flat);
 		button.setScaleType(ScaleType.FIT_XY);
-		myListener = new ToolButtonListener(myActivity, myTool, 0);
+		myListener = new ToolButtonListener(myActivity, myTool, 1);
 		button.setOnClickListener(myListener);
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
 		myFamily.add(button);
@@ -172,7 +172,7 @@ public class ToolBar {
 		myTool = new AccidentalTool(AccidentalType.NATURAL);
 		button.setImageResource(R.drawable.natural);
 		button.setScaleType(ScaleType.FIT_XY);
-		myListener = new ToolButtonListener(myActivity, myTool, 0);
+		myListener = new ToolButtonListener(myActivity, myTool, 2);
 		button.setOnClickListener(myListener);
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
 		myFamily.add(button);
@@ -182,7 +182,7 @@ public class ToolBar {
 		myTool = new AccidentalTool(AccidentalType.DOT);
 		button.setImageResource(R.drawable.dot);
 		button.setScaleType(ScaleType.CENTER_INSIDE);
-		myListener = new ToolButtonListener(myActivity, myTool, 0);
+		myListener = new ToolButtonListener(myActivity, myTool, 3);
 		button.setOnClickListener(myListener);
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
 		myFamily.add(button);
