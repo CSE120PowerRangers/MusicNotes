@@ -1,5 +1,6 @@
 package MusicSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import MusicUtil.EnumKeySignature;
@@ -12,7 +13,7 @@ import MusicUtil.NoteName;
  *
  */
 
-public class Signature {
+public class Signature implements Serializable{
 	private int tempo, numerator, denominator; //Beats per minute
 	private EnumTimeSignature timeSignature;
 	private EnumKeySignature keySignature;
@@ -68,8 +69,8 @@ public class Signature {
 	 */
 	public Signature(EnumKeySignature keySig, EnumTimeSignature timeSig, int newTempo) {
 		tempo = newTempo;
-		flats = new int[8];
-		sharps = new int[8];
+		flats = new int[21];
+		sharps = new int[21];
 
 		setKeySignature(keySig);
 		setTimeSignature(timeSig);
@@ -99,7 +100,9 @@ public class Signature {
 		this.tempo = toCopy.tempo;
 		this.timeSignature = toCopy.timeSignature;
 		this.keySignature = toCopy.keySignature;
+		flats = new int[21];
 		System.arraycopy(toCopy.flats, 0, this.flats, 0, toCopy.flats.length);
+		sharps = new int[21];
 		System.arraycopy(toCopy.sharps, 0, this.sharps, 0, toCopy.sharps.length);		
 		this.staffs = new ArrayList<Staff>(toCopy.staffs);
 	}

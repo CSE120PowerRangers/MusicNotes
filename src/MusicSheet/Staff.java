@@ -1,12 +1,13 @@
 package MusicSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import MusicUtil.EnumClef;
 import MusicUtil.NoteName;
 
 
-public class Staff {
+public class Staff implements Serializable{
 	private EnumClef clef;
 	private NoteName[] notes;
 	private int octave;

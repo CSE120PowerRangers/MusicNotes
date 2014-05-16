@@ -26,7 +26,7 @@ public class MidiPlayer {
 
 		try{
 			
-			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/" + s.getFileName());
+			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/Midi/" + s.getFileName());
 			//Uri filePath = Uri.parse(context.getFilesDir().getAbsolutePath() + "/" + s.getFileName());
 
 			System.out.println(filePath);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:id="@+id/addstafftext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:text="Clef Type"
+        />
+    
+    <RadioGroup 
+        android:layout_below="@+id/addstafftext"
+         android:id="@+id/addstaffradio"
+         android:layout_width="match_parent"
+         android:layout_height = "wrap_content"
+         android:orientation="horizontal"
+        >
+        <RadioButton 
+            android:id="@+id/addstaffTreble"
+            android:background="@drawable/treble"
+            />
+          <RadioButton 
+            android:id="@+id/addstaffTenor"
+            android:background="@drawable/tenor"
+            />
+            <RadioButton 
+            android:id="@+id/addstaffBass"
+            android:background="@drawable/bass"
+            />
+        
+    </RadioGroup>
+
+</RelativeLayout>

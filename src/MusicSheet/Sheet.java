@@ -1,7 +1,8 @@
 package MusicSheet;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Sheet {
+public class Sheet implements Serializable{
 	private String name;
 	private ArrayList<Signature> signatures;
 

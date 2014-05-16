@@ -1,7 +1,7 @@
 package Listeners;
 import com.example.musicnotes.EditorActivity;
 
-import MusicUtil.NoteTool;
+import MusicUtil.*;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -9,9 +9,9 @@ import android.view.View.OnClickListener;
 public class ToolButtonListener implements OnClickListener {
 
 	EditorActivity currentActivity;
-	NoteTool myTool;
+	Tool myTool;
 	int myID;
-	public ToolButtonListener(EditorActivity currentActivity, NoteTool currentTool, int ID)
+	public ToolButtonListener(EditorActivity currentActivity, Tool currentTool, int ID)
 	{
 		this.currentActivity = currentActivity;
 		this.myTool = currentTool;

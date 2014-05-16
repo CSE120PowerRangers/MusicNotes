@@ -7,22 +7,35 @@ import Listeners.*;
 import MusicSheet.*;
 import MusicUtil.EnumClef;
 import MusicUtil.EnumKeySignature;
+import MusicUtil.EnumTimeSignature;
 import MusicUtil.NoteTool;
 import MusicUtil.NoteType;
+import MusicUtil.Tool;
 //import Player.Melody;
 import Player.MidiPlayer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class EditorActivity extends Activity{
 
@@ -43,7 +56,7 @@ public class EditorActivity extends Activity{
 	// Editor Values
 	Sheet sheet;
 	ToolFamily currentFamily;
-	NoteTool currentTool, heldTool;
+	Tool currentTool, heldTool;
 	int currentMeasure, currentStaff, currentSignature, activeTool;
 
 	@Override
@@ -53,7 +66,9 @@ public class EditorActivity extends Activity{
 		setContentView(R.layout.editor_layout);
 
 		//Static Values
+		currentMeasure = currentStaff = currentSignature = 0;
 		numNotes = 15;
+		numChords = 8;
 		percentageTop = 0.15f;
 		percentageSide = 0.10f;
 		heldTool = null;
@@ -66,17 +81,21 @@ public class EditorActivity extends Activity{
 		updateToolBar();
 
 		// Load in sheet and initialize values and tools
-		sheet = new Sheet();
 		Intent mainIntent = getIntent();
-		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
-		currentMeasure = currentStaff = currentSignature = 0;
-		sheet.get(currentSignature).setKeySignature(EnumKeySignature.E_MAJOR);
-		numChords = 8;
-
+		if(mainIntent.getStringExtra("nameofSheet") != null)
+		{
+			sheet = new Sheet();
+			sheet.setName(mainIntent.getStringExtra("nameofSheet"));
+		}
+		else
+		{
+			sheet = (Sheet)mainIntent.getSerializableExtra("Sheet");
+		}
+		this.setTitle(sheet.name());
 		calcScreenSize();
 		initializeView();
 		updateMeasureSpinner();
-		updateStaffSpinner();
+
 
 		// Initialize Tool Family Spinner
 		familySpinner = (Spinner) findViewById(R.id.toolbarSpinner);
@@ -143,7 +162,7 @@ public class EditorActivity extends Activity{
 		Chord c;
 		EditorTouchListener touchListener;
 		EditorDragListener dragListener;
-		EditorLongTouchListener longTouchListener;
+
 		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
 
 		//Add Listener and Draw Notes
@@ -206,6 +225,7 @@ public class EditorActivity extends Activity{
 
 	public void initializeView()
 	{
+
 		//Top Panel
 		LinearLayout topToolbar = (LinearLayout)findViewById(R.id.topToolbar);
 		topToolbar.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,(int)(screenHeight*percentageTop)));
@@ -226,25 +246,21 @@ public class EditorActivity extends Activity{
 		RelativeLayout.LayoutParams sidePanelParams = new RelativeLayout.LayoutParams((int)(screenWidth*percentageSide),(int)((1.0f-percentageTop)*screenHeight));
 		sidePanelParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
 		sidePanel.setLayoutParams(sidePanelParams);
-	
-		ImageView keySig = (ImageView)findViewById(R.id.keysignaturemeasure);
-		keySig.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+
+		ImageButton keySig = (ImageButton)findViewById(R.id.keysignaturemeasure);
+		keySig.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/4.0f)));
+		keySig.setScaleType(ScaleType.FIT_XY);
 		LinearLayout timeSigLayout = (LinearLayout)findViewById(R.id.timeSignatureLayout);
-		timeSigLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		timeSigLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/4.0f)));
 		ImageView topTime = (ImageView)findViewById(R.id.timesigtop);
-		topTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/14));
+		topTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/8));
 		//topTime.setScaleType(ScaleType.FIT_XY);
 		ImageView botTime = (ImageView)findViewById(R.id.timesigbot);
-		botTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/14));
+		botTime.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, measureHeight/8));
 		//botTime.setScaleType(ScaleType.FIT_XY);
-		ImageView staffClef = (ImageView)findViewById(R.id.staffclef);
-		staffClef.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
-		ImageView previousStaff = (ImageView)findViewById(R.id.previousStaff);
-		previousStaff.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
-		Spinner staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
-		staffSpinner.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
-		ImageView nextStaff = (ImageView)findViewById(R.id.nextStaff);
-		nextStaff.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/7.0f)));
+		ImageButton staffClef = (ImageButton)findViewById(R.id.staffclef);
+		staffClef.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(measureHeight/4.0f)));
+		staffClef.setScaleType(ScaleType.CENTER_INSIDE);
 
 		// Add Measure Lines
 		LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
@@ -253,18 +269,18 @@ public class EditorActivity extends Activity{
 		measureParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
 		measureLayout.setOrientation(LinearLayout.HORIZONTAL);
 		measureLayout.setLayoutParams(measureParams);
-		
+
 		for(int chords = 0; chords < numChords; chords++) {
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setOrientation(LinearLayout.VERTICAL);
 			chordLayout.setLayoutParams(chordParams);
-			
+
 			for(int notes = 0; notes < numNotes; notes++) {
 				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth,noteHeight);
 				ImageView noteView = new ImageView(this);
 				noteView.setLayoutParams(noteParams);
-				
+
 				if(notes >= 3 && notes <=11 && notes%2 == 1) {
 					noteView.setImageResource(R.drawable.line);
 					noteView.setScaleType(ScaleType.FIT_XY);
@@ -281,7 +297,7 @@ public class EditorActivity extends Activity{
 		noteLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
 		noteLayout.setOrientation(LinearLayout.HORIZONTAL);
 		noteLayout.setLayoutParams(noteLayoutParams);
-		
+
 		for(int chords = 0; chords < 8; chords++) {
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
 			LinearLayout chordLayout = new LinearLayout(this);
@@ -313,6 +329,20 @@ public class EditorActivity extends Activity{
 	}
 
 	public void saveFile() {
+		FileOutputStream fos = null;
+		ObjectOutputStream out = null;
+		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes/Sheets");
+		path.mkdirs();
+		try{
+			fos = new FileOutputStream(Environment.getExternalStorageDirectory().toString()+"/MusicNotes/Sheets/" + sheet.name()+".mnn");
+			out = new ObjectOutputStream(fos);
+			out.writeObject(sheet);
+			
+			out.close();
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 		FileMaker.writeSheetToMidiInternal(sheet, this);
 	}
 
@@ -344,48 +374,28 @@ public class EditorActivity extends Activity{
 			updateMeasures(getCurrentMeasure());
 		}
 	}
-	
-	public void nextStaff(View v) {
-		if(currentStaff == sheet.get(currentSignature).size()-1) {
-			sheet.get(currentSignature).add(new Staff());
-			currentStaff++;
-			updateStaffSpinner();
-		} else {
-			currentStaff++;
-		}
-		staffSpinner.setSelection(currentStaff);
-		updateMeasures(getCurrentMeasure());
-	}
-	
-	public void previousStaff(View v) {
-		if(currentStaff>0) {
-			currentStaff--;
-			staffSpinner.setSelection(currentStaff);
-			updateMeasures(getCurrentMeasure());
-		}
-	}
-	
-	public NoteTool getCurrentTool() {
+
+	public Tool getCurrentTool() {
 		return currentTool;
 	}
-	
-	public void setCurrentTool(NoteTool newTool) {
+
+	public void setCurrentTool(Tool newTool) {
 		currentTool = newTool;
 	}
-	
+
 	public void setActiveToolID(int tool) {
 		activeTool = tool;
 	}
-	
+
 	public void setToolFamily(ToolFamily newFamily) {
 		currentFamily = newFamily;
 	}
-	
-	public NoteTool getHeldTool() {
+
+	public Tool getHeldTool() {
 		return heldTool;
 	}
 
-	public void setHeldTool(NoteTool heldTool) {
+	public void setHeldTool(Tool heldTool) {
 		this.heldTool = heldTool;
 	}
 
@@ -394,72 +404,390 @@ public class EditorActivity extends Activity{
 		//Initialize Measure Spinner
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);
 		measureArray = new String[sheet.get(currentSignature).get(currentStaff).size()];
-		
+
 		for(int i = 0; i < sheet.get(currentSignature).get(currentStaff).size(); i++) {
 			measureArray[i] = "" +(i+1);
 		}
-		
+
 		ArrayAdapter<String> adapterMeasure = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,measureArray);
 		adapterMeasure.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		measureSpinner.setAdapter(adapterMeasure);
 		measureSpinner.setOnItemSelectedListener(new MeasureSpinnerListener(this));
 	}
 
-	public void updateStaffSpinner() {
-		staffSpinner = (Spinner)findViewById(R.id.staffSpinner);
-		staffArray = new String[sheet.get(currentSignature).size()];
-		
-		for(int i = 0; i < sheet.get(currentSignature).size(); i++) {
-			staffArray[i] = "" + (i+1);
-		}
-		
-		ArrayAdapter<String> adapterStaff = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,staffArray);
-		adapterStaff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		staffSpinner.setAdapter(adapterStaff);
-		staffSpinner.setOnItemSelectedListener(new StaffSpinnerListener(this));
-	}
-	
+
+
 	public Sheet getSheet() {
 		return sheet;
 	}
-	
+
+	public void setCurrentSignature(int newSig) {
+		currentSignature = newSig;
+	}
+
 	public Staff getCurrentStaff() {
 		return sheet.get(currentSignature).get(currentStaff);
 	}
-	
+
 	public void setCurrentStaff(int newStaff) {
 		currentStaff = newStaff;
 	}
-	
+
 	public Signature getCurrentSignature() {
 		return sheet.get(currentSignature);
 	}
-	
+
 	public Measure getCurrentMeasure() {
 		return getCurrentStaff().get(currentMeasure);
 	}
-	
+
 	public void setCurrentMeasure(int measure) {
 		currentMeasure = measure;
 	}
-	
-	public void changeStaff(View v) {
-		ImageView touchedStaff = (ImageView)findViewById(R.id.staffclef);
-		switch(sheet.get(currentSignature).get(currentStaff).clef()) {
-		case TREBLE:
-			touchedStaff.setImageResource(R.drawable.tenor);
-			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TENOR);
-			break;
-		case TENOR:
-			touchedStaff.setImageResource(R.drawable.bass);
-			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.BASS);
-			break;
-		case BASS:
-			touchedStaff.setImageResource(R.drawable.treble);
-			sheet.get(currentSignature).get(currentStaff).setClef(EnumClef.TREBLE);
-			break;
+
+	public void alertStaff(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+
+		builder.setView(inflater.inflate(R.layout.staffoptions_layout, null))
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void changeStaff(View v) 
+	{
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+		LinearLayout staffLayout = (LinearLayout) inflater.inflate(R.layout.changestaff_layout, null);
+		staffSpinner = (Spinner) staffLayout.findViewById(R.id.changestaffspinner);
+		String[] changeStaffArray = new String[sheet.get(currentSignature).size()];
+		for(int i = 0; i < sheet.get(currentSignature).size(); i++) {
+			changeStaffArray[i] = "" +(i+1);
+		}
+		ArrayAdapter<String> adapterStaff = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, changeStaffArray);
+		adapterStaff.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		staffSpinner.setAdapter(adapterStaff);
+		staffSpinner.setOnItemSelectedListener(new StaffSpinnerListener(this));
+		staffSpinner.setSelection(currentStaff);
+
+		builder.setView(staffLayout)
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void addStaff(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+
+		builder.setView(inflater.inflate(R.layout.addstaff_layout, null))
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Dialog d = (Dialog) dialog;
+				RadioGroup clefRadio = (RadioGroup) d.findViewById(R.id.addstaffradio);
+				ImageButton staffButton = (ImageButton)findViewById(R.id.staffclef);
+				switch(clefRadio.getCheckedRadioButtonId())
+				{
+				case R.id.addstaffTreble:
+					for(int sig = 0; sig < sheet.size(); sig++)
+					{
+						sheet.get(sig).add(new Staff(EnumClef.TREBLE));
+					}
+					break;
+				case R.id.addstaffTenor:
+					for(int sig = 0; sig < sheet.size(); sig++)
+					{
+						sheet.get(sig).add(new Staff(EnumClef.TENOR));
+					}
+					break;
+				case R.id.addstaffBass:
+					for(int sig = 0; sig < sheet.size(); sig++)
+					{
+						sheet.get(sig).add(new Staff(EnumClef.BASS));
+					}
+					break;
+				}
+				setCurrentStaff(getCurrentSignature().size()-1);
+				updateStaffButton();
+				updateMeasures(getCurrentMeasure());
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void deleteStaff(View v)
+	{
+		if(getCurrentSignature().size()>1)
+		{
+			for(int sig = 0; sig < sheet.size(); sig++)
+			{
+				sheet.get(sig).delete(sheet.get(sig).get(currentStaff));
+			}
+			if(currentStaff==0)
+			{
+
+			}
+			else
+			{
+				currentStaff--;
+			}
+			setCurrentStaff(currentStaff);
+			updateStaffButton();
+			updateMeasures(getCurrentMeasure());
 		}
 	}
 
+	public void alertSignature(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
 
+		builder.setView(inflater.inflate(R.layout.signatureoptions_layout, null))
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void changeSignature(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+		LinearLayout staffLayout = (LinearLayout) inflater.inflate(R.layout.changesignature_layout, null);
+		Spinner sigSpinner = (Spinner) staffLayout.findViewById(R.id.changesignaturespinner);
+		String[] changeSignatureArray = new String[sheet.size()];
+		for(int i = 0; i < sheet.size(); i++) {
+			changeSignatureArray[i] = "" +(i+1);
+		}
+		ArrayAdapter<String> adapterSignature = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, changeSignatureArray);
+		adapterSignature.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		sigSpinner.setAdapter(adapterSignature);
+		sigSpinner.setOnItemSelectedListener(new SignatureSpinnerListener(this));
+		sigSpinner.setSelection(currentSignature);
+
+		builder.setView(staffLayout)
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+	
+	public void addSignature(View v)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+
+		LinearLayout sigLayout = (LinearLayout) inflater.inflate(R.layout.addsignature_layout, null);
+		Spinner signatureSpinner = (Spinner) sigLayout.findViewById(R.id.keysignaturespinner);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.keySignatures, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		signatureSpinner.setAdapter(adapter);
+		signatureSpinner.setSelection(0);
+
+		builder.setView(sigLayout)
+		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Dialog d = (Dialog) dialog;
+				EnumKeySignature newKey = EnumKeySignature.C_MAJOR;
+				switch(((Spinner)d.findViewById(R.id.keysignaturespinner)).getSelectedItemPosition())
+				{
+				case 0:
+					//"B Major/G# Minor"
+					newKey = EnumKeySignature.B_MAJOR;
+					break;
+				case 1:
+					//"E Major/C# Minor"
+					newKey = EnumKeySignature.E_MAJOR;
+					break;
+
+				case 2:
+					//"A Major/F# Minor"
+					newKey = EnumKeySignature.A_MAJOR;
+					break;
+				case 3:
+					//"D Major/B Minor"
+					newKey = EnumKeySignature.D_MAJOR;
+					break;
+
+				case 4:
+					//"G Major/E Minor"
+					newKey = EnumKeySignature.G_MAJOR;
+					break;
+
+				case 5:
+					//"C Major/A Minor"
+					newKey = EnumKeySignature.C_MAJOR;
+					break;
+				}
+				sheet.add(new Signature(newKey,EnumTimeSignature.THREE_FOUR,120));
+				sheet.get(sheet.size()-1).delete(sheet.get(sheet.size()-1).get(0));
+				for(int staves = 0; staves < getCurrentSignature().size(); staves++)
+				{
+					sheet.get(sheet.size()-1).add(new Staff(getCurrentSignature().get(staves).clef()));
+				}
+				setCurrentSignature(sheet.size()-1);
+				getCurrentSignature().setKeySignature(newKey);
+				setCurrentMeasure(0);
+				updateSignatureButton();
+				updateMeasures(getCurrentMeasure());
+				
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});      
+
+		AlertDialog myAlert = builder.create();
+		myAlert.show();
+	}
+
+	public void deleteSignature(View v)
+	{
+		if(sheet.size()>1)
+		{
+			sheet.delete(getCurrentSignature());
+			if(currentSignature==0)
+			{
+			
+			}
+			else
+			{
+				currentSignature--;
+			}
+			setCurrentSignature(currentSignature);
+			//updateStaffButton();
+		}
+		updateSignatureButton();
+		updateMeasures(getCurrentMeasure());
+	}
+
+
+	public void updateSignatureButton()
+	{
+		switch(getCurrentStaff().clef())
+		{
+		case TREBLE:
+		case TENOR:
+			switch(getCurrentSignature().keySignature())
+			{
+			case B_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tbsignature);
+				break;
+			case E_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tesignature);
+				break;
+			case A_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tasignature);
+				break;
+			case D_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tdsignature);
+				break;
+			case G_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.tgsignature);
+				break;
+			case C_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.csignature);
+				break;	
+			}
+			break;
+		case BASS:	
+			switch(getCurrentSignature().keySignature())
+			{
+			case B_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.bbsignature);
+				break;
+			case E_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.besignature);
+				break;
+			case A_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.basignature);
+				break;
+			case D_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.bdsignature);
+				break;
+			case G_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.bgsignature);
+				break;
+			case C_MAJOR:
+				((ImageButton) findViewById(R.id.keysignaturemeasure)).setImageResource(R.drawable.csignature);
+				break;	
+			}
+			break;
+		}
+	}
+	
+	public void updateStaffButton()
+	{
+		switch(getCurrentStaff().clef())
+		{
+		case TREBLE:
+			((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.treble);
+			break;
+		case TENOR:
+			((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.tenor);
+			break;
+		case BASS:
+			((ImageButton) findViewById(R.id.staffclef)).setImageResource(R.drawable.bass);
+			break;
+		}	
+	}
 }

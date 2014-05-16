@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/staffoptionslayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button
+        android:id="@+id/changestaffoption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Staff"
+        android:onClick="changeStaff"
+        />
+       
+    <Button
+        android:id="@+id/addstaffoption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add New Staff"
+        android:onClick="addStaff"
+        />
+    
+    <Button
+        android:id="@+id/deletestaffoption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Current Staff"
+        android:onClick="deleteStaff"
+        />
+    
+</LinearLayout>

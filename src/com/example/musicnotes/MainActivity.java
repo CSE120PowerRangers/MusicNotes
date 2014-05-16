@@ -2,6 +2,7 @@ package com.example.musicnotes;
 
 import java.io.File;
 
+import Listeners.LoadSheetListener;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -25,13 +26,14 @@ public class MainActivity extends Activity{
 		setContentView(R.layout.activity_main);
 
 		LinearLayout fileSpinner = (LinearLayout) findViewById(R.id.listofSheets);
-		File musicNotesFile = new File(Environment.getExternalStorageDirectory().toString() + "/MusicNotes");
+		File musicNotesFile = new File(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/Sheets");
 		String[] fileArray = musicNotesFile.list();
 		if(fileArray!=null)
 		{
 			for(int i = 0; i < fileArray.length; i++)
 			{
 				Button myFile = new Button(this);
+				myFile.setOnClickListener(new LoadSheetListener(this));
 				myFile.setText(fileArray[i]);
 				fileSpinner.addView(myFile);
 			}

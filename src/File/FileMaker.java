@@ -26,7 +26,7 @@ import com.leff.midi.event.meta.*;
 public class FileMaker {
 
 	public static String TEST_FILENAME = "midiTest.mid";
-
+	public static long signatureOffset = 0;
 	/*
 	 * SHEET => MIDIFILE
 	 */
@@ -95,15 +95,17 @@ public class FileMaker {
 
 	private static MidiTrack insertMeasureEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex) {
 		int numMeasures = s.get(staffIndex).get(signatureIndex).size();
+		int signatureLength = 0;
 
 		for (int i = 0; i < numMeasures; i++) {
-			track = insertChordEvents(track, s, staffIndex, signatureIndex, i);
+			track = insertChordEvents(track, s, staffIndex, signatureIndex, i, signatureLength);
 		}
 
+		signatureOffset += signatureLength;
 		return track;
 	}
 
-	private static MidiTrack insertChordEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex, int measureIndex) {
+	private static MidiTrack insertChordEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex, int measureIndex, long length) {
 		int numChords = s.get(staffIndex).get(signatureIndex).get(measureIndex).size();
 		Chord currentChord;
 		Note currentNote;
@@ -152,7 +154,10 @@ public class FileMaker {
 
 					// Finally calculate the tick timestamp
 					tick = (MidiFile.DEFAULT_RESOLUTION * (beatsPerQN * num) * measureIndex)
-							+ (i * (MidiFile.DEFAULT_RESOLUTION / divisionsPerQN));
+							+ (i * (MidiFile.DEFAULT_RESOLUTION / divisionsPerQN)) + signatureOffset;
+
+					//Update the length of the signature to the last tick
+					length = tick;
 
 					duration = currentNote.getNoteDurationInTicks(MidiFile.DEFAULT_RESOLUTION);
 
@@ -408,7 +413,7 @@ public class FileMaker {
 
 	public static void writeSheetToMidiInternal(Sheet s, Context c) {
 		MidiFile midi = sheetToMidi(s);
-		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes");
+		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes/Midi");
 		path.mkdirs();
 		//File path = new File(c.getFilesDir().getAbsolutePath()+"/");
 		File output = new File(path, s.getFileName());

@@ -29,6 +29,14 @@
           
       </string-array>
           
+      <string-array name = "keySignatures">
+          <item>B Major/G# Minor</item>
+          <item>E Major/C# Minor</item>
+          <item>A Major/F# Minor</item>
+          <item>D Major/B Minor</item>
+          <item>G Major/E Minor</item>
+          <item>C Major/A Minor</item>
+      </string-array>
       
 	<string name="save">Save</string>
     <string name="hello_world">Hello world!</string>
