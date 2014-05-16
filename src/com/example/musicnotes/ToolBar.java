@@ -181,7 +181,7 @@ public class ToolBar {
 		button = new ImageButton(myActivity);
 		myTool = new AccidentalTool(AccidentalType.DOT);
 		button.setImageResource(R.drawable.dot);
-		button.setScaleType(ScaleType.FIT_XY);
+		button.setScaleType(ScaleType.CENTER_INSIDE);
 		myListener = new ToolButtonListener(myActivity, myTool, 0);
 		button.setOnClickListener(myListener);
 		button.setLayoutParams(new LayoutParams(100, LayoutParams.MATCH_PARENT));
