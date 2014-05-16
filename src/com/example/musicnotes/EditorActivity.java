@@ -740,7 +740,7 @@ public class EditorActivity extends Activity{
 					newKey = EnumKeySignature.C_MAJOR;
 					break;
 				}
-				sheet.add(new Signature(newKey,EnumTimeSignature.THREE_FOUR,120));
+				sheet.add(new Signature(newKey,EnumTimeSignature.FOUR_FOUR,120));
 				sheet.get(sheet.size()-1).delete(sheet.get(sheet.size()-1).get(0));
 				for(int staves = 0; staves < getCurrentSignature().size(); staves++)
 				{

@@ -98,13 +98,13 @@ public class FileMaker {
 
 	private static MidiTrack insertMeasureEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex) {
 		int numMeasures = s.get(signatureIndex).get(staffIndex).size();
-		int signatureLength = 0;
+		long signatureLength = 0;
 
 		for (int i = 0; i < numMeasures; i++) {
 			track = insertChordEvents(track, s, staffIndex, signatureIndex, i, signatureLength);
 		}
-
-		signatureOffset += signatureLength;
+		//System.out.println(track.getLengthInTicks());
+		signatureOffset += track.getLengthInTicks();
 		return track;
 	}
 
