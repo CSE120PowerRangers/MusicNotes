@@ -12,6 +12,7 @@ public class Staff implements Serializable{
 	private NoteName[] notes;
 	private int octave;
 	private int program; //Midi program number
+	private int numDivs = 0;
 	private ArrayList<Measure> measures;
 	
 	/**
@@ -24,6 +25,7 @@ public class Staff implements Serializable{
 		program = 0;
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
+		//measures.get(0).setDivisionNumber(numDivs);
 	}
 	
 	/**
@@ -37,6 +39,7 @@ public class Staff implements Serializable{
 		program = 0;
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure());
+		//measures.get(0).setDivisionNumber(numDivs);
 	}
 	
 	/**
@@ -51,6 +54,7 @@ public class Staff implements Serializable{
 		program = 0;
 		measures = new ArrayList<Measure>();
 		measures.add(new Measure(measure));
+		//measures.get(0).setDivisionNumber(numDivs);
 	}
 	
 	/**
@@ -80,6 +84,8 @@ public class Staff implements Serializable{
 	 * @param newMeasure
 	 */
 	public void add(Measure newMeasure) {
+		System.out.println(numDivs);
+		newMeasure.setDivisionNumber(numDivs);
 		measures.add(newMeasure);
 	}
 
@@ -91,8 +97,8 @@ public class Staff implements Serializable{
 	public void add(int index, Measure newMeasure) {
 		if(index >= 0 && index < measures.size()) {
 			//Force creation of new copy of measure
-			newMeasure = new Measure(newMeasure);
-			measures.add(index, newMeasure);
+			measures.add(index, new Measure(newMeasure));
+			measures.get(index).setDivisionNumber(numDivs);
 		}
 	}
 	
@@ -103,6 +109,7 @@ public class Staff implements Serializable{
 	public void add(int numberOfMeasures) {
 		for(int i = 0; i < numberOfMeasures; i++) {
 			measures.add(new Measure());
+			measures.get(i).setDivisionNumber(numDivs);
 		}
 	}
 
@@ -224,6 +231,16 @@ public class Staff implements Serializable{
 			notes[13] = NoteName.E;
 			notes[14] = NoteName.D;
 			break;
+		}
+	}
+	
+	public void setDivs(int num) {
+		numDivs = num;
+	}
+	
+	public void update() {
+		for(int i = 0; i < measures.size(); i++) {
+			measures.get(i).setDivisionNumber(numDivs);
 		}
 	}
 }

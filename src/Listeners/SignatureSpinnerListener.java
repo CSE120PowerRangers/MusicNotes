@@ -20,7 +20,10 @@ private EditorActivity myActivity;
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		myActivity.setCurrentSignature(position);
+		myActivity.setCurrentMeasure(0);
 		myActivity.updateSignatureButton();
+		myActivity.updateMeasureSpinner();
+		myActivity.updateMeasures(myActivity.getCurrentMeasure());
 	}
 
 	@Override
