@@ -80,6 +80,9 @@ public class Staff implements Serializable{
 	 * @param newMeasure
 	 */
 	public void add(Measure newMeasure) {
+		int numDivs = measures.get(0).size();
+		System.out.println(numDivs);
+		newMeasure.setDivisionNumber(numDivs);
 		measures.add(newMeasure);
 	}
 
@@ -90,9 +93,10 @@ public class Staff implements Serializable{
 	 */
 	public void add(int index, Measure newMeasure) {
 		if(index >= 0 && index < measures.size()) {
+			int numDivs = measures.get(0).size();
 			//Force creation of new copy of measure
-			newMeasure = new Measure(newMeasure);
-			measures.add(index, newMeasure);
+			measures.add(index, new Measure(newMeasure));
+			measures.get(index).setDivisionNumber(numDivs);
 		}
 	}
 	
@@ -101,8 +105,10 @@ public class Staff implements Serializable{
 	 * @param numberOfMeasures
 	 */
 	public void add(int numberOfMeasures) {
+		int numDivs = measures.get(0).size();
 		for(int i = 0; i < numberOfMeasures; i++) {
 			measures.add(new Measure());
+			measures.get(i).setDivisionNumber(numDivs);
 		}
 	}
 

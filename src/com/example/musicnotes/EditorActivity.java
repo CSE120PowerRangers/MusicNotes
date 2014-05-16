@@ -165,6 +165,7 @@ public class EditorActivity extends Activity{
 
 		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
 
+		numChords = currentMeasure.size();
 		//Add Listener and Draw Notes
 		for(int chords = 0; chords < numChords; chords++) {
 
@@ -298,7 +299,61 @@ public class EditorActivity extends Activity{
 		noteLayout.setOrientation(LinearLayout.HORIZONTAL);
 		noteLayout.setLayoutParams(noteLayoutParams);
 
-		for(int chords = 0; chords < 8; chords++) {
+		for(int chords = 0; chords < numChords; chords++) {
+			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
+			LinearLayout chordLayout = new LinearLayout(this);
+			chordLayout.setLayoutParams(chordParams);
+			chordLayout.setOrientation(LinearLayout.VERTICAL);
+
+			for(int notes = 0; notes < numNotes; notes++) {
+				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth, noteHeight);
+				ImageView noteView = new ImageView(this);
+				noteView.setLayoutParams(noteParams);
+				chordLayout.addView(noteView);
+			}
+			noteLayout.addView(chordLayout);	
+		}
+	}
+	
+	public void resizeView(int numDivisions) {
+		numChords = numDivisions;
+		
+		LinearLayout measureLayout = (LinearLayout) findViewById(R.id.measureLayout);
+		RelativeLayout.LayoutParams measureParams = new RelativeLayout.LayoutParams(measureWidth,measureHeight);
+		measureParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+		measureParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
+		measureLayout.setOrientation(LinearLayout.HORIZONTAL);
+		measureLayout.setLayoutParams(measureParams);
+
+		for(int chords = 0; chords < numChords; chords++) {
+			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
+			LinearLayout chordLayout = new LinearLayout(this);
+			chordLayout.setOrientation(LinearLayout.VERTICAL);
+			chordLayout.setLayoutParams(chordParams);
+
+			for(int notes = 0; notes < numNotes; notes++) {
+				LinearLayout.LayoutParams noteParams = new LinearLayout.LayoutParams(noteWidth,noteHeight);
+				ImageView noteView = new ImageView(this);
+				noteView.setLayoutParams(noteParams);
+
+				if(notes >= 3 && notes <=11 && notes%2 == 1) {
+					noteView.setImageResource(R.drawable.line);
+					noteView.setScaleType(ScaleType.FIT_XY);
+				}
+				chordLayout.addView(noteView);
+			}
+			measureLayout.addView(chordLayout);
+		}
+
+		// Add Note Holders
+		LinearLayout noteLayout = (LinearLayout)findViewById(R.id.noteLayout);
+		RelativeLayout.LayoutParams noteLayoutParams = new RelativeLayout.LayoutParams(measureWidth,measureHeight);
+		noteLayoutParams.addRule(RelativeLayout.BELOW, R.id.topToolbar);
+		noteLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.leftPanel);
+		noteLayout.setOrientation(LinearLayout.HORIZONTAL);
+		noteLayout.setLayoutParams(noteLayoutParams);
+
+		for(int chords = 0; chords < numChords; chords++) {
 			LinearLayout.LayoutParams chordParams = new LinearLayout.LayoutParams(chordWidth, chordHeight);
 			LinearLayout chordLayout = new LinearLayout(this);
 			chordLayout.setLayoutParams(chordParams);
@@ -610,11 +665,20 @@ public class EditorActivity extends Activity{
 		sigSpinner.setAdapter(adapterSignature);
 		sigSpinner.setOnItemSelectedListener(new SignatureSpinnerListener(this));
 		sigSpinner.setSelection(currentSignature);
-
+		
 		builder.setView(staffLayout)
 		.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
+				//Updates screen when selection is made
+				//numChords = sheet.get(currentSignature).get(0).get(0).size();
+				//initializeView();
+				System.out.println("Resizing the view to signature " + currentSignature + " and " + sheet.get(currentSignature).get(0).get(0).size() + " chords");
+				System.out.println("Time signature of signature " + currentSignature + " is " + sheet.get(currentSignature).timeSignature().name());
+				
+				//Measure.setDivisionNumber(numDivs);
+				resizeView(sheet.get(currentSignature).get(0).get(0).size());
+				updateMeasures(sheet.get(currentSignature).get(0).get(0));
 				dialog.cancel();
 			}
 		})
@@ -622,8 +686,8 @@ public class EditorActivity extends Activity{
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}
-		});      
-
+		});
+		
 		AlertDialog myAlert = builder.create();
 		myAlert.show();
 	}
