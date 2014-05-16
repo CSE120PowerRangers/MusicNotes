@@ -80,8 +80,9 @@ public class FileMaker {
 		for (int i = 0; i < numSignatures; i++) {
 			newTrack = createSingleTrack(s, i);
 			noteTracks.add(newTrack);
+			signatureOffset += newTrack.getLengthInTicks();
 		}
-
+		
 		return noteTracks;
 	}
 
@@ -104,7 +105,7 @@ public class FileMaker {
 			track = insertChordEvents(track, s, staffIndex, signatureIndex, i, signatureLength);
 		}
 		//System.out.println(track.getLengthInTicks());
-		signatureOffset += track.getLengthInTicks();
+		
 		return track;
 	}
 
