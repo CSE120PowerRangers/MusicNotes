@@ -398,7 +398,7 @@ public class EditorActivity extends Activity{
 		this.heldTool = heldTool;
 	}
 
-	private void updateMeasureSpinner()
+	public void updateMeasureSpinner()
 	{
 		//Initialize Measure Spinner
 		measureSpinner = (Spinner) findViewById(R.id.currentMeasure);

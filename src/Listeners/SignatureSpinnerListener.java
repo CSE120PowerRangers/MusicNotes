@@ -22,6 +22,7 @@ private EditorActivity myActivity;
 		myActivity.setCurrentSignature(position);
 		myActivity.setCurrentMeasure(0);
 		myActivity.updateSignatureButton();
+		myActivity.updateMeasureSpinner();
 		myActivity.updateMeasures(myActivity.getCurrentMeasure());
 	}
 
