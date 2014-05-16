@@ -1,6 +1,7 @@
 package MusicUtil;
 
 import MusicSheet.Chord;
+import MusicSheet.Note;
 import android.content.ClipData;
 import android.content.Context;
 import android.os.Vibrator;
@@ -18,7 +19,7 @@ public class NoteTool extends Tool{
 
 	NoteType myType;
 	int imageID;
-
+	
 	public NoteTool( NoteType currentType, int imageID)
 	{
 		toolName = ToolNames.NOTE;
@@ -66,7 +67,8 @@ public class NoteTool extends Tool{
 
 		if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos) != null)
 		{
-			myActivity.setHeldTool(NoteToScreen.notetoTool(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos)));
+			myActivity.setHeldNote(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos));
+			
 			Vibrator vib = (Vibrator) myActivity.getSystemService(Context.VIBRATOR_SERVICE);
 			// Delete the note
 			// Vibrate on long click if there's a note to pick up
@@ -88,7 +90,7 @@ public class NoteTool extends Tool{
 			{
 				NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos);
 			}
-			NoteToScreen.addNote(myActivity, chordSel, notePos, myTool);
+			NoteToScreen.addNote(myActivity, chordSel, notePos, myTool.getType());
 			return;
 		}
 	}
@@ -96,7 +98,7 @@ public class NoteTool extends Tool{
 	@Override
 	public void dragUse(EditorActivity myActivity, View v) {
 		ImageView noteView = (ImageView)v;
-		NoteTool heldTool = (NoteTool)myActivity.getHeldTool();
+		Note heldNote = myActivity.getHeldNote();
 		// Get the chord and measure views that the note is located in
 		LinearLayout chordParent = (LinearLayout)noteView.getParent();
 		LinearLayout measureParent = (LinearLayout) chordParent.getParent();
@@ -120,14 +122,14 @@ public class NoteTool extends Tool{
 		// Get the selected chord and add a new chord
 		myActivity.getCurrentMeasure().add(chordsPos);
 		Chord chordSel = myActivity.getCurrentMeasure().get(chordsPos);
-
 		if(NoteToScreen.findNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos) != null)
 		{
 			NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos);
 		}
-		noteView.setImageResource(heldTool.getID());
-		noteView.setScaleType(ScaleType.CENTER_INSIDE);
-		NoteToScreen.addNote(myActivity, chordSel, notePos, heldTool);
+		NoteToScreen.addNote(myActivity, chordSel, notePos, heldNote.type());
+		NoteToScreen.findNote(myActivity, chordSel, notePos).setAccidental(heldNote.accidental());
+		myActivity.setHeldNote(null);
+		myActivity.updateMeasures(myActivity.getCurrentMeasure());
 	}
 
 

@@ -198,7 +198,9 @@ public class Note implements Serializable{
 			break;
 
 		}
+
 		return (21 * octave) + numberName;
+
 	}
 
 	/**
@@ -292,8 +294,7 @@ public class Note implements Serializable{
 			numberName = -1;
 			break;
 		}
-
-		return (12 * this.octave) + numberName;
+			return (12 * this.octave) + numberName;
 	}
 
 	public long getNoteDurationInTicks(int PPQ) {
@@ -380,7 +381,7 @@ public class Note implements Serializable{
 		switch(name)
 		{
 		case BSHARP:
-			return NoteName.CFLAT;
+			return NoteName.C;
 		case C:
 			return NoteName.CSHARP;
 		case CSHARP:
@@ -418,7 +419,7 @@ public class Note implements Serializable{
 		case BFLAT:
 			return NoteName.B;
 		case B:
-			return NoteName.BSHARP;
+			return NoteName.C;
 		case CFLAT:
 			return NoteName.C;
 		}
@@ -471,7 +472,7 @@ public class Note implements Serializable{
 		case B:
 			return NoteName.B;
 		case CFLAT:
-			return NoteName.C;
+			return NoteName.B;
 		}
 		return NoteName.C;
 
@@ -485,7 +486,7 @@ public class Note implements Serializable{
 		case BSHARP:
 			return NoteName.B;
 		case C:
-			return NoteName.CFLAT;
+			return NoteName.B;
 		case CSHARP:
 			return NoteName.C;
 		case DFLAT:
@@ -523,7 +524,7 @@ public class Note implements Serializable{
 		case B:
 			return NoteName.BFLAT;
 		case CFLAT:
-			return NoteName.BSHARP;
+			return NoteName.B;
 		}
 		return NoteName.C;
 

@@ -46,7 +46,6 @@ public class EraserTool extends Tool{
 		
 			NoteToScreen.deleteNote(myActivity, myActivity.getCurrentMeasure().get(chordsPos), notePos);
 			noteView.setImageResource(0);
-			myActivity.setHeldTool(myActivity.getCurrentTool());
 			ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 			v.startDrag(data, shadowBuilder, v, 0);

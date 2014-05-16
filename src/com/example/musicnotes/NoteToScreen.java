@@ -48,7 +48,7 @@ public class NoteToScreen {
 		return searchNote;
 	}
 
-	public static void addNote(EditorActivity myActivity, Chord chordSel, int notePos, NoteTool noteTool) {
+	public static void addNote(EditorActivity myActivity, Chord chordSel, int notePos, NoteType note) {
 
 		Staff currentStaff = myActivity.getCurrentStaff();
 		NoteName[] currentScale = currentStaff.scale();
@@ -57,30 +57,30 @@ public class NoteToScreen {
 		{
 			if(notePos <= 6)
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
+				chordSel.add(currentScale[notePos], note, currentStaff.octave()+1);
 			}
 			else if(notePos == 14)
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
+				chordSel.add(currentScale[notePos], note, currentStaff.octave()-1);
 			}
 			else
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
+				chordSel.add(currentScale[notePos], note, currentStaff.octave());
 			}
 		}
 		else
 		{
 			if(notePos<=1)
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()+1);
+				chordSel.add(currentScale[notePos], note, currentStaff.octave()+1);
 			}
 			else if(notePos <= 8)
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave());
+				chordSel.add(currentScale[notePos], note, currentStaff.octave());
 			}
 			else
 			{
-				chordSel.add(currentScale[notePos], noteTool.getType(), currentStaff.octave()-1);
+				chordSel.add(currentScale[notePos], note, currentStaff.octave()-1);
 			}
 		}
 	}

@@ -56,7 +56,8 @@ public class EditorActivity extends Activity{
 	// Editor Values
 	Sheet sheet;
 	ToolFamily currentFamily;
-	Tool currentTool, heldTool;
+	Tool currentTool;
+	Note heldNote;
 	int currentMeasure, currentStaff, currentSignature, activeTool;
 
 	@Override
@@ -71,7 +72,7 @@ public class EditorActivity extends Activity{
 		numChords = 8;
 		percentageTop = 0.15f;
 		percentageSide = 0.10f;
-		heldTool = null;
+		heldNote = null;
 
 		//Initialize Tools MUST GO BEFORE VIEW IS INITIALIZED
 		tools = new ToolBar(this);
@@ -445,12 +446,12 @@ public class EditorActivity extends Activity{
 		currentFamily = newFamily;
 	}
 
-	public Tool getHeldTool() {
-		return heldTool;
+	public Note getHeldNote() {
+		return heldNote;
 	}
 
-	public void setHeldTool(Tool heldTool) {
-		this.heldTool = heldTool;
+	public void setHeldNote(Note heldNote) {
+		this.heldNote = heldNote;
 	}
 
 	public void updateMeasureSpinner()
