@@ -152,6 +152,7 @@ public class NoteToScreen {
 					break;
 				case DOTTED_HALF_NOTE:
 					resourceID = R.drawable.halfnotedot;
+					break;
 				case WHOLE_NOTE:
 					resourceID = R.drawable.wholenote;
 					break;
@@ -180,6 +181,7 @@ public class NoteToScreen {
 					break;
 				case DOTTED_HALF_NOTE:
 					resourceID = R.drawable.sharphalfnotedot;
+					break;
 				case WHOLE_NOTE:
 					resourceID = R.drawable.sharpwholenote;
 					break;
@@ -208,6 +210,7 @@ public class NoteToScreen {
 					break;
 				case DOTTED_HALF_NOTE:
 					resourceID = R.drawable.flathalfnotedot;
+					break;
 				case WHOLE_NOTE:
 					resourceID = R.drawable.flatwholenote;
 					break;
@@ -236,6 +239,7 @@ public class NoteToScreen {
 					break;
 				case DOTTED_HALF_NOTE:
 					resourceID = R.drawable.naturalhalfnotedot;
+					break;
 				case WHOLE_NOTE:
 					resourceID = R.drawable.naturalwholenote;
 					break;
