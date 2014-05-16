@@ -31,6 +31,9 @@ public class FileMaker {
 	 * SHEET => MIDIFILE
 	 */
 	public static MidiFile sheetToMidi(Sheet s) {
+		// Reset the offset value
+		signatureOffset = 0;
+		
 		if (s != null) {
 			// First track is always tempo map -- followed by array of noteTracks (1 entry per staff)
 			MidiTrack tempoTrack = new MidiTrack();

@@ -25,7 +25,7 @@ public class MidiPlayer {
 		FileMaker.writeSheetToMidiInternal(s, context);
 
 		try{
-			
+
 			Uri filePath = Uri.parse(Environment.getExternalStorageDirectory().toString() + "/MusicNotes/Midi/" + s.getFileName());
 			//Uri filePath = Uri.parse(context.getFilesDir().getAbsolutePath() + "/" + s.getFileName());
 
