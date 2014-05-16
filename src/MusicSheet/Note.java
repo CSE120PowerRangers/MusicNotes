@@ -22,8 +22,6 @@ public class Note implements Serializable{
 	private AccidentalType accidental;
 	private NoteType type;
 	private int octave;
-	private boolean edge = false;
-
 
 	public Note() {
 
@@ -40,7 +38,6 @@ public class Note implements Serializable{
 		this.type = type;
 		accidental = AccidentalType.NONE;
 		this.octave = octave;
-		edge = false;
 	}
 
 	/**
@@ -54,7 +51,6 @@ public class Note implements Serializable{
 		this.type = toCopy.type;
 		this.accidental = toCopy.accidental;
 		this.octave = toCopy.octave;
-		this.edge = toCopy.edge;
 	}
 
 	/**
