@@ -58,7 +58,9 @@ public class Signature implements Serializable{
 
 		staffs = new ArrayList<Staff>();
 		staffs.add(new Staff());
-		staffs.get(0).get(0).setDivisionNumber(numDivs);
+		staffs.get(0).setDivs(numDivs);
+		staffs.get(0).update();
+		//staffs.get(0).get(0).setDivisionNumber(numDivs);
 		System.out.println("Created a new signature with " + timeSignature.name() + " and " + staffs.get(0).get(0).size() + " chords");
 	}
 
@@ -92,7 +94,9 @@ public class Signature implements Serializable{
 		
 		staffs = new ArrayList<Staff>();
 		staffs.add(new Staff());
-		staffs.get(0).get(0).setDivisionNumber(numDivs);
+		staffs.get(0).setDivs(numDivs);
+		staffs.get(0).update();
+		//staffs.get(0).get(0).setDivisionNumber(numDivs);
 		System.out.println("Created a new signature with " + timeSignature.name() + " and " + staffs.get(0).get(0).size() + " chords");
 	}
 
@@ -118,6 +122,8 @@ public class Signature implements Serializable{
 	 * @param newSignature
 	 */
 	public void add(Staff newStaff) {
+		int numDivs = (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
+		newStaff.setDivs(numDivs);
 		staffs.add(newStaff);
 	}
 	
@@ -292,5 +298,9 @@ public class Signature implements Serializable{
 	 */
 	public int tempo() {
 		return tempo;
+	}
+	
+	public int getDivs() {
+		return (int) ( ((float)(numerator) / denominator) * Measure.divisionType());
 	}
 }

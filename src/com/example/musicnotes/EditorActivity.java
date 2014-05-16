@@ -673,8 +673,8 @@ public class EditorActivity extends Activity{
 				//Updates screen when selection is made
 				//numChords = sheet.get(currentSignature).get(0).get(0).size();
 				//initializeView();
-				System.out.println("Resizing the view to signature " + currentSignature + " and " + sheet.get(currentSignature).get(0).get(0).size() + " chords");
-				System.out.println("Time signature of signature " + currentSignature + " is " + sheet.get(currentSignature).timeSignature().name());
+				//System.out.println("Resizing the view to signature " + currentSignature + " and " + sheet.get(currentSignature).get(0).get(0).size() + " chords");
+				//System.out.println("Time signature of signature " + currentSignature + " is " + sheet.get(currentSignature).timeSignature().name());
 				
 				//Measure.setDivisionNumber(numDivs);
 				resizeView(sheet.get(currentSignature).get(0).get(0).size());
@@ -740,7 +740,7 @@ public class EditorActivity extends Activity{
 					newKey = EnumKeySignature.C_MAJOR;
 					break;
 				}
-				sheet.add(new Signature(newKey,EnumTimeSignature.FOUR_FOUR,120));
+				sheet.add(new Signature(newKey,EnumTimeSignature.THREE_FOUR,120));
 				sheet.get(sheet.size()-1).delete(sheet.get(sheet.size()-1).get(0));
 				for(int staves = 0; staves < getCurrentSignature().size(); staves++)
 				{
