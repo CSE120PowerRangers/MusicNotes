@@ -72,12 +72,12 @@ public class FileMaker {
 	}
 
 	private static ArrayList<MidiTrack> createNoteTracks(Sheet s) {
-		int numSignatures = s.size();
+		int numStaffs = s.get(0).size();
 
 		ArrayList<MidiTrack> noteTracks = new ArrayList<MidiTrack>();
 		MidiTrack newTrack;
 
-		for (int i = 0; i < numSignatures; i++) {
+		for (int i = 0; i < numStaffs; i++) {
 			newTrack = createSingleTrack(s, i);
 			noteTracks.add(newTrack);
 		}
@@ -86,10 +86,10 @@ public class FileMaker {
 	}
 
 	private static MidiTrack createSingleTrack(Sheet s, int staffIndex) {
-		int numStaffs = s.get(staffIndex).size();
+		int numSignatures = s.size();
 
 		MidiTrack noteTrack = new MidiTrack();
-		for (int i = 0; i < numStaffs; i++) {
+		for (int i = 0; i < numSignatures; i++) {
 			noteTrack = insertMeasureEvents(noteTrack, s, staffIndex, i);
 		}
 
