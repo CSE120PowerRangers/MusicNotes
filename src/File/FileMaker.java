@@ -31,6 +31,9 @@ public class FileMaker {
 	 * SHEET => MIDIFILE
 	 */
 	public static MidiFile sheetToMidi(Sheet s) {
+		// Reset the offset value
+		signatureOffset = 0;
+		
 		if (s != null) {
 			// First track is always tempo map -- followed by array of noteTracks (1 entry per staff)
 			MidiTrack tempoTrack = new MidiTrack();
@@ -106,7 +109,10 @@ public class FileMaker {
 	}
 
 	private static MidiTrack insertChordEvents(MidiTrack track, Sheet s, int staffIndex, int signatureIndex, int measureIndex, long length) {
-		int numChords = s.get(staffIndex).get(signatureIndex).get(measureIndex).size();
+		// Getting the number of divisions no longer accurate this way, using a temp function to determine division size based on time signature
+		//int numChords = s.get(staffIndex).get(signatureIndex).get(measureIndex).size();
+		
+		int numChords = getDivisions(s.get(signatureIndex).timeSignature());
 		Chord currentChord;
 		Note currentNote;
 		EnumTimeSignature t;
@@ -167,6 +173,26 @@ public class FileMaker {
 		}
 
 		return track;
+	}
+
+	private static int getDivisions(EnumTimeSignature timeSignature) {
+		// TODO Auto-generated method stub
+		switch(timeSignature){
+		case FOUR_FOUR:
+			return 8;
+		case SEVEN_EIGHT:
+			return 7;
+		case SIX_EIGHT:
+			return 6;
+		case THREE_EIGHT:
+			return 3;
+		case THREE_FOUR:
+			return 6;
+		case TWO_FOUR:
+			return 4;
+		default:
+			return 8;
+		}
 	}
 
 	/*

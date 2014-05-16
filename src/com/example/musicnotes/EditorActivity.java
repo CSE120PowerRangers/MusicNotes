@@ -349,13 +349,12 @@ public class EditorActivity extends Activity{
 	public void nextMeasure(View v){
 		//**** If null, create a new measure****
 		if(currentMeasure == sheet.get(currentSignature).get(currentStaff).size() - 1) {
-			for(int sigs = 0; sigs < sheet.size(); sigs++)
-			{
-				for(int staves = 0; staves < sheet.get(sigs).size(); staves++)
+			
+				for(int staves = 0; staves < sheet.get(currentSignature).size(); staves++)
 				{
-					sheet.get(sigs).get(staves).add(new Measure());
+					sheet.get(currentSignature).get(staves).add(new Measure());
 				}
-			}
+			
 			currentMeasure++;
 			updateMeasureSpinner();
 
