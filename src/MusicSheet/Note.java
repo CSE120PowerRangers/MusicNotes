@@ -10,10 +10,12 @@
 
 package MusicSheet;
 
+import java.io.Serializable;
+
 import MusicUtil.NoteName;
 import MusicUtil.NoteType;
 
-public class Note {
+public class Note implements Serializable{
 	private NoteName name;
 	private NoteType type;
 	private int octave;

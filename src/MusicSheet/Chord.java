@@ -1,11 +1,12 @@
 package MusicSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import MusicUtil.NoteName;
 import MusicUtil.NoteType;
 
-public class Chord {
+public class Chord implements Serializable{
 	private ArrayList<Note> noteList;
 	
 	/**

@@ -1,5 +1,6 @@
 package MusicSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import MusicUtil.EnumKeySignature;
@@ -12,7 +13,7 @@ import MusicUtil.NoteName;
  *
  */
 
-public class Signature {
+public class Signature implements Serializable{
 	private int tempo, numerator, denominator; //Beats per minute
 	private EnumTimeSignature timeSignature;
 	private EnumKeySignature keySignature;

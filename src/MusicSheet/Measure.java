@@ -1,6 +1,8 @@
 package MusicSheet;
 
-public class Measure {
+import java.io.Serializable;
+
+public class Measure implements Serializable{
 	private static int numDivisions = 8; //Default number of eighth notes in a measure in a 4/4 time signature. Subject to change
 	private static int divisionType = 8; //Minimum supported division type. Currently only supporting down to eighth notes.
 	private int chordMap;

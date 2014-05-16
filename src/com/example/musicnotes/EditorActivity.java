@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,12 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class EditorActivity extends Activity{
 
@@ -73,10 +80,16 @@ public class EditorActivity extends Activity{
 		updateToolBar();
 
 		// Load in sheet and initialize values and tools
-		sheet = new Sheet();
 		Intent mainIntent = getIntent();
-		sheet.setName(mainIntent.getStringExtra("nameofSheet"));
-
+		if(mainIntent.getStringExtra("nameofSheet") != null)
+		{
+			sheet = new Sheet();
+			sheet.setName(mainIntent.getStringExtra("nameofSheet"));
+		}
+		else
+		{
+			sheet = (Sheet)mainIntent.getSerializableExtra("Sheet");
+		}
 		this.setTitle(sheet.name());
 		calcScreenSize();
 		initializeView();
@@ -315,6 +328,20 @@ public class EditorActivity extends Activity{
 	}
 
 	public void saveFile() {
+		FileOutputStream fos = null;
+		ObjectOutputStream out = null;
+		File path = new File(Environment.getExternalStorageDirectory().toString()+"/MusicNotes/Sheets");
+		path.mkdirs();
+		try{
+			fos = new FileOutputStream(Environment.getExternalStorageDirectory().toString()+"/MusicNotes/Sheets/" + sheet.name()+".mnn");
+			out = new ObjectOutputStream(fos);
+			out.writeObject(sheet);
+			
+			out.close();
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 		FileMaker.writeSheetToMidiInternal(sheet, this);
 	}
 
@@ -648,7 +675,8 @@ public class EditorActivity extends Activity{
 					newKey = EnumKeySignature.C_MAJOR;
 					break;
 				}
-				sheet.add(new Signature(newKey,EnumTimeSignature.FOUR_FOUR,120));
+				sheet.add(new Signature(newKey,EnumTimeSignature.THREE_FOUR,120));
+				sheet.get(sheet.size()-1).delete(sheet.get(sheet.size()-1).get(0));
 				for(int staves = 0; staves < getCurrentSignature().size(); staves++)
 				{
 					sheet.get(sheet.size()-1).add(new Staff(getCurrentSignature().get(staves).clef()));

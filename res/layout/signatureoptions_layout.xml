@@ -24,7 +24,7 @@
         android:id="@+id/deletesigtoendoption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete Signature at End"
+        android:text="Delete Current Signature"
         android:onClick="deleteSignature"
         />
     
