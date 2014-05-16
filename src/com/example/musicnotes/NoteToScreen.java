@@ -130,25 +130,121 @@ public class NoteToScreen {
 		int resourceID = 0;
 		if(selectedNote != null)
 		{
-			NoteType selectedType = selectedNote.type();
-
-			switch(selectedType)
+			switch(myNote.accidental())
 			{
-			case EIGHTH_NOTE:
-				resourceID = R.drawable.eigthnote;
+			case NONE:
+				switch(myNote.type())
+				{
+				case EIGHTH_NOTE:
+					resourceID = R.drawable.eigthnote;
+					break;
+				case DOTTED_EIGHTH_NOTE:
+					resourceID = R.drawable.eigthnotedot;
+					break;
+				case QUARTER_NOTE:
+					resourceID = R.drawable.quarternote;
+					break;
+				case DOTTED_QUARTER_NOTE:
+					resourceID = R.drawable.quarternotedot;
+					break;
+				case HALF_NOTE:
+					resourceID = R.drawable.halfnotes;
+					break;
+				case DOTTED_HALF_NOTE:
+					resourceID = R.drawable.halfnotedot;
+				case WHOLE_NOTE:
+					resourceID = R.drawable.wholenote;
+					break;
+				default:
+					resourceID = R.drawable.eigthnote;
+					break;
+				}
 				break;
-			case QUARTER_NOTE:
-				resourceID = R.drawable.quarternote;
+			case SHARP:
+				switch(myNote.type())
+				{
+				case EIGHTH_NOTE:
+					resourceID = R.drawable.sharpeigthnote;
+					break;
+				case DOTTED_EIGHTH_NOTE:
+					resourceID = R.drawable.sharpeigthnotedot;
+					break;
+				case QUARTER_NOTE:
+					resourceID = R.drawable.sharpquarternote;
+					break;
+				case DOTTED_QUARTER_NOTE:
+					resourceID = R.drawable.sharpquarternotedot;
+					break;
+				case HALF_NOTE:
+					resourceID = R.drawable.sharphalfnote;
+					break;
+				case DOTTED_HALF_NOTE:
+					resourceID = R.drawable.sharphalfnotedot;
+				case WHOLE_NOTE:
+					resourceID = R.drawable.sharpwholenote;
+					break;
+				default:
+					resourceID = R.drawable.sharpeigthnote;
+					break;
+				}
 				break;
-			case HALF_NOTE:
-				resourceID = R.drawable.halfnotes;
+			case FLAT:
+				switch(myNote.type())
+				{
+				case EIGHTH_NOTE:
+					resourceID = R.drawable.flateigthnote;
+					break;
+				case DOTTED_EIGHTH_NOTE:
+					resourceID = R.drawable.flateigthnotedot;
+					break;
+				case QUARTER_NOTE:
+					resourceID = R.drawable.flatquarternote;
+					break;
+				case DOTTED_QUARTER_NOTE:
+					resourceID = R.drawable.flatquarternotedot;
+					break;
+				case HALF_NOTE:
+					resourceID = R.drawable.flathalfnote;
+					break;
+				case DOTTED_HALF_NOTE:
+					resourceID = R.drawable.flathalfnotedot;
+				case WHOLE_NOTE:
+					resourceID = R.drawable.flatwholenote;
+					break;
+				default:
+					resourceID = R.drawable.flateigthnote;
+					break;
+				}
 				break;
-			case WHOLE_NOTE:
-				resourceID = R.drawable.wholenote;
+			case NATURAL:
+				switch(myNote.type())
+				{
+				case EIGHTH_NOTE:
+					resourceID = R.drawable.naturaleigthnote;
+					break;
+				case DOTTED_EIGHTH_NOTE:
+					resourceID = R.drawable.naturaleigthnotedot;
+					break;
+				case QUARTER_NOTE:
+					resourceID = R.drawable.naturalquarternote;
+					break;
+				case DOTTED_QUARTER_NOTE:
+					resourceID = R.drawable.naturalquarternotedot;
+					break;
+				case HALF_NOTE:
+					resourceID = R.drawable.naturalhalfnote;
+					break;
+				case DOTTED_HALF_NOTE:
+					resourceID = R.drawable.naturalhalfnotedot;
+				case WHOLE_NOTE:
+					resourceID = R.drawable.naturalwholenote;
+					break;
+				default:
+					resourceID = R.drawable.naturaleigthnote;
+					break;
+				}
 				break;
-			default:
-				resourceID = R.drawable.eigthnote;
-				break;
+
 			}
 			return new NoteTool(myNote.type(), resourceID);
 		}

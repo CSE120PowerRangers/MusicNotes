@@ -12,11 +12,14 @@ package MusicSheet;
 
 import java.io.Serializable;
 
+import MusicUtil.AccidentalTool;
 import MusicUtil.NoteName;
 import MusicUtil.NoteType;
+import MusicUtil.AccidentalTool.AccidentalType;
 
 public class Note implements Serializable{
 	private NoteName name;
+	private AccidentalType accidental;
 	private NoteType type;
 	private int octave;
 
@@ -34,6 +37,7 @@ public class Note implements Serializable{
 	public Note(NoteName name, NoteType type, int octave) {
 		this.name = name;
 		this.type = type;
+		accidental = AccidentalType.NONE;
 		this.octave = octave;
 	}
 
@@ -46,6 +50,7 @@ public class Note implements Serializable{
 	public Note(Note toCopy) {
 		this.name = toCopy.name;
 		this.type = toCopy.type;
+		this.accidental = toCopy.accidental;
 		this.octave = toCopy.octave;
 	}
 
@@ -74,6 +79,14 @@ public class Note implements Serializable{
 	}
 
 	/**
+	 * Changes the accidental of the note
+	 * @param accidental
+	 */
+	public void setAccidental(AccidentalType accidental)
+	{
+		this.accidental = accidental;
+	}
+	/**
 	 * Retrieves the name of the note
 	 * @return name
 	 */
@@ -98,6 +111,15 @@ public class Note implements Serializable{
 	}
 
 	/**
+	 * Retrieves the accidental of the note
+	 * @param accidental
+	 */
+	public AccidentalType accidental()
+	{
+		return accidental;
+	}
+
+	/**
 	 * Simple hash could be the number mapping of the actual name
 	 * e.g. C0 == 0, CSHARP0 == 2, C1 == 21, CSHARP1 == 23, ... BSHARP8 == 188
 	 * Used in note lookup table for determining frequencies
@@ -105,8 +127,8 @@ public class Note implements Serializable{
 	 */
 	public int hashCode() {
 		int numberName;
-		switch(name) {
-
+		NoteName n = convertNote();
+		switch(n) {
 		case C:
 			numberName = 0;
 			break;
@@ -201,7 +223,8 @@ public class Note implements Serializable{
 
 	public int getMidiPitch() {
 		int numberName = 0;
-		switch(name) {
+		NoteName n = convertNote();
+		switch(n) {
 		case BSHARP:
 			numberName = 0;
 			break;
@@ -335,4 +358,175 @@ public class Note implements Serializable{
 
 		return duration;
 	}
+
+	private NoteName convertNote()
+	{
+		switch(accidental)
+		{
+		case NONE:
+			return name;
+		case SHARP:
+			return sharpNote();
+		case FLAT:
+			return flatNote();
+		case NATURAL:
+			return naturalNote();
+		}
+		return NoteName.C;
+	}
+
+	private NoteName sharpNote()
+	{
+		switch(name)
+		{
+		case BSHARP:
+			return NoteName.CFLAT;
+		case C:
+			return NoteName.CSHARP;
+		case CSHARP:
+			return NoteName.DFLAT;
+		case DFLAT:
+			return NoteName.D;
+		case D:
+			return NoteName.DSHARP;
+		case DSHARP:
+			return NoteName.EFLAT;
+		case EFLAT:
+			return NoteName.E;
+		case E:
+			return NoteName.ESHARP;
+		case ESHARP:
+			return NoteName.FFLAT;
+		case FFLAT:
+			return NoteName.F;
+		case F:
+			return NoteName.FSHARP;
+		case FSHARP:
+			return NoteName.GFLAT;
+		case GFLAT:
+			return NoteName.G;
+		case G:
+			return NoteName.GSHARP;
+		case GSHARP:
+			return NoteName.AFLAT;
+		case AFLAT:
+			return NoteName.A;
+		case A:
+			return NoteName.ASHARP;
+		case ASHARP:
+			return NoteName.BFLAT;
+		case BFLAT:
+			return NoteName.B;
+		case B:
+			return NoteName.BSHARP;
+		case CFLAT:
+			return NoteName.C;
+		}
+		return NoteName.C;
+
+	}
+
+	private NoteName naturalNote()
+	{
+		switch(name)
+		{
+		case BSHARP:
+			return NoteName.B;
+		case C:
+			return NoteName.C;
+		case CSHARP:
+			return NoteName.C;
+		case DFLAT:
+			return NoteName.D;
+		case D:
+			return NoteName.D;
+		case DSHARP:
+			return NoteName.D;
+		case EFLAT:
+			return NoteName.E;
+		case E:
+			return NoteName.E;
+		case ESHARP:
+			return NoteName.E;
+		case FFLAT:
+			return NoteName.F;
+		case F:
+			return NoteName.F;
+		case FSHARP:
+			return NoteName.F;
+		case GFLAT:
+			return NoteName.G;
+		case G:
+			return NoteName.G;
+		case GSHARP:
+			return NoteName.G;
+		case AFLAT:
+			return NoteName.A;
+		case A:
+			return NoteName.A;
+		case ASHARP:
+			return NoteName.A;
+		case BFLAT:
+			return NoteName.B;
+		case B:
+			return NoteName.B;
+		case CFLAT:
+			return NoteName.C;
+		}
+		return NoteName.C;
+
+	}
+
+	private NoteName flatNote()
+	{
+
+		switch(name)
+		{
+		case BSHARP:
+			return NoteName.B;
+		case C:
+			return NoteName.CFLAT;
+		case CSHARP:
+			return NoteName.C;
+		case DFLAT:
+			return NoteName.CSHARP;
+		case D:
+			return NoteName.DFLAT;
+		case DSHARP:
+			return NoteName.D;
+		case EFLAT:
+			return NoteName.DSHARP;
+		case E:
+			return NoteName.EFLAT;
+		case ESHARP:
+			return NoteName.E;
+		case FFLAT:
+			return NoteName.ESHARP;
+		case F:
+			return NoteName.FFLAT;
+		case FSHARP:
+			return NoteName.F;
+		case GFLAT:
+			return NoteName.FSHARP;
+		case G:
+			return NoteName.GFLAT;
+		case GSHARP:
+			return NoteName.G;
+		case AFLAT:
+			return NoteName.GSHARP;
+		case A:
+			return NoteName.AFLAT;
+		case ASHARP:
+			return NoteName.A;
+		case BFLAT:
+			return NoteName.CSHARP;
+		case B:
+			return NoteName.BFLAT;
+		case CFLAT:
+			return NoteName.BSHARP;
+		}
+		return NoteName.C;
+
+	}
+
 }

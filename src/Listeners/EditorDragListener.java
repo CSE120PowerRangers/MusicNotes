@@ -41,7 +41,6 @@ public class EditorDragListener implements OnDragListener {
 				if(heldTool.getToolName()==ToolNames.ERASER)
 				{
 					heldTool.dragUse(myActivity, v);
-					System.out.println("DRAGGING ERASER LOL");
 				}
 				return true;
 
